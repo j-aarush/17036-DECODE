@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DECODE;
+package org.firstinspires.ftc.teamcode.DECODE.tests;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous
-public class intaketest extends LinearOpMode {
+public class pulleyintaketest extends LinearOpMode {
     //Custom variable declaration for button speed change
 
 
