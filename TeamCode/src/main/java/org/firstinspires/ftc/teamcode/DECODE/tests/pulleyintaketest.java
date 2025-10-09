@@ -60,7 +60,7 @@ public class pulleyintaketest extends LinearOpMode {
             double velocity = speed * 60 / 28;
 
 
-            telemetry.addData("speed", velocity);
+            telemetry.addData("not speed", velocity);
             telemetry.update();
 
 
