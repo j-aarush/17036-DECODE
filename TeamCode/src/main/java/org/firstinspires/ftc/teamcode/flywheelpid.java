@@ -28,11 +28,11 @@ public class flywheelpid extends NextFTCOpMode {
     private final MotorEx flywheel = new MotorEx("flywheel");
 
 
-    public static void velocityControlWithFeedforwardExample() {
+    public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
         // Create a velocity controller with PID and feedforward
         ControlSystem controller = ControlSystem.builder()
                 .velPid(0.1, 0.01, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
-//                .basicFF(0.02, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01
+//                .basicFF(0.02, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
                 .build();
 
         // Set the goal velocity to 500 units per second
@@ -42,9 +42,8 @@ public class flywheelpid extends NextFTCOpMode {
         // Create a KineticState with current position and velocity
         // In a loop (simulated here), you would:
         // Create a KineticState with current position and velocity
-        KineticState currentState = new KineticState(1000.0, 450.0, 0.0);
 
-        double power = controller.calculate(currentState);
+        double power = controller.calculate(currentstate);
 
         // Apply power to your motor
         System.out.println("Power to apply: " + power);
@@ -56,8 +55,8 @@ public class flywheelpid extends NextFTCOpMode {
 
     }
     @Override public void onUpdate() {
-        KineticState currentState = new KineticState(0, 450.0, 0.0);
-         velocityControlWithFeedforwardExample();
+        KineticState currentState = new KineticState(0, 450.0, 0.0); //figure out velocity (is it in ticks?!?)
+         velocityControlWithFeedforwardExample(currentState);
 
 
 
