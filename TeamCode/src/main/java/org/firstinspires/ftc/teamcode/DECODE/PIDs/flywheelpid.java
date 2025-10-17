@@ -68,7 +68,7 @@ public class flywheelpid extends NextFTCOpMode {
             flickerrr.setPosition(0.4);
         }
         if (gamepad1.b) {
-            flickerrr.setPosition(0.067);
+            flickerrr.setPosition(0.0670);
         }
 
 
