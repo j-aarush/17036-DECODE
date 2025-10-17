@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.DECODE.PIDs;
 
+import android.health.connect.datatypes.units.Power;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import dev.nextftc.control.KineticState;
 import dev.nextftc.control.ControlSystem;
 
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.impl.MotorEx;
+import dev.nextftc.hardware.impl.ServoEx;
 
 @TeleOp(name = "NextFTC TeleOp Program Java")
 public class flywheelpid extends NextFTCOpMode {
@@ -21,10 +25,11 @@ public class flywheelpid extends NextFTCOpMode {
     }
 
 
+    double flywheelvelocity;
 
 
-
-    private final MotorEx flywheel = new MotorEx("flywheel");
+    public static MotorEx flywheel = new MotorEx("flywheel");
+    public static ServoEx flickerrr = new ServoEx("flicky");
 
 
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
@@ -35,7 +40,7 @@ public class flywheelpid extends NextFTCOpMode {
                 .build();
 
         // Set the goal velocity to 500 units per second
-        controller.setGoal(new KineticState(0.0, 500.0, 0.0));
+        controller.setGoal(new KineticState(0.0, 1300, 0.0));
 
         // In a loop (simulated here), you would:
         // Create a KineticState with current position and velocity
@@ -43,6 +48,7 @@ public class flywheelpid extends NextFTCOpMode {
         // Create a KineticState with current position and velocity
 
         double power = controller.calculate(currentstate);
+        flywheel.setPower(power);
 
         // Apply power to your motor
         System.out.println("Power to apply: " + power);
@@ -54,8 +60,16 @@ public class flywheelpid extends NextFTCOpMode {
 
     }
     @Override public void onUpdate() {
-        KineticState currentState = new KineticState(0, 450.0, 0.0); //figure out velocity (is it in ticks?!?)
+        flywheelvelocity = flywheel.getVelocity();
+        KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
          velocityControlWithFeedforwardExample(currentState);
+
+        if (gamepad1.a) {
+            flickerrr.setPosition(0.4);
+        }
+        if (gamepad1.b) {
+            flickerrr.setPosition(0.067);
+        }
 
 
 
