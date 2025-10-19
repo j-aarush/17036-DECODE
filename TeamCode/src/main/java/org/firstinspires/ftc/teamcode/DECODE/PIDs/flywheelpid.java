@@ -31,16 +31,17 @@ public class flywheelpid extends NextFTCOpMode {
     public static MotorEx flywheel = new MotorEx("flywheel");
     public static ServoEx flickerrr = new ServoEx("flicky");
 
+    public static float configvelocity = 1300;
 
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
         // Create a velocity controller with PID and feedforward
         ControlSystem controller = ControlSystem.builder()
                 .velPid(0.1, 0.01, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
-//                .basicFF(0.02, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
+                .basicFF(0.02, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
                 .build();
 
         // Set the goal velocity to 500 units per second
-        controller.setGoal(new KineticState(0.0, 1300, 0.0));
+        controller.setGoal(new KineticState(0.0, configvelocity, 0.0));
 
         // In a loop (simulated here), you would:
         // Create a KineticState with current position and velocity
@@ -70,6 +71,11 @@ public class flywheelpid extends NextFTCOpMode {
         if (gamepad1.b) {
             flickerrr.setPosition(0.0670);
         }
+
+        telemetry.addData("output real velocity:", flywheel.getVelocity()*60/28);
+        telemetry.addData("input velocity:", configvelocity);
+        telemetry.update();
+
 
 
 
