@@ -22,10 +22,19 @@ public class InitialTeleop extends NextFTCOpMode {
 
         while(opModeIsActive()) {
 
-            if (!flywheeloff) flywheelvelocity = flywheel.getVelocity();
-            KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
-            velocityControlWithFeedforwardExample(currentState);
+            boolean isXPressed = gamepad1.x;
+            if (isXPressed && !xpressed) {
+                flywheeloff = !flywheeloff;
+            }
+            xpressed = isXPressed;
 
+            if (flywheeloff) {
+                flywheel.setPower(0.2);
+            } else {
+                flywheelvelocity = flywheel.getVelocity();
+                KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
+                velocityControlWithFeedforwardExample(currentState);
+            }
 
             if (gamepad1.a) {
                 configvelocity = 1300;
@@ -33,19 +42,10 @@ public class InitialTeleop extends NextFTCOpMode {
             if (gamepad1.b) {
                 configvelocity = 1520;
             }
-            if (gamepad1.x) xpressed = true;
-            if (gamepad1.x && !xpressed && !flywheeloff) {
-                flywheeloff = true;
-                flywheelvelocity = 100;
-                flywheel.setPower(0.2);
-            }
-            if (gamepad1.x && !xpressed && flywheeloff) {
-                flywheeloff = false;
-                flywheelvelocity = 1000;
-            }
 
             telemetry.addData("output real velocity:", flywheel.getVelocity());
             telemetry.addData("input velocity:", configvelocity);
+            telemetry.addData("Flywheel PID", flywheeloff ? "Disabled (0.2 power)" : "Enabled");
             telemetry.update();
 
 
