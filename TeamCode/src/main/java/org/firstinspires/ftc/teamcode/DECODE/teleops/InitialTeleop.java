@@ -29,7 +29,7 @@ public class InitialTeleop extends NextFTCOpMode {
             xpressed = isXPressed;
 
             if (flywheeloff) {
-                flywheel.setPower(0.2);
+                flywheel.setPower(0.2467);
             } else {
                 flywheelvelocity = flywheel.getVelocity();
                 KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
@@ -48,6 +48,7 @@ public class InitialTeleop extends NextFTCOpMode {
             telemetry.addData("Flywheel PID", flywheeloff ? "Disabled (0.2 power)" : "Enabled");
             telemetry.update();
 
+//claire skibidi toilet ohio
 
         }
 
