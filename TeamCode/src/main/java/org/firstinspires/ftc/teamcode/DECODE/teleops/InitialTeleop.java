@@ -7,9 +7,9 @@ import dev.nextftc.control.KineticState;
 import dev.nextftc.ftc.NextFTCOpMode;
 import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.*;
 
-@TeleOp(name = "THE teleop")
+@TeleOp(name = "teleop")
 @Configurable
-public class Teleop extends NextFTCOpMode {
+public class InitialTeleop extends NextFTCOpMode {
 
     boolean flywheeloff = false;
     boolean xpressed = false;
