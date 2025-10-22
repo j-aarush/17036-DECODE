@@ -25,19 +25,19 @@ public class flywheelpid extends NextFTCOpMode {
     }
 
 
-    double flywheelvelocity;
+   public static double flywheelvelocity;
 
 
     public static MotorEx flywheel = new MotorEx("flywheel");
     public static ServoEx flickerrr = new ServoEx("flicky");
 
-    public static float configvelocity = 1300;
+    public static float configvelocity = 1500; //far zone - ~1500. near zone - ~1200-13[900
 
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
         // Create a velocity controller with PID and feedforward
         ControlSystem controller = ControlSystem.builder()
-                .velPid(0.1, 0.01, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
-                .basicFF(0.02, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
+                .velPid(0.18, 0.01, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
+                .basicFF(0.0067, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
                 .build();
 
         // Set the goal velocity to 500 units per second
@@ -72,11 +72,13 @@ public class flywheelpid extends NextFTCOpMode {
             flickerrr.setPosition(0.0670);
         }
 
-        telemetry.addData("output real velocity:", flywheel.getVelocity()*60/28);
+        telemetry.addData("output real velocity:", flywheel.getVelocity());
         telemetry.addData("input velocity:", configvelocity);
         telemetry.update();
 
-
+//motor.setPower(kP * error + kV * targetVelocity)
+//where error is (targetVelocity - motor.getVelocity())
+//tune kP until error is small enough (graph error)
 
 
     }
