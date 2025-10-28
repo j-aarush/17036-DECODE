@@ -3,16 +3,20 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import dev.nextftc.bindings.Button;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.ftc.NextFTCOpMode;
 import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.*;
-
+import static dev.nextftc.bindings.Bindings.button;
 
 
 @TeleOp(name = "teleop")
 @Configurable
 public class InitialTeleop extends NextFTCOpMode {
 
+    Button gamepad1a = button(() -> gamepad1.a);
+    Button gamepad1b = button(() -> gamepad1.b);
+    Button gamepad1x = button(() -> gamepad1.x);
 
     @Override
     public void runOpMode() {
@@ -23,24 +27,17 @@ public class InitialTeleop extends NextFTCOpMode {
         while(opModeIsActive()) {
 
             //get data from hub; store as variables at beginning of loop
-            flywheelvelocity = flywheel.getVelocity();
+
+            gamepad1a.whenBecomesTrue(() -> configvelocity = 1267); //rough near zone
+
+            gamepad1b.whenBecomesTrue(() -> configvelocity = 1520); //rough far zone
+
+            gamepad1x.whenBecomesTrue(() -> configvelocity = 350); //power save
+
+            shooter();
 
 
-            //HOW TO DO THIS WITH NEXTFTC ASDL;FAHUEIJAORH8293PIEOW;FD SOBBBBBBBBBBBBBBBBBBBBB 😭
-            if (gamepad1.a) {
-                configvelocity = 1300;
-            }
-            if (gamepad1.b) {
-                configvelocity = 1520;
-            }
-            if (gamepad1.x) {
-                configvelocity = 350;
-            }
-
-            KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
-            velocityControlWithFeedforwardExample(currentState);
-
-            telemetry.addData("output real velocity:", flywheel.getVelocity());
+            telemetry.addData("output real velocity:", flywheelvelocity);
             telemetry.addData("input velocity:", configvelocity);
             telemetry.update();
 
@@ -50,3 +47,9 @@ public class InitialTeleop extends NextFTCOpMode {
 
     }
 }
+//coding todos:
+//set up pinpoint/pedro
+//format as much code as possible into seperate subsystem classes
+//heading lock via ll/pp
+//indexing
+//formula for flywheel speed

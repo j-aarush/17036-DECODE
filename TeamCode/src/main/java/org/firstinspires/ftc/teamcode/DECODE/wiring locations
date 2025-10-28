@@ -1,0 +1,17 @@
+Chub
+Motor 3 - backright
+Motor 2 - front right
+Motor 1 - intake right
+Servo 0 flick (injector 4)
+Servo 1 right spindex (injector 5)
+Servo 4 left spindex (injector 6)
+MOTOR 0 - FLYWHEEL
+I2C 3 - PINPOINT
+I2C 0 - FRONT COLOR SENSOR
+
+
+Ehub
+
+Motor 0 - left intake
+Motor 2 - front left
+Motor 3 - back left

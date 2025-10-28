@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.DECODE.PIDs;
 
+import static dev.nextftc.bindings.Bindings.button;
+
 import android.health.connect.datatypes.units.Power;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import dev.nextftc.bindings.*;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.control.ControlSystem;
 
@@ -12,7 +15,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 
-@TeleOp(name = "NextFTC TeleOp Program Java")
+//@TeleOp(name = "NextFTC TeleOp Program Java")
 public class flywheelpid extends NextFTCOpMode {
     public flywheelpid() {
         addComponents(
@@ -28,10 +31,11 @@ public class flywheelpid extends NextFTCOpMode {
    public static double flywheelvelocity;
 
 
-    public static MotorEx flywheel = new MotorEx("flywheel");
+    public static MotorEx flywheel = new MotorEx("shooter");
     public static ServoEx flickerrr = new ServoEx("flicky");
 
-    public static float configvelocity = 1500; //far zone - ~1500. near zone - ~1200-13[900
+    public static float configvelocity = 1500; //far zone - ~1500. near zone - ~1200-1300
+
 
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
         // Create a velocity controller with PID and feedforward
@@ -60,21 +64,11 @@ public class flywheelpid extends NextFTCOpMode {
     @Override public void onStartButtonPressed() {
 
     }
-    @Override public void onUpdate() {
+    public static void shooter() {
+        BindingManager.update();
         flywheelvelocity = flywheel.getVelocity();
         KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
          velocityControlWithFeedforwardExample(currentState);
-
-        if (gamepad1.a) {
-            flickerrr.setPosition(0.4);
-        }
-        if (gamepad1.b) {
-            flickerrr.setPosition(0.0670);
-        }
-
-        telemetry.addData("output real velocity:", flywheel.getVelocity());
-        telemetry.addData("input velocity:", configvelocity);
-        telemetry.update();
 
 //motor.setPower(kP * error + kV * targetVelocity)
 //where error is (targetVelocity - motor.getVelocity())
