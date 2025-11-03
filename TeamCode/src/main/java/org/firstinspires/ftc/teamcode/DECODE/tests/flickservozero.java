@@ -26,7 +26,7 @@ public class flickservozero extends LinearOpMode {
 
 
 
-        //
+        //Rintake; Lintake
 
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
