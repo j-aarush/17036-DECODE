@@ -32,8 +32,8 @@ public class flickservozero extends LinearOpMode {
         // reverse the left side instead.
         // See the note about this earlier on this page.
         flick = hardwareMap.get(Servo.class, "flicky");
-        leftintake = hardwareMap.get(DcMotorEx.class, "leftin");
-        leftintake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        leftintake = hardwareMap.get(DcMotorEx.class, "leftin");
+//        leftintake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -58,13 +58,12 @@ public class flickservozero extends LinearOpMode {
                 flick.setPosition(0.4);
             }
 
-            leftintake.setPower(0.7);
+//            leftintake.setPower(0.7);
 
-            speed = leftintake.getVelocity();
-            double velocity = speed * 60 / 28;
+//            speed = leftintake.getVelocity();
+//            double velocity = speed * 60 / 28;
 
 
-            telemetry.addData("speed", velocity);
 
 
             telemetry.update();
