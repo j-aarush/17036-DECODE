@@ -28,7 +28,7 @@ public class flywheelpid extends NextFTCOpMode {
     }
 
 
-   public static double flywheelvelocity;
+    public static double flywheelvelocity;
 
 
     public static MotorEx flywheel = new MotorEx("shooter");
@@ -68,7 +68,7 @@ public class flywheelpid extends NextFTCOpMode {
         BindingManager.update();
         flywheelvelocity = flywheel.getVelocity();
         KineticState currentState = new KineticState(0, flywheelvelocity, 0.0); //figure out velocity (is it in ticks?!?)
-         velocityControlWithFeedforwardExample(currentState);
+        velocityControlWithFeedforwardExample(currentState);
 
 //motor.setPower(kP * error + kV * targetVelocity)
 //where error is (targetVelocity - motor.getVelocity())

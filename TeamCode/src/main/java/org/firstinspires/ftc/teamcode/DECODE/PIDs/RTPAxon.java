@@ -8,13 +8,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class RTPAxon {
     // Encoder for servo position feedback
-    private final AnalogInput servoEncoder;
+    double servoEncoder;
+    private final DcMotorEx revencoder;
+
     // Continuous rotation servo
     private final CRServo servo;
+//    public static DcMotorEx throughboreencoder;
     // Run-to-position mode flag
     private boolean rtp;
     // Current power applied to servo
@@ -54,17 +59,17 @@ public class RTPAxon {
     // region constructors
 
     // Basic constructor, defaults to FORWARD direction
-    public RTPAxon(CRServo servo, AnalogInput encoder) {
+    public RTPAxon(CRServo servo, DcMotorEx theencoder) {
         rtp = true;
         this.servo = servo;
-        servoEncoder = encoder;
+        revencoder = theencoder;
         direction = Direction.FORWARD;
         initialize();
     }
 
     // Constructor with explicit direction
-    public RTPAxon(CRServo servo, AnalogInput encoder, Direction direction) {
-        this(servo, encoder);
+    public RTPAxon(CRServo servo, DcMotorEx theencoder, Direction direction) {
+        this(servo, theencoder);
         this.direction = direction;
         initialize();
     }
@@ -73,7 +78,7 @@ public class RTPAxon {
     private void initialize() {
         servo.setPower(0);
         try {
-            Thread.sleep(50);
+            Thread.sleep(10);
         } catch (InterruptedException ignored) {
         }
 
@@ -84,7 +89,7 @@ public class RTPAxon {
                 previousAngle = getCurrentAngle();
             } else {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(10);
                 } catch (InterruptedException ignored) {
                 }
             }
@@ -92,12 +97,12 @@ public class RTPAxon {
         } while (Math.abs(previousAngle) < 0.2 && (ntry < 50));
 
         totalRotation = 0;
-        homeAngle = previousAngle;
+//        homeAngle = previousAngle;
 
         // Default PID coefficients
-        kP = 0.1;
+        kP = 0.002;
         kI = 0;
-        kD = 0.0025;
+        kD = 0;
         integralSum = 0.0;
         lastError = 0.0;
         maxIntegralSum = 100.0;
@@ -229,8 +234,9 @@ public class RTPAxon {
 
     // Get current angle from encoder (in degrees)
     public double getCurrentAngle() {
-        if (servoEncoder == null) return 0;
-        return (servoEncoder.getVoltage() / 3.3) * (direction.equals(Direction.REVERSE) ? -360 : 360);
+//        if (servoEncoder == null) return 0;
+//        return (servoEncoder.getVoltage() / 3.3) * (direction.equals(Direction.REVERSE) ? -360 : 360);
+        return (revencoder.getCurrentPosition() * 360 / 8192 );
     }
 
     // Check if servo is at target (default tolerance)
@@ -334,7 +340,7 @@ public class RTPAxon {
                         "Current Power: %.3f\n" +
                         "PID Values: P=%.3f I=%.3f D=%.3f\n" +
                         "PID Terms: Error=%.2f Integral=%.2f",
-                servoEncoder.getVoltage(),
+//                servoEncoder.getVoltage(),
                 getCurrentAngle(),
                 totalRotation,
                 targetRotation,
