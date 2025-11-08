@@ -3,13 +3,12 @@ names listed are config names
 Chub
 Motor 3 - BR
 Motor 2 - FR
-Motor 1 - Rintake
 Servo 0 flicky (injector 4)
 Servo 1 leftspindex (injector 5/6)
 Servo 4 rightspindex (injector 5/6)
 MOTOR 0 - shooter
 I2C 3 - pinpoint
-I2C 0 - FRONT COLOR SENSOR
+I2C 0 - intakecolor
 
 
 Ehub

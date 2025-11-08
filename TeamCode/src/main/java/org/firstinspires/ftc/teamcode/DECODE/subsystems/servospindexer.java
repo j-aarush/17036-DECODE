@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.DECODE.subsystems;
 
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import dev.nextftc.bindings.BindingManager;
@@ -12,13 +15,17 @@ import dev.nextftc.bindings.BindingManager;
 @TeleOp
 public class servospindexer extends LinearOpMode {
 
-    Servo leftspindex, rightspindex;
+    public static Servo leftspindex, rightspindex;
+    NormalizedColorSensor colorSensor;
+    View relativeLayout;
+
+
     DcMotorEx leftinake;
 //    Button gamepad1a = button(() -> gamepad1.a);
 //    Button gamepad1b = button(() -> gamepad1.b);
 //    Button gamepad1x = button(() -> gamepad1.x);
 
-    void settherotation(double rotationn) {
+    public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
         rightspindex.setPosition(rotationn);
     }
@@ -41,11 +48,10 @@ public class servospindexer extends LinearOpMode {
         while(opModeIsActive()) {
 
             BindingManager.update();
-            leftinake.setPower(1);
 
 
             if (gamepad1.a) {
-                settherotation(0.1);  //intake pos 1
+                settherotation(0.175);  //intake pos 1
             }
             if (gamepad1.b) {
                 settherotation(0);
@@ -54,10 +60,10 @@ public class servospindexer extends LinearOpMode {
                 settherotation(0.2367); //shoter pos 1
             }
             if (gamepad1.y) {
-                settherotation(0.35); //intaek pos 2
+                settherotation(0.42); //intaek pos 2
             }
             if (gamepad1.left_bumper) {
-                settherotation(0.6);  //inatke pos 3
+                settherotation(0.665);  //inatke pos 3
             }
             if (gamepad1.right_bumper) {
                 settherotation(0.48); //shooter pos 2

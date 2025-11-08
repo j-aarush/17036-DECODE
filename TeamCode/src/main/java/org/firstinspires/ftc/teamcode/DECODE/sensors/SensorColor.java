@@ -27,12 +27,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.DECODE.sensors;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -48,6 +48,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * There will be some variation in the values measured depending on the specific sensor you are using.
  *
+ * greendirect: .011, 0.034, 0.025
+ * greenhole: .013, 0.032, 0.023
+
+ * purpledirect: 0.021, .025, .035
+ * purplehole: 0.22, .027, .030
+
+ * metal: 0.049, .077, .060
+ * open: .046, .060, .040
  * If the color sensor supports adjusting the gain, you can increase the gain (a multiplier to make
  * the sensor report higher values) by holding down the A button on the gamepad, and decrease the
  * gain by holding down the B button on the gamepad. The AndyMark Proximity & Color Sensor does not
@@ -69,11 +77,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 @TeleOp(name = "Sensor: Color", group = "Sensor")
-@Disabled
 public class SensorColor extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
-  NormalizedColorSensor colorSensor;
+public static  NormalizedColorSensor colorSensor;
 
   /** The relativeLayout field is used to aid in providing interesting visual feedback
    * in this sample application; you probably *don't* need this when you use a color sensor on your
@@ -121,7 +128,7 @@ public class SensorColor extends LinearOpMode {
     // colors will report at or near 1, and you won't be able to determine what color you are
     // actually looking at. For this reason, it's better to err on the side of a lower gain
     // (but always greater than  or equal to 1).
-    float gain = 2;
+    float gain = 12;
 
     // Once per loop, we will update this hsvValues array. The first element (0) will contain the
     // hue, the second element (1) will contain the saturation, and the third element (2) will
@@ -137,7 +144,7 @@ public class SensorColor extends LinearOpMode {
     // Get a reference to our sensor object. It's recommended to use NormalizedColorSensor over
     // ColorSensor, because NormalizedColorSensor consistently gives values between 0 and 1, while
     // the values you get from ColorSensor are dependent on the specific sensor you're using.
-    colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+    colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
 
     // If possible, turn the light on in the beginning (it might already be on anyway,
     // we just make sure it is if we can).
@@ -185,7 +192,7 @@ public class SensorColor extends LinearOpMode {
       xButtonPreviouslyPressed = xButtonCurrentlyPressed;
 
       // Get the normalized colors from the sensor
-      NormalizedRGBA colors = colorSensor.getNormalizedColors();
+       NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
       /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
        * normalized values from the sensor (in the range of 0 to 1), as well as the equivalent
