@@ -29,7 +29,6 @@ public class InitialTeleop extends NextFTCOpMode {
         BL = hardwareMap.get(DcMotorEx.class, "BL");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
         leftinake = hardwareMap.get(DcMotorEx.class, "Lintake");
-        rightinake = hardwareMap.get(DcMotorEx.class, "Rintake");
 
 
         waitForStart();
@@ -61,7 +60,6 @@ public class InitialTeleop extends NextFTCOpMode {
 //                FR.setPower(-1);
 //                FL.setPower(1);
 //                BL.setPower(1);
-                rightinake.setPower(-1);
                 leftinake.setPower(1);
 //            } else{
 //                BR.setPower(0);

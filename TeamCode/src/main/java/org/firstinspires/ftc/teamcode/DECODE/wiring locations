@@ -1,17 +1,20 @@
+names listed are config names
+
 Chub
-Motor 3 - backright
-Motor 2 - front right
-Motor 1 - intake right
-Servo 0 flick (injector 4)
-Servo 1 right spindex (injector 5)
-Servo 4 left spindex (injector 6)
-MOTOR 0 - FLYWHEEL
-I2C 3 - PINPOINT
+Motor 3 - BR
+Motor 2 - FR
+Motor 1 - Rintake
+Servo 0 flicky (injector 4)
+Servo 1 leftspindex (injector 5/6)
+Servo 4 rightspindex (injector 5/6)
+MOTOR 0 - shooter
+I2C 3 - pinpoint
 I2C 0 - FRONT COLOR SENSOR
 
 
 Ehub
 
-Motor 0 - left intake
-Motor 2 - front left
-Motor 3 - back left
+Motor 0 - Lintake (spindexer encoder)
+Motor 2 - FL
+Motor 3 - BL
+analog 2-3 - lefte; righte (spindexer analog output)

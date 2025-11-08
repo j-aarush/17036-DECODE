@@ -6,13 +6,11 @@ import android.annotation.SuppressLint;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class RTPAxon {
+public class CRaxonSpindexer {
     // Encoder for servo position feedback
     double servoEncoder;
     private final DcMotorEx revencoder;
@@ -59,7 +57,7 @@ public class RTPAxon {
     // region constructors
 
     // Basic constructor, defaults to FORWARD direction
-    public RTPAxon(CRServo servo, DcMotorEx theencoder) {
+    public CRaxonSpindexer(CRServo servo, DcMotorEx theencoder) {
         rtp = true;
         this.servo = servo;
         revencoder = theencoder;
@@ -68,7 +66,7 @@ public class RTPAxon {
     }
 
     // Constructor with explicit direction
-    public RTPAxon(CRServo servo, DcMotorEx theencoder, Direction direction) {
+    public CRaxonSpindexer(CRServo servo, DcMotorEx theencoder, Direction direction) {
         this(servo, theencoder);
         this.direction = direction;
         initialize();
@@ -78,26 +76,28 @@ public class RTPAxon {
     private void initialize() {
         servo.setPower(0);
         try {
-            Thread.sleep(10);
+            Thread.sleep(25);
         } catch (InterruptedException ignored) {
         }
 
         // Try to get a valid starting position
-        do {
-            STARTPOS = getCurrentAngle();
-            if (Math.abs(STARTPOS) > 1) {
-                previousAngle = getCurrentAngle();
-            } else {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ignored) {
-                }
-            }
-            ntry++;
-        } while (Math.abs(previousAngle) < 0.2 && (ntry < 50));
+//        do {
+//            STARTPOS = getCurrentAngle();
+//            if (Math.abs(STARTPOS) > 1) {
+//                previousAngle = getCurrentAngle();
+//            } else {
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException ignored) {
+//                }
+//            }
+//            ntry++;
+//        } while (Math.abs(previousAngle) < 0.2 && (ntry < 50));
 
         totalRotation = 0;
 //        homeAngle = previousAngle;
+        homeAngle = getCurrentAngle();
+        STARTPOS = homeAngle;
 
         // Default PID coefficients
         kP = 0.002;
@@ -236,7 +236,7 @@ public class RTPAxon {
     public double getCurrentAngle() {
 //        if (servoEncoder == null) return 0;
 //        return (servoEncoder.getVoltage() / 3.3) * (direction.equals(Direction.REVERSE) ? -360 : 360);
-        return (revencoder.getCurrentPosition() * 360 / 8192 );
+        return (revencoder.getCurrentPosition() * 360 / 8192.0 );
     }
 
     // Check if servo is at target (default tolerance)
@@ -252,7 +252,8 @@ public class RTPAxon {
     // Force reset total rotation and PID state
     public void forceResetTotalRotation() {
         totalRotation = 0;
-        previousAngle = getCurrentAngle();
+        homeAngle = getCurrentAngle();
+//        previousAngle = getCurrentAngle();
         resetPID();
     }
 
@@ -271,20 +272,22 @@ public class RTPAxon {
     // Main update loop: updates rotation, computes PID, applies power
     public synchronized void update() {
         double currentAngle = getCurrentAngle();
-        double angleDifference = currentAngle - previousAngle;
+//        double angleDifference = currentAngle - previousAngle;
+//
+//        // Handle wraparound at 0/360 degrees
+//        if (angleDifference > 180) {
+//            angleDifference -= 360;
+//            cliffs--;
+//        } else if (angleDifference < -180) {
+//            angleDifference += 360;
+//            cliffs++;
+//        }
+//
+//        // Update total rotation with wraparound correction
+//        totalRotation = currentAngle - homeAngle + cliffs * 360;
+//        previousAngle = currentAngle;
+        totalRotation = currentAngle - homeAngle;
 
-        // Handle wraparound at 0/360 degrees
-        if (angleDifference > 180) {
-            angleDifference -= 360;
-            cliffs--;
-        } else if (angleDifference < -180) {
-            angleDifference += 360;
-            cliffs++;
-        }
-
-        // Update total rotation with wraparound correction
-        totalRotation = currentAngle - homeAngle + cliffs * 360;
-        previousAngle = currentAngle;
 
         if (!rtp) return;
 
