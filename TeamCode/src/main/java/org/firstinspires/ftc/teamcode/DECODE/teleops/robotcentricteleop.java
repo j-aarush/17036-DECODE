@@ -22,9 +22,9 @@ import static dev.nextftc.bindings.Bindings.button;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@TeleOp(name = "field centric")
+@TeleOp(name = "robot centric")
 @Configurable
-public class newteleop extends NextFTCOpMode {
+public class robotcentricteleop extends NextFTCOpMode {
     public static  NormalizedColorSensor colorSensor;
     public static ElapsedTime intakeeee = new ElapsedTime();
     public static Servo leftspindex, rightspindex;
@@ -35,7 +35,7 @@ public class newteleop extends NextFTCOpMode {
 
     public static DcMotorEx intake;
     float greenv, bluev;
-    boolean move;
+    boolean move= false;
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
@@ -66,44 +66,6 @@ public class newteleop extends NextFTCOpMode {
 
 
     public void intakefsm() {
-        switch (intaekstage) {
-            case 0:
-                intake.setPower(1);
-//                    rotationpos = 0;
-                settherotation(0); //first pos
-                if (move && intakeeee.seconds() > 0.467) {
-//                        rotationpos = rotationpos + 0.25;
-                    settherotation(0.25);
-                    move = false;
-                    intakeeee.reset();
-                    intaekstage = 1;
-                }
-                break;
-            case 1:
-                settherotation(0.25); //first pos
-                if (move && intakeeee.seconds() > 0.467) {
-//                        rotationpos = rotationpos + 0.25;
-                    settherotation(0.5);
-                    move = false;
-                    intakeeee.reset();
-                    intaekstage = 2;
-                }
-                break;
-            case 2:
-//                rotationpos = 0.175;
-                settherotation(0.5);
-//                    settherotation(rotationpos); //first pos
-                if (move && intakeeee.seconds() > 0.467) {
-                    settherotation(0.6167);
-                    move = false;
-                    intakeeee.reset();
-                    intake.setPower(0);
-                    intaekstage = -1;
-                    shooterstage = 0;
-                }
-                break;
-        }
-
     }
     public void shootingfsm() {
         switch (shooterstage) {
@@ -113,11 +75,11 @@ public class newteleop extends NextFTCOpMode {
                 shooterstage = 1;
                 break;
             case 1:
-                flicky.setPosition(0.2); //hopefully up
+                flicky.setPosition(0); //hopefully up
                 shooterstage = 2;
                 break;
             case 2:
-                flicky.setPosition(0.4); //hopefully down
+                flicky.setPosition(0.25); //hopefully down
                 shooterstage = 3;
                 break;
             case 3:
@@ -126,11 +88,11 @@ public class newteleop extends NextFTCOpMode {
                 shooterstage = 4;
                 break;
             case 4:
-                flicky.setPosition(0.2); //hopefully up
+                flicky.setPosition(0); //hopefully up
                 shooterstage = 5;
                 break;
             case 5:
-                flicky.setPosition(0.4); //hopefully up
+                flicky.setPosition(0.25); //hopefully up
                 shooterstage = 6;
                 break;
             case 6:
@@ -141,11 +103,11 @@ public class newteleop extends NextFTCOpMode {
                 shooterstage = 7;
                 break;
             case 7:
-                flicky.setPosition(0.2); //hopefully up
+                flicky.setPosition(0); //hopefully up
                 shooterstage = 8;
                 break;
             case 8:
-                flicky.setPosition(0.4); //hopefully down
+                flicky.setPosition(0.25); //hopefully down
                 settherotation(0);
                 shooterstage = -1;
                 break;
@@ -168,6 +130,11 @@ public class newteleop extends NextFTCOpMode {
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
         flicky = hardwareMap.get(Servo.class, "flicky");
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
@@ -175,27 +142,27 @@ public class newteleop extends NextFTCOpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
 
-        NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
         pinpoint.setHeading(0, AngleUnit.DEGREES);
 
         // Configure the sensor
-        colorSensor.setGain(12);
 
 
         waitForStart();
+        colorSensor.setGain(12);
 
         while(opModeIsActive()) {
+            NormalizedRGBA colors = colorSensor.getNormalizedColors();
             greenv = colors.green;
             bluev = colors.blue;
-            pinpoint.update();
-            botHeading = pinpoint.getHeading(AngleUnit.DEGREES);
+//            pinpoint.update();
+//            botHeading = pinpoint.getHeading(AngleUnit.DEGREES);
 
 
 
-            if (greenv > 0.02 && greenv < 0.04 && bluev > 0.02 && bluev < 0.039) {
+            if (greenv > 0.0167 && greenv < 0.04 && bluev > 0.015 && bluev < 0.039) {
                 move = true;
                 intakeeee.startTime();
             } else {
@@ -211,7 +178,7 @@ public class newteleop extends NextFTCOpMode {
 
             gamepad1x.whenBecomesTrue(() -> configvelocity = 500); //power save
 
-            shootingfsmbutton.whenTrue(() -> shootingfsm());
+//            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
 
             if (gamepad1.left_bumper) {
@@ -223,41 +190,68 @@ public class newteleop extends NextFTCOpMode {
                     .whenBecomesFalse(() -> intake.setPower(1)); // runs the rest of the rising edges
 
 
-            intakefsm();
+            switch (intaekstage) {
+                case 0:
+                    intake.setPower(1);
+//                    rotationpos = 0;
+                    settherotation(0); //first pos
+                    if (move && intakeeee.seconds() > 0.467) {
+//                        rotationpos = rotationpos + 0.25;
+                        settherotation(0.25);
+                        move = false;
+                        intakeeee.reset();
+                        intaekstage = 1;
+                    }
+                    break;
+                case 1:
+                    settherotation(0.25); //first pos
+                    if (move && intakeeee.seconds() > 0.467) {
+//                        rotationpos = rotationpos + 0.25;
+                        settherotation(0.5);
+                        move = false;
+                        intakeeee.reset();
+                        intaekstage = 2;
+                    }
+                    break;
+                case 2:
+//                rotationpos = 0.175;
+                    settherotation(0.5);
+//                    settherotation(rotationpos); //first pos
+                    if (move && intakeeee.seconds() > 0.467) {
+                        settherotation(0.6167);
+                        move = false;
+                        intakeeee.reset();
+                        intake.setPower(0);
+                        intaekstage = -1;
+                        shooterstage = 0;
+                    }
+                    break;
+            }
+
 
 
             if (gamepad1.dpad_right) {
-                flicky.setPosition(0);
+                settherotation(0.5);
             }
             if (gamepad1.dpad_left) {
-                flicky.setPosition(0.2);
+                settherotation(0);
             }
 
 
 
 
-            double y = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad2.left_stick_x;
-            double rx = gamepad2.right_stick_x;
-
-            if (gamepad1.options) {
-                pinpoint.setHeading(0, AngleUnit.DEGREES);
-            }
-
-            // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-
-            rotX = rotX * 1.1;  // Counteract imperfect strafing
+            double rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
+            double x = gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
+            double y = gamepad2.right_stick_x;
 
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-            double frontLeftPower = (rotY + rotX + rx) / denominator;
-            double backLeftPower = (rotY - rotX + rx) / denominator;
-            double frontRightPower = (rotY - rotX - rx) / denominator;
-            double backRightPower = (rotY + rotX - rx) / denominator;
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
 
 
             shooter();
@@ -270,6 +264,8 @@ public class newteleop extends NextFTCOpMode {
 
             telemetry.addData("output real velocity:", flywheelvelocity);
             telemetry.addData("input velocity:", configvelocity);
+            telemetry.addData("green:", greenv);
+            telemetry.addData("blue:", bluev);
             telemetry.update();
 //claire skibidi toilet ohio
 
