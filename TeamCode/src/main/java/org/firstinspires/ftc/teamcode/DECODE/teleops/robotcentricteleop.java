@@ -4,10 +4,12 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import dev.nextftc.bindings.Button;
 import dev.nextftc.control.KineticState;
@@ -20,13 +22,16 @@ import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.*;
 import static dev.nextftc.bindings.Bindings.button;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import java.util.concurrent.TimeUnit;
 
 
 @TeleOp(name = "robot centric")
 @Configurable
 public class robotcentricteleop extends NextFTCOpMode {
     public static  NormalizedColorSensor colorSensor;
-    public static ElapsedTime intakeeee = new ElapsedTime();
+    public static ElapsedTime intakeeee = new ElapsedTime(0);
     public static Servo leftspindex, rightspindex;
     public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
@@ -34,7 +39,9 @@ public class robotcentricteleop extends NextFTCOpMode {
     }
 
     public static DcMotorEx intake;
-    float greenv, bluev;
+    float greenv, bluev, redv;
+    double flickup = 0.08, flickdown = 0.267;
+    double distancev;
     boolean move= false;
     int counter = 0;
     int shootercounter = 0;
@@ -67,52 +74,52 @@ public class robotcentricteleop extends NextFTCOpMode {
 
     public void intakefsm() {
     }
-    public void shootingfsm() {
-        switch (shooterstage) {
-            case 0:
-                rotationpos = 0.6167;
-                settherotation(0.6167); //first pos
-                shooterstage = 1;
-                break;
-            case 1:
-                flicky.setPosition(0); //hopefully up
-                shooterstage = 2;
-                break;
-            case 2:
-                flicky.setPosition(0.25); //hopefully down
-                shooterstage = 3;
-                break;
-            case 3:
-                rotationpos = rotationpos - 0.255;
-                settherotation(rotationpos);
-                shooterstage = 4;
-                break;
-            case 4:
-                flicky.setPosition(0); //hopefully up
-                shooterstage = 5;
-                break;
-            case 5:
-                flicky.setPosition(0.25); //hopefully up
-                shooterstage = 6;
-                break;
-            case 6:
-//                    rotationpos = 0.175;
-//                    settherotation(rotationpos); //first pos
-                rotationpos = rotationpos - 0.2535;
-                settherotation(rotationpos);
-                shooterstage = 7;
-                break;
-            case 7:
-                flicky.setPosition(0); //hopefully up
-                shooterstage = 8;
-                break;
-            case 8:
-                flicky.setPosition(0.25); //hopefully down
-                settherotation(0);
-                shooterstage = -1;
-                break;
-        }
-    }
+//    public void shootingfsm() {
+//        switch (shooterstage) {
+//            case 0:
+//                rotationpos = 0.6167;
+//                settherotation(0.6167); //first pos
+//                shooterstage = 1;
+//                break;
+//            case 1:
+//                flicky.setPosition(flickup); //hopefully up
+//                shooterstage = 2;
+//                break;
+//            case 2:
+//                flicky.setPosition(flickdown); //hopefully down
+//                shooterstage = 3;
+//                break;
+//            case 3:
+//                rotationpos = rotationpos - 0.255;
+//                settherotation(rotationpos);
+//                shooterstage = 4;
+//                break;
+//            case 4:
+//                flicky.setPosition(flickup); //hopefully up
+//                shooterstage = 5;
+//                break;
+//            case 5:
+//                flicky.setPosition(flickdown); //hopefully up
+//                shooterstage = 6;
+//                break;
+//            case 6:
+////                    rotationpos = 0.175;
+////                    settherotation(rotationpos); //first pos
+//                rotationpos = rotationpos - 0.2535;
+//                settherotation(rotationpos);
+//                shooterstage = 7;
+//                break;
+//            case 7:
+//                flicky.setPosition(flickup); //hopefully up
+//                shooterstage = 8;
+//                break;
+//            case 8:
+//                flicky.setPosition(flickdown); //hopefully down
+//                settherotation(0);
+//                shooterstage = -1;
+//                break;
+//        }
+//    }
 
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
@@ -148,23 +155,32 @@ public class robotcentricteleop extends NextFTCOpMode {
         pinpoint.setHeading(0, AngleUnit.DEGREES);
 
         // Configure the sensor
-
+        colorSensor.setGain(100);
 
         waitForStart();
-        colorSensor.setGain(12);
 
         while(opModeIsActive()) {
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
             greenv = colors.green;
             bluev = colors.blue;
+            redv = colors.red;
+            distancev = ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
+
 //            pinpoint.update();
 //            botHeading = pinpoint.getHeading(AngleUnit.DEGREES);
 
 
+            //purple open - 0.17, 0.2, 0.24
+            //purplie solid - 0.17, 0.21, 0.3
+            //green open - 0.15, 0.32, 0.22
+            //gren solid - 0.1, 0.315, 0.230
+            //nothing -
+            // metal - 0.42, 0.66, 0.49
 
-            if (greenv > 0.0167 && greenv < 0.04 && bluev > 0.015 && bluev < 0.039) {
+
+            if (!move && distancev > 2 && distancev < 7 && redv > 0.03 && redv < 0.40 && greenv > 0.10 && greenv < 0.50 && bluev > 0.03 && bluev < 0.45) {
                 move = true;
-                intakeeee.startTime();
+                intakeeee.reset();
             } else {
                 move = false;
             }
@@ -180,6 +196,56 @@ public class robotcentricteleop extends NextFTCOpMode {
 
 //            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
+            if (gamepad2.left_bumper) {
+                shooterstage = 0;
+            }
+
+
+            switch (shooterstage) {
+                case 0:
+                    rotationpos = 0.6167;
+                    settherotation(0.62); //first pos
+                    shooterstage = 1;
+                    break;
+                case 1:
+                    flicky.setPosition(0.08); //hopefully up
+                    shooterstage = 2;
+                    break;
+                case 2:
+                    flicky.setPosition(0.25); //hopefully down
+                    shooterstage = 3;
+                    break;
+                case 3:
+                    rotationpos = rotationpos - 0.255;
+                    settherotation(0.3617);
+                    shooterstage = 4;
+                    break;
+                case 4:
+                    flicky.setPosition(0); //hopefully up
+                    shooterstage = 5;
+                    break;
+                case 5:
+                    flicky.setPosition(0.25); //hopefully up
+                    shooterstage = 6;
+                    break;
+                case 6:
+//                    rotationpos = 0.175;
+//                    settherotation(rotationpos); //first pos
+                    rotationpos = rotationpos - 0.255;
+                    settherotation(0.11);
+                    shooterstage = 7;
+                    break;
+                case 7:
+                    flicky.setPosition(0); //hopefully up
+                    shooterstage = 8;
+                    break;
+                case 8:
+                    flicky.setPosition(0.25); //hopefully down
+                    settherotation(0);
+                    shooterstage = -1;
+                    break;
+            }
+
 
             if (gamepad1.left_bumper) {
                 intaekstage = 0;
@@ -190,12 +256,17 @@ public class robotcentricteleop extends NextFTCOpMode {
                     .whenBecomesFalse(() -> intake.setPower(1)); // runs the rest of the rising edges
 
 
+
+
+
+
+
             switch (intaekstage) {
                 case 0:
-                    intake.setPower(1);
+                    intake.setPower(0.67);
 //                    rotationpos = 0;
-                    settherotation(0); //first pos
-                    if (move && intakeeee.seconds() > 0.467) {
+                    settherotation(0.12); //first pos
+                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
 //                        rotationpos = rotationpos + 0.25;
                         settherotation(0.25);
                         move = false;
@@ -204,8 +275,8 @@ public class robotcentricteleop extends NextFTCOpMode {
                     }
                     break;
                 case 1:
-                    settherotation(0.25); //first pos
-                    if (move && intakeeee.seconds() > 0.467) {
+                    settherotation(0.37); //first pos
+                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
 //                        rotationpos = rotationpos + 0.25;
                         settherotation(0.5);
                         move = false;
@@ -215,15 +286,15 @@ public class robotcentricteleop extends NextFTCOpMode {
                     break;
                 case 2:
 //                rotationpos = 0.175;
-                    settherotation(0.5);
+                    settherotation(0.62);
 //                    settherotation(rotationpos); //first pos
-                    if (move && intakeeee.seconds() > 0.467) {
-                        settherotation(0.6167);
+                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
+                        settherotation(0.62);
                         move = false;
                         intakeeee.reset();
                         intake.setPower(0);
                         intaekstage = -1;
-                        shooterstage = 0;
+                        shooterstage = -1;
                     }
                     break;
             }
@@ -235,6 +306,12 @@ public class robotcentricteleop extends NextFTCOpMode {
             }
             if (gamepad1.dpad_left) {
                 settherotation(0);
+            }
+            if (gamepad1.dpad_down) {
+                flicky.setPosition(0.27);
+            }
+            if (gamepad1.dpad_up) {
+                flicky.setPosition(0.08);
             }
 
 
@@ -264,6 +341,7 @@ public class robotcentricteleop extends NextFTCOpMode {
 
             telemetry.addData("output real velocity:", flywheelvelocity);
             telemetry.addData("input velocity:", configvelocity);
+            telemetry.addData("red:", redv);
             telemetry.addData("green:", greenv);
             telemetry.addData("blue:", bluev);
             telemetry.update();

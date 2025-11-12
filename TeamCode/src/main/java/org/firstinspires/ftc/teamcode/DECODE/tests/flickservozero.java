@@ -41,6 +41,7 @@ public class flickservozero extends LinearOpMode {
         flick = hardwareMap.get(Servo.class, "flicky");
         left = hardwareMap.get(Servo.class, "leftspindex");
         right = hardwareMap.get(Servo.class, "rightspindex");
+        flick.setDirection(Servo.Direction.FORWARD);
 
 
 
@@ -67,7 +68,7 @@ public class flickservozero extends LinearOpMode {
                 flick.setPosition(0);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.4);
+                flick.setPosition(0.2);
             }
 
             if (gamepad2.a) {
