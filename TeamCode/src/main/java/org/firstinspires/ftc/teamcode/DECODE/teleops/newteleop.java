@@ -240,7 +240,7 @@ public class newteleop extends NextFTCOpMode {
                     settherotation(0.24); //0.12
                     intakeonoffb = true;
 //                    rotationpos = 0;
-                    if (move && intakeeee.time() > 1.5) {
+                    if (move && intakeeee.time() > 1.6) {
 //                        rotationpos = rotationpos + 0.25;
                         move = false;
                         intakeeee.reset();
@@ -250,7 +250,7 @@ public class newteleop extends NextFTCOpMode {
                     }
                     break;
                 case 1:
-                    if (move && intakeeee.time() > 1.5) {
+                    if (move && intakeeee.time() > 1.6) {
 //                        rotationpos = rotationpos + 0.25;
                         move = false;
                         intakeeee.reset();
@@ -263,7 +263,7 @@ public class newteleop extends NextFTCOpMode {
                 case 2:
 //                rotationpos = 0.175;
 //                    settherotation(rotationpos); //first pos
-                    if (move && intakeeee.time() > 1.5) {
+                    if (move && intakeeee.time() > 1.6) {
                         move = false;
                         intakeeee.reset();
                         settherotation(0.75); //0.62
@@ -277,42 +277,42 @@ public class newteleop extends NextFTCOpMode {
                     rotationpos = 0.6167;
                     settherotation(0.62); //first pos
                     previntakestage = 3;
-                    if (intakeeee.time() > 0.3) {
+                    if (intakeeee.time() > 0.33) {
                     intaekstage = 4;
                         intakeeee.reset();}
                     break;
                 case 4:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 4;
-                    if (intakeeee.time() > 0.3) {
+                    if (intakeeee.time() > 0.33) {
                     intaekstage = 5;
                         intakeeee.reset();}
                     break;
                 case 5:
                     flickys.setPosition(flickdown); //hopefully down
                     previntakestage = 5;
-                    if (intakeeee.time() > 0.3) {
+                    if (intakeeee.time() > 0.33) {
                         intaekstage = 6;
                         intakeeee.reset();}
                     break;
                 case 6:
                     settherotation(0.872);
                     previntakestage = 6;
-                    if (intakeeee.time() > 0.7) {
+                    if (intakeeee.time() > 0.75) {
                     intaekstage = 7;
                         intakeeee.reset();}
                     break;
                 case 7:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 7;
-                    if (intakeeee.time() > 0.3) {
+                    if (intakeeee.time() > 0.33) {
                     intaekstage = 8;
                         intakeeee.reset();}
                     break;
                 case 8:
                     flickys.setPosition(flickdown); //hopefully up
                     previntakestage = 8;
-                    if (intakeeee.time() > 0.3) {
+                    if (intakeeee.time() > 0.33) {
                     intaekstage = 9;
                         intakeeee.reset();}
                     break;
