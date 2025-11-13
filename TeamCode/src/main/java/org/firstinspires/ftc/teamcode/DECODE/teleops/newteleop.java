@@ -30,8 +30,9 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(name = "NEW TELEOP")
 @Configurable
 public class newteleop extends NextFTCOpMode {
-    public static  NormalizedColorSensor colorSensor;
+    public static NormalizedColorSensor colorSensor;
     public static Servo leftspindex, rightspindex;
+
     public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
         rightspindex.setPosition(rotationn);
@@ -41,26 +42,26 @@ public class newteleop extends NextFTCOpMode {
     float greenv, bluev, redv;
     double flickup = 0.00, flickdown = 0.267;
     double distancev;
-    boolean move= false, intakeonoffb = false;
+    boolean move = false, intakeonoffb = false;
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
 
 
-    int intaekstage =-1 , shooterstage =-1, previntakestage = -1;
+    int intaekstage = -1, shooterstage = -1, previntakestage = -1;
 
     double y;
-    double x ;
-    double rx ;
+    double x;
+    double rx;
 
     // Denominator is the largest motor power (absolute value) or 1
     // This ensures all the powers maintain the same ratio,
     // but only if at least one is out of the range [-1, 1]
-    double denominator ;
+    double denominator;
     double frontLeftPower;
-    double backLeftPower ;
-    double frontRightPower ;
-    double backRightPower ;
+    double backLeftPower;
+    double frontRightPower;
+    double backRightPower;
 
     GoBildaPinpointDriver pinpoint;
 
@@ -101,8 +102,8 @@ public class newteleop extends NextFTCOpMode {
 //                shooterstage = 6;
 //                break;
 //            case 6:
-    ////                    rotationpos = 0.175;
-    ////                    settherotation(rotationpos); //first pos
+    /// /                    rotationpos = 0.175;
+    /// /                    settherotation(rotationpos); //first pos
 //                rotationpos = rotationpos - 0.2535;
 //                settherotation(rotationpos);
 //                shooterstage = 7;
@@ -130,10 +131,10 @@ public class newteleop extends NextFTCOpMode {
         return intakeeee;
     }
 
+    double intaketimercount;
 
     @Override
-    public void runOpMode() {
-
+    public void onInit() {
 
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
@@ -159,17 +160,23 @@ public class newteleop extends NextFTCOpMode {
 
         // Configure the sensor
         colorSensor.setGain(100);
+    }
 
-        waitForStart();
+    @Override
+    public void onStartButtonPressed() {
         intakeeee.reset();
 
+    }
 
-        while(opModeIsActive()) {
+     @Override
+     public void onUpdate() {
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
             greenv = colors.green;
             bluev = colors.blue;
             redv = colors.red;
             distancev = ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
+            intaketimercount = intakeeee.time();
+
 
 //            pinpoint.update();
 //            botHeading = pinpoint.getHeading(AngleUnit.DEGREES);
@@ -240,7 +247,7 @@ public class newteleop extends NextFTCOpMode {
                     settherotation(0.24); //0.12
                     intakeonoffb = true;
 //                    rotationpos = 0;
-                    if (move && intakeeee.time() > 1.6) {
+                    if (move && intaketimercount > 1.6) {
 //                        rotationpos = rotationpos + 0.25;
                         move = false;
                         intakeeee.reset();
@@ -250,7 +257,7 @@ public class newteleop extends NextFTCOpMode {
                     }
                     break;
                 case 1:
-                    if (move && intakeeee.time() > 1.6) {
+                    if (move && intaketimercount > 1.6) {
 //                        rotationpos = rotationpos + 0.25;
                         move = false;
                         intakeeee.reset();
@@ -263,7 +270,7 @@ public class newteleop extends NextFTCOpMode {
                 case 2:
 //                rotationpos = 0.175;
 //                    settherotation(rotationpos); //first pos
-                    if (move && intakeeee.time() > 1.6) {
+                    if (move && intaketimercount > 1.6) {
                         move = false;
                         intakeeee.reset();
                         settherotation(0.75); //0.62
@@ -277,42 +284,42 @@ public class newteleop extends NextFTCOpMode {
                     rotationpos = 0.6167;
                     settherotation(0.62); //first pos
                     previntakestage = 3;
-                    if (intakeeee.time() > 0.33) {
+                    if (intaketimercount > 0.33) {
                     intaekstage = 4;
                         intakeeee.reset();}
                     break;
                 case 4:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 4;
-                    if (intakeeee.time() > 0.33) {
+                    if (intaketimercount > 0.33) {
                     intaekstage = 5;
                         intakeeee.reset();}
                     break;
                 case 5:
                     flickys.setPosition(flickdown); //hopefully down
                     previntakestage = 5;
-                    if (intakeeee.time() > 0.33) {
+                    if (intaketimercount > 0.33) {
                         intaekstage = 6;
                         intakeeee.reset();}
                     break;
                 case 6:
                     settherotation(0.872);
                     previntakestage = 6;
-                    if (intakeeee.time() > 0.75) {
+                    if (intaketimercount > 0.75) {
                     intaekstage = 7;
                         intakeeee.reset();}
                     break;
                 case 7:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 7;
-                    if (intakeeee.time() > 0.33) {
+                    if (intaketimercount > 0.33) {
                     intaekstage = 8;
                         intakeeee.reset();}
                     break;
                 case 8:
                     flickys.setPosition(flickdown); //hopefully up
                     previntakestage = 8;
-                    if (intakeeee.time() > 0.33) {
+                    if (intaketimercount > 0.33) {
                     intaekstage = 9;
                         intakeeee.reset();}
                     break;
@@ -320,21 +327,21 @@ public class newteleop extends NextFTCOpMode {
                     rotationpos = rotationpos - 0.255;
                     settherotation(0.368);
                     previntakestage = 9;
-                    if (intakeeee.time() > 1) {
+                    if (intaketimercount > 1) {
                     intaekstage = 10;
                         intakeeee.reset();}
                     break;
                 case 10:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 10;
-                    if (intakeeee.time() > 1.2) {
+                    if (intaketimercount > 1.2) {
                     intaekstage = 11;
                         intakeeee.reset();}
                     break;
                 case 11:
                     flickys.setPosition(flickdown); //hopefully down
                     previntakestage = 11;
-                    if (intakeeee.time() > 0.5) {
+                    if (intaketimercount > 0.5) {
                     intaekstage = -1;
                         intakeeee.reset();}
                     break;
@@ -388,11 +395,11 @@ public class newteleop extends NextFTCOpMode {
             telemetry.addData("green:", greenv);
             telemetry.addData("blue:", bluev);
             telemetry.addData("intake stage", intaekstage);
-            telemetry.addData("timer", intakeeee.time());
+            telemetry.addData("timer", intaketimercount);
             telemetry.update();
 //claire skibidi toilet ohio
 
-        }
+
 
     }
 
