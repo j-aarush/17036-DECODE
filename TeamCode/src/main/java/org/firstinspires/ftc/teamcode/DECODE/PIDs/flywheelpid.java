@@ -32,10 +32,9 @@ public class flywheelpid extends NextFTCOpMode {
 
 
     public static MotorEx flywheel = new MotorEx("shooter");
-    public static ServoEx flickerrr = new ServoEx("flicky");
 
 
-    public static float configvelocity = 1500; //far zone - ~1500. near zone - ~1200-1300
+    public static float configvelocity; //far zone - ~1500. near zone - ~1200-1300
 
 
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {

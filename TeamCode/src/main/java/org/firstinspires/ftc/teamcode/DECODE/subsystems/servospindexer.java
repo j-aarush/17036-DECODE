@@ -57,7 +57,7 @@ public class servospindexer extends LinearOpMode {
                 settherotation(0);
             }
             if (gamepad1.x) {
-                settherotation(0.11); //shoter pos 1
+                settherotation(0.62); //shoter pos 1
             }
             if (gamepad1.y) {
                 settherotation(0.35); //intaek pos 2
@@ -66,10 +66,10 @@ public class servospindexer extends LinearOpMode {
                 settherotation(0.50);  //inatke pos 3
             }
             if (gamepad1.right_bumper) {
-                settherotation(0.3617); //shooter pos 2
+                settherotation(0.37); //shooter pos 2
             }
             if (gamepad1.dpad_down) {
-                settherotation(0.62); //shooter pos 3
+                settherotation(0.115); //shooter pos 3
             }
 //            gamepad1a.whenBecomesTrue(() -> settherotation(0)); //rough near zone
 //

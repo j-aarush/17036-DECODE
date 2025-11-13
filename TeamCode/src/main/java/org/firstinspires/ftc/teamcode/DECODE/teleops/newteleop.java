@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Configurable
 public class newteleop extends NextFTCOpMode {
     public static  NormalizedColorSensor colorSensor;
-    public static ElapsedTime intakeeee = new ElapsedTime(0);
     public static Servo leftspindex, rightspindex;
     public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
@@ -40,13 +39,13 @@ public class newteleop extends NextFTCOpMode {
 
     public static DcMotorEx intake;
     float greenv, bluev, redv;
-    double flickup = 0.08, flickdown = 0.267;
+    double flickup = 0.00, flickdown = 0.267;
     double distancev;
     boolean move= false, intakeonoffb = false;
-    int configvelocity;
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
+
 
     int intaekstage =-1 , shooterstage =-1, previntakestage = -1;
 
@@ -122,9 +121,14 @@ public class newteleop extends NextFTCOpMode {
 
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flicky;
+    Servo flickys;
 
     double botHeading;
+    public static ElapsedTime intakeeee = new ElapsedTime(0);
+
+    public static ElapsedTime getIntakeeee() {
+        return intakeeee;
+    }
 
 
     @Override
@@ -141,7 +145,7 @@ public class newteleop extends NextFTCOpMode {
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        flicky = hardwareMap.get(Servo.class, "flicky");
+        flickys = hardwareMap.get(Servo.class, "flicky");
 
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
@@ -157,6 +161,8 @@ public class newteleop extends NextFTCOpMode {
         colorSensor.setGain(100);
 
         waitForStart();
+        intakeeee.reset();
+
 
         while(opModeIsActive()) {
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
@@ -177,31 +183,30 @@ public class newteleop extends NextFTCOpMode {
             // metal - 0.42, 0.66, 0.49
 
 
-            if (!move && distancev > 2 && distancev < 7 && redv > 0.03 && redv < 0.40 && greenv > 0.10 && greenv < 0.50 && bluev > 0.03 && bluev < 0.45) {
-                move = true;
+            if (!move && distancev > 2 && distancev < 6.5 && redv > 0.05 && redv < 0.30 && greenv > 0.10 && greenv < 0.45 && bluev > 0.05 && bluev < 0.40) {
                 intakeeee.reset();
-            } else {
-                move = false;
+                move = true;
             }
-
 
             //get data from hub; store as variables at beginning of loop
 
-            gamepad1y.whenBecomesTrue(() -> configvelocity = 1267); //rough near zone
+            if (gamepad1.y) {
+                configvelocity = 1267;
+            }
+            if (gamepad1.b) {
+                configvelocity = 1650;
+            }
 
-            gamepad1b.whenBecomesTrue(() -> configvelocity = 1520); //rough far zone
-
-            gamepad1x.whenBecomesTrue(() -> configvelocity = 500); //power save
 
 //            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
-            if (gamepad2.left_bumper && intaekstage > 1.9) {
-                intaekstage = previntakestage + 1;
+            if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
+                intaekstage = 3;
             }
-            if (!gamepad2.left_bumper && intaekstage > 2.9) {
-                previntakestage = intaekstage;
-                intaekstage = 20;
-            }
+//            if (gamepad2.right_trigger < 0.5 && intaekstage > 2.9) {
+//                previntakestage = intaekstage;
+//                intaekstage = 20;
+//            }
 
 
 
@@ -209,9 +214,9 @@ public class newteleop extends NextFTCOpMode {
                 intaekstage = 0;
             }
 
-            intakeonoff.toggleOnBecomesTrue()
-                    .whenBecomesTrue(() -> intakeonoffb = true) // runs every other rising edge, including the first one
-                    .whenBecomesFalse(() -> intakeonoffb = false); // runs the rest of the rising edges
+//            intakeonoff.toggleOnBecomesTrue()
+//                    .whenBecomesTrue(() -> intakeonoffb = true) // runs every other rising edge, including the first one
+//                    .whenBecomesFalse(() -> intakeonoffb = false); // runs the rest of the rising edges
 
             if (intakeonoffb) {
                 intake.setPower(0.75);
@@ -220,94 +225,118 @@ public class newteleop extends NextFTCOpMode {
                 intake.setPower(0);
             }
 
+            if (gamepad1.a)
+            {
+                settherotation(0.12); //first pos
+
+            }
 
 
             switch (intaekstage) {
+                case -1:
+                    intakeeee.reset();
+                    break;
                 case 0:
+                    settherotation(0.24); //0.12
                     intakeonoffb = true;
 //                    rotationpos = 0;
-                    settherotation(0.12); //first pos
-                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
+                    if (move && intakeeee.time() > 1.5) {
 //                        rotationpos = rotationpos + 0.25;
-                        settherotation(0.25);
                         move = false;
                         intakeeee.reset();
+                        settherotation(0.492); //0.37
                         previntakestage = 0;
                         intaekstage = 1;
                     }
                     break;
                 case 1:
-                    settherotation(0.37); //first pos
-                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
+                    if (move && intakeeee.time() > 1.5) {
 //                        rotationpos = rotationpos + 0.25;
-                        settherotation(0.5);
                         move = false;
                         intakeeee.reset();
+                        settherotation(0.492); //0.62
+
                         previntakestage = 1;
                         intaekstage = 2;
                     }
                     break;
                 case 2:
 //                rotationpos = 0.175;
-                    settherotation(0.62);
 //                    settherotation(rotationpos); //first pos
-                    if (move && intakeeee.now(TimeUnit.MILLISECONDS) > 1000) {
-                        settherotation(0.62);
+                    if (move && intakeeee.time() > 1.5) {
                         move = false;
                         intakeeee.reset();
+                        settherotation(0.75); //0.62
                         intakeonoffb = false;
                         previntakestage = 2;
                         intaekstage = -1;
+                        intakeeee.reset();
                     }
                     break;
                 case 3:
                     rotationpos = 0.6167;
                     settherotation(0.62); //first pos
                     previntakestage = 3;
+                    if (intakeeee.time() > 0.3) {
                     intaekstage = 4;
+                        intakeeee.reset();}
                     break;
                 case 4:
-                    flicky.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup); //hopefully up
                     previntakestage = 4;
+                    if (intakeeee.time() > 0.3) {
                     intaekstage = 5;
+                        intakeeee.reset();}
                     break;
                 case 5:
-                    flicky.setPosition(flickdown); //hopefully down
+                    flickys.setPosition(flickdown); //hopefully down
                     previntakestage = 5;
-                    intaekstage = 6;
+                    if (intakeeee.time() > 0.3) {
+                        intaekstage = 6;
+                        intakeeee.reset();}
                     break;
                 case 6:
-                    rotationpos = rotationpos - 0.255;
-                    settherotation(0.3617);
+                    settherotation(0.872);
                     previntakestage = 6;
+                    if (intakeeee.time() > 0.7) {
                     intaekstage = 7;
+                        intakeeee.reset();}
                     break;
                 case 7:
-                    flicky.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup); //hopefully up
                     previntakestage = 7;
+                    if (intakeeee.time() > 0.3) {
                     intaekstage = 8;
+                        intakeeee.reset();}
                     break;
                 case 8:
-                    flicky.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown); //hopefully up
                     previntakestage = 8;
+                    if (intakeeee.time() > 0.3) {
                     intaekstage = 9;
+                        intakeeee.reset();}
                     break;
                 case 9:
                     rotationpos = rotationpos - 0.255;
-                    settherotation(0.11);
+                    settherotation(0.368);
                     previntakestage = 9;
+                    if (intakeeee.time() > 1) {
                     intaekstage = 10;
+                        intakeeee.reset();}
                     break;
                 case 10:
-                    flicky.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup); //hopefully up
                     previntakestage = 10;
+                    if (intakeeee.time() > 1.2) {
                     intaekstage = 11;
+                        intakeeee.reset();}
                     break;
                 case 11:
-                    flicky.setPosition(flickdown); //hopefully down
-                    settherotation(0);
+                    flickys.setPosition(flickdown); //hopefully down
                     previntakestage = 11;
+                    if (intakeeee.time() > 0.5) {
                     intaekstage = -1;
+                        intakeeee.reset();}
                     break;
 
             }
@@ -321,10 +350,10 @@ public class newteleop extends NextFTCOpMode {
                 settherotation(0);
             }
             if (gamepad1.dpad_down) {
-                flicky.setPosition(0.27);
+                flickys.setPosition(flickup);
             }
             if (gamepad1.dpad_up) {
-                flicky.setPosition(0.08);
+                flickys.setPosition(flickdown);
             }
 
 
@@ -354,9 +383,12 @@ public class newteleop extends NextFTCOpMode {
 
             telemetry.addData("output real velocity:", flywheelvelocity);
             telemetry.addData("input velocity:", configvelocity);
+            telemetry.addData("dist:", distancev);
             telemetry.addData("red:", redv);
             telemetry.addData("green:", greenv);
             telemetry.addData("blue:", bluev);
+            telemetry.addData("intake stage", intaekstage);
+            telemetry.addData("timer", intakeeee.time());
             telemetry.update();
 //claire skibidi toilet ohio
 
