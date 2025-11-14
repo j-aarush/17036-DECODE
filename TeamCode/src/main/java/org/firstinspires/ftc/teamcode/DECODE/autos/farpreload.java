@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Autonomous(name = "3 Ball Far")
+@Disabled
 @Configurable
 public class farpreload extends NextFTCOpMode {
     public static NormalizedColorSensor colorSensor;
