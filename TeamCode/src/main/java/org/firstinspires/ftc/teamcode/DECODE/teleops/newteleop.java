@@ -206,7 +206,7 @@ public class newteleop extends NextFTCOpMode {
                 configvelocity = 1267;
             }
             if (gamepad1.b) {
-                configvelocity = 1650;
+                configvelocity = 1675;
             }
 
 
@@ -294,9 +294,9 @@ public class newteleop extends NextFTCOpMode {
                     break;
                 case 3:
                     rotationpos = 0.6167;
-                    settherotation(0.62); //first pos
+                    settherotation(0.872); //first pos
                     previntakestage = 3;
-                    if (intakeeee.time() > 0.43) {
+                    if (intakeeee.time() > 0.63) {
                     intaekstage = 4;
                         intakeeee.reset();}
                     break;
@@ -315,7 +315,7 @@ public class newteleop extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 6:
-                    settherotation(0.872);
+                    settherotation(0.62);
                     previntakestage = 6;
                     if (intakeeee.time() > 0.75) {
                     intaekstage = 7;
@@ -331,7 +331,7 @@ public class newteleop extends NextFTCOpMode {
                 case 8:
                     flickys.setPosition(flickdown); //hopefully up
                     previntakestage = 8;
-                    if (intakeeee.time() > 0.33) {
+                    if (intakeeee.time() > 0.43) {
                     intaekstage = 9;
                         intakeeee.reset();}
                     break;
@@ -346,7 +346,7 @@ public class newteleop extends NextFTCOpMode {
                 case 10:
                     flickys.setPosition(flickup); //hopefully up
                     previntakestage = 10;
-                    if (intakeeee.time() > 1.2) {
+                    if (intakeeee.time() > 0.43) {
                     intaekstage = 11;
                         intakeeee.reset();}
                     break;

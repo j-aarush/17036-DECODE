@@ -40,8 +40,8 @@ public class flywheelpid extends NextFTCOpMode {
     public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
         // Create a velocity controller with PID and feedforward
         ControlSystem controller = ControlSystem.builder()
-                .velPid(0.184, 0.0167, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
-                .basicFF(0.0067, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
+                .velPid(0.12, 0, 0) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
+                .basicFF(0, 0.0, 0) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
                 .build();
 
         // Set the goal velocity to 500 units per second

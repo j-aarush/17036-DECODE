@@ -40,6 +40,7 @@ public class servospindexer extends LinearOpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         leftinake = hardwareMap.get(DcMotorEx.class, "Lintake");
 
+
 //        leftspindex.setDirection(Servo.Direction.REVERSE);
 
 
@@ -47,17 +48,18 @@ public class servospindexer extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            BindingManager.update();
+
+            leftinake.setPower(1);
 
 
             if (gamepad1.a) {
                 settherotation(0.25);  //intake pos 1
             }
             if (gamepad1.b) {
-                settherotation(0);
+                settherotation(0.06);
             }
             if (gamepad1.x) {
-                settherotation(0.62); //shoter pos 1
+                settherotation(0.535); //shoter pos 1
             }
             if (gamepad1.y) {
                 settherotation(0.35); //intaek pos 2
@@ -66,10 +68,10 @@ public class servospindexer extends LinearOpMode {
                 settherotation(0.50);  //inatke pos 3
             }
             if (gamepad1.right_bumper) {
-                settherotation(0.37); //shooter pos 2
+                settherotation(0.28); //shooter pos 2
             }
             if (gamepad1.dpad_down) {
-                settherotation(0.115); //shooter pos 3
+                settherotation(0.02); //shooter pos 3
             }
 //            gamepad1a.whenBecomesTrue(() -> settherotation(0)); //rough near zone
 //
