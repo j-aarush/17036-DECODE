@@ -49,30 +49,32 @@ public class servospindexer extends LinearOpMode {
         while(opModeIsActive()) {
 
 
-            leftinake.setPower(1);
+//            leftinake.setPower(1);
+//up is counterclockwise
 
 
             if (gamepad1.a) {
-                settherotation(0.25);  //intake pos 1
+                settherotation(0.97);  //SHOOTER 3 hoewfjepwa
             }
             if (gamepad1.b) {
-                settherotation(0.06);
+                settherotation(0);
             }
             if (gamepad1.x) {
-                settherotation(0.535); //shoter pos 1
+                settherotation(0.71); //SHOOTER 2
+
             }
-            if (gamepad1.y) {
-                settherotation(0.35); //intaek pos 2
-            }
-            if (gamepad1.left_bumper) {
-                settherotation(0.50);  //inatke pos 3
-            }
-            if (gamepad1.right_bumper) {
-                settherotation(0.28); //shooter pos 2
-            }
-            if (gamepad1.dpad_down) {
-                settherotation(0.02); //shooter pos 3
-            }
+                if (gamepad1.y) {
+                    settherotation(0.46); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
+                }
+//            if (gamepad1.left_bumper) {
+//                settherotation(0.50);  //inatke pos 3
+//            }
+//            if (gamepad1.right_bumper) {
+//                settherotation(0.28); //shooter pos 2
+//            }
+                if (gamepad1.dpad_down) {
+                    settherotation(0.02); //intake?
+                }
 //            gamepad1a.whenBecomesTrue(() -> settherotation(0)); //rough near zone
 //
 //            gamepad1b.whenBecomesTrue(() -> settherotation(0.1)); //rough far zone
