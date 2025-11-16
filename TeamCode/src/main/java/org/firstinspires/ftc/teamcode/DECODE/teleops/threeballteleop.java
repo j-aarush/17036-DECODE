@@ -27,9 +27,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import java.util.concurrent.TimeUnit;
 
 
-@TeleOp(name = "NEWnewnewnew TELEOP")
+@TeleOp(name = "3 ball TELEOP")
 @Configurable
-public class newnewteleop extends NextFTCOpMode {
+public class threeballteleop extends NextFTCOpMode {
     public static NormalizedColorSensor colorSensor;
     public static Servo leftspindex, rightspindex;
 
@@ -40,7 +40,7 @@ public class newnewteleop extends NextFTCOpMode {
 
     public static DcMotorEx intake;
     float greenv, bluev, redv;
-    double flickup = 0.00, flickdown = 0.3;
+    double flickup = 0.005, flickdown = 0.3;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -204,7 +204,7 @@ public class newnewteleop extends NextFTCOpMode {
         //get data from hub; store as variables at beginning of loop
 
         if (gamepad1.y) {
-            configvelocity = 1645;
+            configvelocity = 1675;
         }
         if (gamepad1.b) {
             configvelocity = 1267;
@@ -227,14 +227,14 @@ public class newnewteleop extends NextFTCOpMode {
 //            intaekstage = 0;
 //        }
 
-            intakeonoff.toggleOnBecomesTrue()
-                    .whenBecomesTrue(() -> intake.setPower(1)) // runs every other rising edge, including the first one
-                    .whenBecomesFalse(() -> intake.setPower(0)); // runs the rest of the rising edges
+        intakeonoff.toggleOnBecomesTrue()
+                .whenBecomesTrue(() -> intake.setPower(1)) // runs every other rising edge, including the first one
+                .whenBecomesFalse(() -> intake.setPower(0)); // runs the rest of the rising edges
 
 
         if (gamepad1.a)
         {
-            settherotation(0.21); //first pos figure out later
+            settherotation(0.46); //first pos figure out later
 
         }
 
@@ -311,36 +311,36 @@ public class newnewteleop extends NextFTCOpMode {
 //                break;
             case 5:
                 previntakestage = 5;
-                if (intakeeee.time() > 0.2) {
+                if (intakeeee.time() > 0.8) {
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.21);
+                settherotation(0.71);
                 previntakestage = 6;
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 1) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 7;
-                if (intakeeee.time() > 0.3) {
+                if (intakeeee.time() > 0.43) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 previntakestage = 8;
-                if (intakeeee.time() > 0.3) {
+                if (intakeeee.time() > 0.43) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.46);
+                settherotation(0.97);
                 previntakestage = 9;
-                if (intakeeee.time() > 0.7) {
+                if (intakeeee.time() > 1.5) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -355,28 +355,6 @@ public class newnewteleop extends NextFTCOpMode {
                 flickys.setPosition(flickdown); //hopefully down
                 previntakestage = 11;
                 if (intakeeee.time() > 0.5) {
-                    intaekstage = -1;
-                    intakeeee.reset();}
-                break;
-            case 12:
-                rotationpos = rotationpos - 0.255;
-                settherotation(0.71);
-                previntakestage = 9;
-                if (intakeeee.time() > 0.7) {
-                    intaekstage = 10;
-                    intakeeee.reset();}
-                break;
-            case 13:
-                flickys.setPosition(flickup); //hopefully up
-                previntakestage = 10;
-                if (intakeeee.time() > 0.43) {
-                    intaekstage = 11;
-                    intakeeee.reset();}
-                break;
-            case 14:
-                flickys.setPosition(flickdown); //hopefully down
-                previntakestage = 11;
-                if (intakeeee.time() > 0.4) {
                     intaekstage = -1;
                     intakeeee.reset();}
                 break;

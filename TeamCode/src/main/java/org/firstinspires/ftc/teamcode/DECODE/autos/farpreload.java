@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -13,14 +12,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.ftc.NextFTCOpMode;
-import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.*;
+import dev.nextftc.hardware.impl.MotorEx;
+
 import static dev.nextftc.bindings.Bindings.button;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -29,21 +31,60 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import java.util.concurrent.TimeUnit;
 
 
-@Autonomous(name = "3 Ball Far")
-@Disabled
+@Autonomous(name = "3 Ball Far", preselectTeleOp = "NEWnewnewnew TELEOP")
 @Configurable
 public class farpreload extends NextFTCOpMode {
+
+
+    public static double flywheelvelocity;
+
+
+    public static MotorEx flywheel = new MotorEx("shooter");
+
+
+    public static float configvelocity = 800; //far zone - ~1500. near zone - ~1200-1300
+
+
     public static NormalizedColorSensor colorSensor;
     public static Servo leftspindex, rightspindex;
 
-    public void settherotation(double rotationn) {
+    public static void velocityControlWithFeedforwardExample(KineticState currentstate) {
+        // Create a velocity controller with PID and feedforward
+        ControlSystem controller = ControlSystem.builder()
+                .velPid(0.184, 0.02, 0.05) // Velocity PID with kP=0.1, kI=0.01, kD=0.05
+                .basicFF(0.0067, 0.0, 0.01) // Basic feedforward with kV=0.02, kA=0.0, kS=0.01 //pid tuning
+                .build();
+
+        // Set the goal velocity to 500 units per second
+        controller.setGoal(new KineticState(0.0, 800, 0.0));
+
+        // In a loop (simulated here), you would:
+        // Create a KineticState with current position and velocity
+        // In a loop (simulated here), you would:
+        // Create a KineticState with current position and velocity
+
+        double power = controller.calculate(currentstate);
+        flywheel.setPower(power);
+
+        // Apply power to your motor
+        System.out.println("Power to apply: " + power);
+    }
+
+    public static void shooter() {
+        BindingManager.update();
+        flywheelvelocity = flywheel.getVelocity();
+        KineticState currentState = new KineticState(0, 800, 0.0); //figure out velocity (is it in ticks?!?)
+        velocityControlWithFeedforwardExample(currentState);
+    }
+
+        public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
         rightspindex.setPosition(rotationn);
     }
 
     public static DcMotorEx intake;
     float greenv, bluev, redv;
-    double flickup = 0.00, flickdown = 0.267;
+    double flickup = 0.00, flickdown = 0.3;
     double distancev;
     boolean move = false, intakeonoffb = false;
     int counter = 0;
@@ -74,6 +115,19 @@ public class farpreload extends NextFTCOpMode {
     Button gamepad1x = button(() -> gamepad1.x);
     Button shootingfsmbutton = button(() -> gamepad2.right_bumper);
     Button intakeonoff = button(() -> gamepad1.right_bumper);
+
+    public void driveawatt() {
+        FL.setPower(1);
+        BL.setPower(1);
+        FR.setPower(-1);
+        BR.setPower(-1);
+    }
+    public void stopd() {
+        FL.setPower(0);
+        BL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
+    }
 
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
@@ -115,23 +169,48 @@ public class farpreload extends NextFTCOpMode {
 
         // Configure the sensor
         colorSensor.setGain(100);
+        settherotation(0.205); //first pos
+
     }
 
     @Override
     public void onStartButtonPressed() {
-        intakeeee.reset();
-        configvelocity = 1600;
+        shooter();
+        sleep(3000);
 
-        settherotation(0.62); //first pos
+        settherotation(0.205); //first pos
+        sleep(1500);
         flickys.setPosition(flickup); //hopefully up
+        sleep(1500);
+
         flickys.setPosition(flickdown); //hopefully down
-        settherotation(0.872);
+        sleep(1500);
+
+        settherotation(0.46);
+        sleep(1000);
+
         flickys.setPosition(flickup); //hopefully up
+        sleep(1000);
+
         flickys.setPosition(flickdown); //hopefully up
-        settherotation(0.368);
+        sleep(1000);
+
+        settherotation(0.71);
+        sleep(1000);
+
         flickys.setPosition(flickup); //hopefully up
+        sleep(1000);
+
         flickys.setPosition(flickdown); //hopefully down
-        settherotation(0);
+        sleep(1000);
+
+        settherotation(0.46);
+        sleep(100);
+
+        driveawatt();
+        sleep(300);
+        stopd();
+
 
 
 
