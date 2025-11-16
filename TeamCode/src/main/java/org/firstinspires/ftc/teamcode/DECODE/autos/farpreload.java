@@ -56,7 +56,7 @@ public class farpreload extends NextFTCOpMode {
                 .build();
 
         // Set the goal velocity to 500 units per second
-        controller.setGoal(new KineticState(0.0, 800, 0.0));
+        controller.setGoal(new KineticState(0.0, 1000, 0.0));
 
         // In a loop (simulated here), you would:
         // Create a KineticState with current position and velocity
@@ -64,7 +64,7 @@ public class farpreload extends NextFTCOpMode {
         // Create a KineticState with current position and velocity
 
         double power = controller.calculate(currentstate);
-        flywheel.setPower(power);
+        flywheel.setPower(power * .5);
 
         // Apply power to your motor
         System.out.println("Power to apply: " + power);
@@ -73,8 +73,10 @@ public class farpreload extends NextFTCOpMode {
     public static void shooter() {
         BindingManager.update();
         flywheelvelocity = flywheel.getVelocity();
-        KineticState currentState = new KineticState(0, 800, 0.0); //figure out velocity (is it in ticks?!?)
+        KineticState currentState = new KineticState(0, 1000, 0.0); //figure out velocity (is it in ticks?!?)
         velocityControlWithFeedforwardExample(currentState);
+
+
     }
 
         public void settherotation(double rotationn) {
@@ -169,65 +171,70 @@ public class farpreload extends NextFTCOpMode {
 
         // Configure the sensor
         colorSensor.setGain(100);
-        settherotation(0.205); //first pos
-
-    }
-
-    @Override
-    public void onStartButtonPressed() {
-        shooter();
-        sleep(3000);
-
-        settherotation(0.205); //first pos
-        sleep(1500);
-        flickys.setPosition(flickup); //hopefully up
-        sleep(1500);
-
-        flickys.setPosition(flickdown); //hopefully down
-        sleep(1500);
-
-        settherotation(0.46);
-        sleep(1000);
-
-        flickys.setPosition(flickup); //hopefully up
-        sleep(1000);
-
-        flickys.setPosition(flickdown); //hopefully up
-        sleep(1000);
-
-        settherotation(0.71);
-        sleep(1000);
-
-        flickys.setPosition(flickup); //hopefully up
-        sleep(1000);
-
-        flickys.setPosition(flickdown); //hopefully down
-        sleep(1000);
-
-        settherotation(0.46);
-        sleep(100);
-
-        driveawatt();
-        sleep(300);
-        stopd();
-
-
-
+        settherotation(0.45); //first pos
 
     }
 
     @Override
     public void onUpdate() {
 
-        shooter();
-
-        telemetry.addData("output real velocity:", flywheelvelocity);
-        telemetry.addData("input velocity:", configvelocity);
         telemetry.update();
+
+
 //claire skibidi toilet ohio
 
 
 
     }
+
+
+    @Override
+    public void onStartButtonPressed() {
+
+        shooter();
+
+        telemetry.addData("output real velocity:", flywheelvelocity);
+        telemetry.addData("input velocity:", configvelocity);
+        sleep(3000);
+
+        settherotation(0.45); //first pos
+        sleep(1500);
+        flickys.setPosition(flickup); //hopefully up
+        sleep(2000);
+
+        flickys.setPosition(flickdown); //hopefully down
+        sleep(1500);
+
+        settherotation(0.7);
+        sleep(1000);
+
+        flickys.setPosition(flickup); //hopefully up
+        sleep(2000);
+
+        flickys.setPosition(flickdown); //hopefully up
+        sleep(1500);
+
+        settherotation(0.954);
+        sleep(1000);
+
+        flickys.setPosition(flickup); //hopefully up
+        sleep(1000);
+
+        flickys.setPosition(flickdown); //hopefully down
+        sleep(1000);
+
+        settherotation(0.325);
+        sleep(100);
+
+        driveawatt();
+        sleep(350);
+        stopd();
+        stop();
+
+
+
+
+    }
+
 
 }

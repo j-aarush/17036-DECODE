@@ -54,17 +54,17 @@ public class servospindexer extends LinearOpMode {
 
 
             if (gamepad1.a) {
-                settherotation(0.97);  //SHOOTER 3 hoewfjepwa
+                settherotation(0.325);  //SHOOTER 3 hoewfjepwa
             }
             if (gamepad1.b) {
                 settherotation(0);
             }
             if (gamepad1.x) {
-                settherotation(0.71); //SHOOTER 2
+                settherotation(0.575); //SHOOTER 2
 
             }
                 if (gamepad1.y) {
-                    settherotation(0.46); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
+                    settherotation(0.829); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
                 }
 //            if (gamepad1.left_bumper) {
 //                settherotation(0.50);  //inatke pos 3
