@@ -206,7 +206,9 @@ public class newnewteleop extends NextFTCOpMode {
         if (gamepad1.y) {
             configvelocity = 1675;
         }
-
+        if (gamepad1.b) {
+            configvelocity = 1267;
+        }
 
 //            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
@@ -235,9 +237,7 @@ public class newnewteleop extends NextFTCOpMode {
             settherotation(0.46); //first pos figure out later
 
         }
-        if (gamepad1.b) {
-            settherotation(0.1);
-        }
+
 
 
 
