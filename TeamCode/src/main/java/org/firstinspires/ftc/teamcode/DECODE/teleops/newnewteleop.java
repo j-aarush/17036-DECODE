@@ -18,7 +18,6 @@ import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.ftc.NextFTCOpMode;
-import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.*;
 import static dev.nextftc.bindings.Bindings.button;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -38,7 +37,12 @@ public class newnewteleop extends NextFTCOpMode {
         rightspindex.setPosition(rotationn);
     }
 
-    public static DcMotorEx intake;
+    public static DcMotorEx intake, flywheel;
+    public static float targetV = 0;
+
+    double kP = 0.11, kV = 0.000435;
+    double error;
+
     float greenv, bluev, redv;
     double flickup = 0.0, flickdown = 0.5;
     double distancev;
@@ -137,6 +141,7 @@ public class newnewteleop extends NextFTCOpMode {
     @Override
     public void onInit() {
 
+        flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
@@ -162,6 +167,9 @@ public class newnewteleop extends NextFTCOpMode {
 
         // Configure the sensor
         colorSensor.setGain(100);
+
+        flickys.setPosition(flickup);
+        flickys.setPosition(flickdown);
     }
 
     @Override
@@ -203,12 +211,23 @@ public class newnewteleop extends NextFTCOpMode {
 
         //get data from hub; store as variables at beginning of loop
 
+        error = targetV - flywheel.getVelocity();
+
+        flywheel.setPower(kP * error + kV * targetV);
+
         if (gamepad1.y) {
-            configvelocity = 1550;
+            targetV = 0;
+        }
+        if (gamepad1.x) {
+            targetV = 1200;
         }
         if (gamepad1.b) {
-            configvelocity = 1267;
+            targetV = 1530;
         }
+
+        telemetry.addData("targetV", targetV);
+        telemetry.addData("velocity", flywheel.getVelocity());
+        telemetry.update();
 
 //            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
@@ -242,7 +261,7 @@ public class newnewteleop extends NextFTCOpMode {
 
         if (gamepad1.a)
         {
-            settherotation(0.428); //first pos figure out later
+            settherotation(0.49); //first pos figure out later
 
         }
 
@@ -324,29 +343,29 @@ public class newnewteleop extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.427);
+                settherotation(0.49);
                 previntakestage = 6;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.2) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 7;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.30) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 previntakestage = 8;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.30) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.677);
+                settherotation(0.745);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -355,36 +374,36 @@ public class newnewteleop extends NextFTCOpMode {
             case 10:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 10;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
                 previntakestage = 11;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.931);
+                settherotation(1.0);
                 previntakestage = 9;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 10;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = 14;
                     intakeeee.reset();}
                 break;
             case 14:
                 flickys.setPosition(flickdown); //hopefully down
                 previntakestage = 11;
-                if (intakeeee.time() > 0.8) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = -1;
                     intakeeee.reset();}
                 break;
@@ -423,7 +442,6 @@ public class newnewteleop extends NextFTCOpMode {
         double backRightPower = (y + x - rx) / denominator;
 
 
-        shooter();
 
 
         FL.setPower(frontLeftPower);
@@ -431,8 +449,6 @@ public class newnewteleop extends NextFTCOpMode {
         FR.setPower(frontRightPower);
         BR.setPower(backRightPower);
 
-        telemetry.addData("output real velocity:", flywheelvelocity);
-        telemetry.addData("input velocity:", configvelocity);
         telemetry.addData("dist:", distancev);
         telemetry.addData("red:", redv);
         telemetry.addData("green:", greenv);

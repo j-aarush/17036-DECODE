@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.DECODE.PIDs;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class ffflywheel extends LinearOpMode {
 
     DcMotorEx flywheel;
+    Servo flicky;
 
     public static float targetV = 0;
 
