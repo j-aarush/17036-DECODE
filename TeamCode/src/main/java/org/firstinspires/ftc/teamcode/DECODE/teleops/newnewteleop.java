@@ -261,7 +261,7 @@ public class newnewteleop extends NextFTCOpMode {
 
         if (gamepad1.a)
         {
-            settherotation(0.49); //first pos figure out later
+            settherotation(0.36); //first pos figure out later
 
         }
 
@@ -338,34 +338,34 @@ public class newnewteleop extends NextFTCOpMode {
 //                break;
             case 5:
                 previntakestage = 5;
-                if (intakeeee.time() > 0.2) {
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.49);
+                settherotation(0.36);
                 previntakestage = 6;
-                if (intakeeee.time() > 0.2) {
+                if (intakeeee.time() > 0.15) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 7;
-                if (intakeeee.time() > 0.30) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 previntakestage = 8;
-                if (intakeeee.time() > 0.30) {
+                if (intakeeee.time() > 0.25) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.745);
+                settherotation(0.62);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -387,7 +387,7 @@ public class newnewteleop extends NextFTCOpMode {
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(1.0);
+                settherotation(0.875);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
@@ -405,7 +405,8 @@ public class newnewteleop extends NextFTCOpMode {
                 previntakestage = 11;
                 if (intakeeee.time() > 0.25) {
                     intaekstage = -1;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                    settherotation(0.36);}
                 break;
 
         }
@@ -429,7 +430,7 @@ public class newnewteleop extends NextFTCOpMode {
 
 
         double rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
-        double x = -gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
+        double x = gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
         double y = gamepad2.right_stick_x;
 
         // Denominator is the largest motor power (absolute value) or 1

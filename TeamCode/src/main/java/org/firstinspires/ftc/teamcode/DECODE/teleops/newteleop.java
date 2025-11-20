@@ -360,7 +360,10 @@ public class newteleop extends NextFTCOpMode {
 
             }
 
-
+//v0.1 total time to shoot - 4.5 seconds
+//v1.0 total time to shoot - 3.5 seconds
+//v1.1 total time to shoot - 3.0 seconds
+//end goal - 0.5 seconds
 
             if (gamepad1.dpad_right) {
                 settherotation(0.5);
