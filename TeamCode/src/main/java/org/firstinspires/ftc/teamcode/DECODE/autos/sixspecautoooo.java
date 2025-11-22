@@ -38,10 +38,10 @@ public class sixspecautoooo extends OpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 0;
+    public static float targetV = 1530;
 
     double kP = 0.11, kV = 0.000435;
-    double error;
+    double error =0 ;
 
     float greenv, bluev, redv;
     double flickup = 0.0, flickdown = 0.5;
@@ -77,7 +77,9 @@ public class sixspecautoooo extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose scorePose = new Pose(56, 8, Math.toRadians(90));
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90));
+
+    private final Pose scorePose = new Pose(62, 14, Math.toRadians(90)); //figure outt
     private final Pose pickup1Pose = new Pose(36, 36, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose pickup1Pose2 = new Pose(20, 36, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
@@ -86,10 +88,14 @@ public class sixspecautoooo extends OpMode {
 
     private final Pose finishPose = new Pose(37.0, 50.0, Math.toRadians(180.0));
 
-    private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3;
+    private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot;
     private Path grab1;
 
     public void buildPaths() {
+        startshoot = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, scorePose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
+                .build();
 
         grab1 = new Path(new BezierLine(scorePose, pickup1Pose));
         grab1.setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading());
@@ -119,6 +125,12 @@ public class sixspecautoooo extends OpMode {
 
     public void autonomousPathUpdate() {
         switch (pathState) {
+            case -1:
+                follower.followPath(startshoot);
+                if (!follower.isBusy()) {
+                    setPathState(0);
+                }
+                break;
             case 0:
                 flickys.setPosition(flickup); //hopefully up
                 if (pathTimer.getElapsedTimeSeconds()>0.25) {
@@ -227,7 +239,7 @@ public class sixspecautoooo extends OpMode {
             case 15:
                 if (pathTimer.getElapsedTimeSeconds()>0.25) {
                     flickys.setPosition(flickdown); //hopefully up]
-                    setPathState(-1);
+                    setPathState(-67);
                 }
                 break;
         }
@@ -272,7 +284,7 @@ public class sixspecautoooo extends OpMode {
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
-        follower.setStartingPose(scorePose);
+        follower.setStartingPose(startPose);
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
@@ -282,22 +294,23 @@ public class sixspecautoooo extends OpMode {
 
     @Override
     public void start() {
+//        error = targetV - flywheel.getVelocity();
+//        flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
         settherotation(0.36); //first pos figure out later
-        targetV = 1530;
-        setPathState(0);
+        setPathState(-1);
     }
 
     @Override
     public void loop() {
-        error = targetV - flywheel.getVelocity();
-        flywheel.setPower(kP * error + kV * targetV);
+//        error = targetV - flywheel.getVelocity();
+//        flywheel.setPower(kP * error + kV * targetV);
         follower.update();
         autonomousPathUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.update();
 
     }

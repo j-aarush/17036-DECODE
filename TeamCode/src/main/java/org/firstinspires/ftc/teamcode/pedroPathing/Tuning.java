@@ -923,6 +923,10 @@ class DriveTuner extends OpMode {
 
         telemetryM.debug("Driving forward?: " + forward);
         telemetryM.update(telemetry);
+
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.update();
     }
 }
 
@@ -984,6 +988,7 @@ class Line extends OpMode {
         }
 
         telemetryM.debug("Driving Forward?: " + forward);
+
         telemetryM.update(telemetry);
     }
 }
