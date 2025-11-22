@@ -7,6 +7,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import dev.nextftc.core.commands.Command;
@@ -17,71 +18,278 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
 @Autonomous(name = "sixspec")
-public class sixspecautoooo extends NextFTCOpMode {
+public class sixspecautoooo extends OpMode {
+
+    public static Servo leftspindex, rightspindex;
+
+    public void settherotation(double rotationn) {
+        leftspindex.setPosition(rotationn);
+        rightspindex.setPosition(rotationn);
+    }
+
+    public static DcMotorEx intake, flywheel;
+    public static float targetV = 0;
+
+    double kP = 0.11, kV = 0.000435;
+    double error;
+
+    float greenv, bluev, redv;
+    double flickup = 0.0, flickdown = 0.5;
+    double distancev;
+    boolean move = false, intakeonoffb = false;
+    boolean intakeswitch = false;
+    int counter = 0;
+    int shootercounter = 0;
+    double rotationpos;
 
 
+    int intaekstage = -1, shooterstage = -1, previntakestage = -1;
 
-    private Follower follower;
+    double y;
+    double x;
+    double rx;
+
+    // Denominator is the largest motor power (absolute value) or 1
+    // This ensures all the powers maintain the same ratio,
+    // but only if at least one is out of the range [-1, 1]
+    double denominator;
+    double frontLeftPower;
+    double backLeftPower;
+    double frontRightPower;
+    double backRightPower;
+
+    DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
+    Servo flickys;
+
+    GoBildaPinpointDriver pinpoint;
+
+    private int pathState;
+
+
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose scorePose = new Pose(56, 8, Math.toRadians(90));
     private final Pose pickup1Pose = new Pose(36, 36, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose2 = new Pose(20, 36, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+
     private final Pose pickup2Pose = new Pose(36, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     private final Pose finishPose = new Pose(37.0, 50.0, Math.toRadians(180.0));
 
-    private PathChain grabPickup1, scorePickup1, grabPickup2, scorePickup2, grabPickup3, scorePickup3;
-    private Path preload;
+    private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3;
+    private Path grab1;
 
     public void buildPaths() {
 
-        preload = new Path(new BezierLine(scorePose, pickup1Pose));
-        preload.setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading());
+        grab1 = new Path(new BezierLine(scorePose, pickup1Pose));
+        grab1.setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading());
 
-        scorePickup1 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup1Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
+        intake1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup1Pose, pickup1Pose2))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose2.getHeading())
                 .build();
+
+        return1 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup1Pose2, scorePose))
+                .setLinearHeadingInterpolation(pickup1Pose2.getHeading(), scorePose.getHeading())
+                .build();
+
 
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup2Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(),pickup1Pose.getHeading())
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
-
-
+        scorePickup2 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, scorePose))
+                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), scorePose.getHeading())
+                .build();
 
     }
 
-    public Command secondRoutine() {
-        return new SequentialGroup(
-                new ParallelGroup(
-                        new FollowPath(grabPickup1)
-                ),
-                new ParallelGroup(
+    public void autonomousPathUpdate() {
+        switch (pathState) {
+            case 0:
+                flickys.setPosition(flickup); //hopefully up
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(1);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
 
-                )
+                break;
+            case 1:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(2);
+                    settherotation(0.62);
+                }
+                break;
+            case 2:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(3);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 3:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(4);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 4:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(5);
+                    settherotation(0.875);
+                }
+                break;
+            case 5:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(6);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 6:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(7);
+                    flickys.setPosition(flickdown); //hopefully up
+                    intake.setPower(1);
+                }
+                break;
+            case 7:
+                settherotation(0.36);
+                follower.followPath(grab1, true);
+                setPathState(8);
+                break;
+            case 8:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(intake1,true );
+                    setPathState(-8);
+                }
+                break;
 
-        );
+            case -8:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(return1,true);
+                    intake.setPower(0);
+                    setPathState(9);
+                }
+                break;
+
+            case 9:
+                flickys.setPosition(flickup); //hopefully up
+                if (pathTimer.getElapsedTimeSeconds()>0.25 && !follower.isBusy()) {
+                    setPathState(10);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 10:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(11);
+                    settherotation(0.62);
+                }
+                break;
+            case 11:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(12);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 12:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(13);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 13:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    setPathState(14);
+                    settherotation(0.875);
+                }
+                break;
+            case 14:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    flickys.setPosition(flickup); //hopefully up]
+                    setPathState(-1);
+                }
+                break;
+        }
     }
+
+    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
+    public void setPathState(int pState) {
+        pathState = pState;
+        pathTimer.resetTimer();
+    }
+
 
     @Override
-    public void onInit() {
+    public void init() {
+
+        flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
+
+        FL = hardwareMap.get(DcMotorEx.class, "FL");
+        FR = hardwareMap.get(DcMotorEx.class, "FR");
+        BL = hardwareMap.get(DcMotorEx.class, "BL");
+        BR = hardwareMap.get(DcMotorEx.class, "BR");
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        flickys = hardwareMap.get(Servo.class, "flicky");
+        flickys.setDirection(Servo.Direction.FORWARD);
+
+        leftspindex = hardwareMap.get(Servo.class, "leftspindex");
+        rightspindex = hardwareMap.get(Servo.class, "rightspindex");
+        intake = hardwareMap.get(DcMotorEx.class, "Lintake");
+
+
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+
+        pinpoint.setHeading(0, AngleUnit.DEGREES);
+
+        // Configure the sensor
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(scorePose);
+
+        flickys.setPosition(flickup);
+        flickys.setPosition(flickdown);
+
+
     }
 
     @Override
-    public void onStartButtonPressed() {
-        secondRoutine().invoke();
+    public void start() {
+        opmodeTimer.resetTimer();
+        settherotation(0.36); //first pos figure out later
+        targetV = 1530;
     }
+
+    @Override
+    public void loop() {
+        error = targetV - flywheel.getVelocity();
+        flywheel.setPower(kP * error + kV * targetV);
+        follower.update();
+        autonomousPathUpdate();
+
+    }
+
+
+
 }
