@@ -221,6 +221,12 @@ public class sixspecautoooo extends OpMode {
             case 14:
                 if (pathTimer.getElapsedTimeSeconds()>0.25) {
                     flickys.setPosition(flickup); //hopefully up]
+                    setPathState(15);
+                }
+                break;
+            case 15:
+                if (pathTimer.getElapsedTimeSeconds()>0.25) {
+                    flickys.setPosition(flickdown); //hopefully up]
                     setPathState(-1);
                 }
                 break;
@@ -279,6 +285,7 @@ public class sixspecautoooo extends OpMode {
         opmodeTimer.resetTimer();
         settherotation(0.36); //first pos figure out later
         targetV = 1530;
+        setPathState(0);
     }
 
     @Override
@@ -287,6 +294,11 @@ public class sixspecautoooo extends OpMode {
         flywheel.setPower(kP * error + kV * targetV);
         follower.update();
         autonomousPathUpdate();
+        telemetry.addData("path state", pathState);
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.update();
 
     }
 
