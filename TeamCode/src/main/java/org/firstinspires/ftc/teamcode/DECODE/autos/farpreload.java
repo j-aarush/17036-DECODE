@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
+import static android.os.SystemClock.sleep;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -33,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 @Autonomous(name = "3 Ball Far", preselectTeleOp = "NEWnewnewnew TELEOP")
 @Configurable
-public class farpreload extends NextFTCOpMode {
+public class farpreload extends OpMode {
 
 
     public static double flywheelvelocity;
@@ -41,6 +44,10 @@ public class farpreload extends NextFTCOpMode {
 
     public static MotorEx flywheel = new MotorEx("shooter");
 
+    public static float targetV = 1530;
+
+    double kP = 0.11, kV = 0.000435;
+    double error =0 ;
 
     public static float configvelocity = 800; //far zone - ~1500. near zone - ~1200-1300
 
@@ -145,7 +152,7 @@ public class farpreload extends NextFTCOpMode {
     double intaketimercount;
 
     @Override
-    public void onInit() {
+    public void init() {
 
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
@@ -171,33 +178,22 @@ public class farpreload extends NextFTCOpMode {
 
         // Configure the sensor
         colorSensor.setGain(100);
-        settherotation(0.45); //first pos
-
-    }
-
-    @Override
-    public void onUpdate() {
-
-        telemetry.update();
-
-
-//claire skibidi toilet ohio
-
-
+        settherotation(0.355); //first pos
 
     }
 
 
-    @Override
-    public void onStartButtonPressed() {
 
-        shooter();
+
+    @Override
+    public void start() {
+
 
         telemetry.addData("output real velocity:", flywheelvelocity);
         telemetry.addData("input velocity:", configvelocity);
         sleep(3000);
 
-        settherotation(0.45); //first pos
+        settherotation(0.355); //first pos
         sleep(1500);
         flickys.setPosition(flickup); //hopefully up
         sleep(2000);
@@ -205,7 +201,7 @@ public class farpreload extends NextFTCOpMode {
         flickys.setPosition(flickdown); //hopefully down
         sleep(1500);
 
-        settherotation(0.7);
+        settherotation(0.61);
         sleep(1000);
 
         flickys.setPosition(flickup); //hopefully up
@@ -214,7 +210,7 @@ public class farpreload extends NextFTCOpMode {
         flickys.setPosition(flickdown); //hopefully up
         sleep(1500);
 
-        settherotation(0.954);
+        settherotation(0.865);
         sleep(1000);
 
         flickys.setPosition(flickup); //hopefully up
@@ -223,16 +219,19 @@ public class farpreload extends NextFTCOpMode {
         flickys.setPosition(flickdown); //hopefully down
         sleep(1000);
 
-        settherotation(0.325);
+        settherotation(0.355);
         sleep(100);
 
         driveawatt();
         sleep(350);
         stopd();
-        stop();
 
 
+    }
 
+    public void loop(){
+        error = targetV - flywheel.getVelocity();
+//        flywheel.setPower(kP * error + kV * targetV);
 
     }
 

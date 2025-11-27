@@ -18,6 +18,7 @@ public class servospindexer extends LinearOpMode {
     public static Servo leftspindex, rightspindex;
     NormalizedColorSensor colorSensor;
     View relativeLayout;
+    Servo flickys;
 
 
     DcMotorEx leftinake;
@@ -34,7 +35,8 @@ public class servospindexer extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-
+        flickys = hardwareMap.get(Servo.class, "flicky");
+        flickys.setDirection(Servo.Direction.FORWARD);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
@@ -54,17 +56,17 @@ public class servospindexer extends LinearOpMode {
 
 
             if (gamepad1.a) {
-                settherotation(0.325);  //SHOOTER 3 hoewfjepwa
+                settherotation(0.355);  //SHOOTER 3 hoewfjepwa //0.45
             }
             if (gamepad1.b) {
                 settherotation(0);
             }
             if (gamepad1.x) {
-                settherotation(0.575); //SHOOTER 2
+                settherotation(0.61); //SHOOTER 2
 
             }
                 if (gamepad1.y) {
-                    settherotation(0.829); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
+                    settherotation(0.865); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
                 }
 //            if (gamepad1.left_bumper) {
 //                settherotation(0.50);  //inatke pos 3
@@ -74,6 +76,11 @@ public class servospindexer extends LinearOpMode {
 //            }
                 if (gamepad1.dpad_down) {
                     settherotation(0.02); //intake?
+                }
+
+                if(gamepad2.a)
+                {
+                    flickys.setPosition(0);
                 }
 //            gamepad1a.whenBecomesTrue(() -> settherotation(0)); //rough near zone
 //
