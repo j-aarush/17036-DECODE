@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -80,8 +81,8 @@ public class sixspecautoooo extends OpMode {
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
     private final Pose scorePose = new Pose(60.5, 14, Math.toRadians(108)); //figure outt
-    private final Pose pickup1Pose = new Pose(40.5, 36, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose2 = new Pose(27.5, 36, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose pickup1Pose = new Pose(18.22, 36.83, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose control = new Pose( 60.15, 37.81, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
     private final Pose pickup2Pose = new Pose(43.5, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
@@ -101,13 +102,13 @@ public class sixspecautoooo extends OpMode {
         grab1.setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading());
 
         intake1 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup1Pose, pickup1Pose2))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose2.getHeading())
+                .addPath(new BezierCurve(scorePose, control, pickup1Pose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
         return1 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup1Pose2, scorePose))
-                .setLinearHeadingInterpolation(pickup1Pose2.getHeading(), scorePose.getHeading())
+                .addPath(new BezierCurve(pickup1Pose, control, scorePose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
                 .build();
 
 
@@ -182,16 +183,9 @@ public class sixspecautoooo extends OpMode {
                 break;
             case 7:
                 settherotation(0.355);
-                    follower.followPath(grab1, true);
-                    setPathState(8);
-
-                break;
-            case 8:
-                if(!follower.isBusy())
-                {
-                    follower.followPath(intake1,true );
+                    follower.followPath(intake1, true);
                     setPathState(-8);
-                }
+
                 break;
 
             case -8:
