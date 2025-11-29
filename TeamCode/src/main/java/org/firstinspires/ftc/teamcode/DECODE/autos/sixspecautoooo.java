@@ -38,7 +38,7 @@ public class sixspecautoooo extends OpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 1595;
+    public static float targetV = 1585;
 
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
@@ -77,16 +77,16 @@ public class sixspecautoooo extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90));
+    private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(53, 14, Math.toRadians(108)); //figure outt
-    private final Pose pickup1Pose = new Pose(33, 36, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose pickup1Pose2 = new Pose(20, 36, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose scorePose = new Pose(60.5, 14, Math.toRadians(108)); //figure outt
+    private final Pose pickup1Pose = new Pose(40.5, 36, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose2 = new Pose(27.5, 36, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(36, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(43.5, 60, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
-    private final Pose finishPose = new Pose(37.0, 50.0, Math.toRadians(180.0));
+    private final Pose finishPose = new Pose(44.5, 50.0, Math.toRadians(180.0));
 
     private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot;
     private Path grab1;

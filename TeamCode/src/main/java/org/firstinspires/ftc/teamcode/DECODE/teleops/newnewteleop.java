@@ -144,9 +144,9 @@ public class newnewteleop extends NextFTCOpMode {
         flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
-        FR = hardwareMap.get(DcMotorEx.class, "FR");
+        BR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
-        BR = hardwareMap.get(DcMotorEx.class, "BR");
+        FR = hardwareMap.get(DcMotorEx.class, "BR");
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -261,7 +261,7 @@ public class newnewteleop extends NextFTCOpMode {
 
         if (gamepad1.a)
         {
-            settherotation(0.36); //first pos figure out later
+            settherotation(0.355); //first pos figure out later
 
         }
 
@@ -343,7 +343,7 @@ public class newnewteleop extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.36);
+                settherotation(0.355);
                 previntakestage = 6;
                 if (intakeeee.time() > 0.15) {
                     intaekstage = 7;
@@ -365,7 +365,7 @@ public class newnewteleop extends NextFTCOpMode {
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.62);
+                settherotation(0.61);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -387,7 +387,7 @@ public class newnewteleop extends NextFTCOpMode {
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.875);
+                settherotation(0.865);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
@@ -406,7 +406,7 @@ public class newnewteleop extends NextFTCOpMode {
                 if (intakeeee.time() > 0.25) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(0.36);}
+                    settherotation(0.355);}
                 break;
 
         }
