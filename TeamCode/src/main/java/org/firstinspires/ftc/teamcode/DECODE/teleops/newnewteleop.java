@@ -222,7 +222,7 @@ public class newnewteleop extends NextFTCOpMode {
             targetV = 1200;
         }
         if (gamepad1.b) {
-            targetV = 1530;
+            targetV = 1550;
         }
 
         telemetry.addData("targetV", targetV);
@@ -338,7 +338,7 @@ public class newnewteleop extends NextFTCOpMode {
 //                break;
             case 5:
                 previntakestage = 5;
-                if (intakeeee.time() > 0.05) {
+                if (intakeeee.time() > 0.025) {
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
