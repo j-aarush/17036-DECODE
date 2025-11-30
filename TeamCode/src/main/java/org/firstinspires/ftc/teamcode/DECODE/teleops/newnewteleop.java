@@ -222,7 +222,7 @@ public class newnewteleop extends NextFTCOpMode {
             targetV = 1200;
         }
         if (gamepad1.b) {
-            targetV = 1550;
+            targetV = 1580;
         }
 
         telemetry.addData("targetV", targetV);
@@ -429,18 +429,18 @@ public class newnewteleop extends NextFTCOpMode {
 
 
 
-        double rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
-        double x = gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
-        double y = gamepad2.right_stick_x;
+         rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
+         x = gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
+         y = gamepad2.right_stick_x;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
         // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double frontLeftPower = (y + x + rx) / denominator;
-        double backLeftPower = (y - x + rx) / denominator;
-        double frontRightPower = (y - x - rx) / denominator;
-        double backRightPower = (y + x - rx) / denominator;
+         denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+         frontLeftPower = (y + x + rx) / denominator;
+         backLeftPower = (y - x + rx) / denominator;
+         frontRightPower = (y - x - rx) / denominator;
+         backRightPower = (y + x - rx) / denominator;
 
 
 

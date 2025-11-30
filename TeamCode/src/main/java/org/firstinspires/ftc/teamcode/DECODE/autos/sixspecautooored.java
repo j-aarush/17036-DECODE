@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "REDsixspec", preselectTeleOp = "NEWnewnewnew TELEOP")
+@Autonomous(name = "6-7 AUTO RED", preselectTeleOp = "NEWnewnewnew TELEOP")
 public class sixspecautooored extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -40,7 +40,7 @@ public class sixspecautooored extends OpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 1557;
+    public static float targetV = 1535;
 
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
@@ -81,25 +81,26 @@ public class sixspecautooored extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.67)).mirror(); //figure outt
-    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
-    private final Pose pickup1Pose = new Pose(20.22, 36.83, Math.toRadians(180)).mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose control = new Pose( 60.15, 37.81, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
-    private final Pose secondcontrol = new Pose(77, 59, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.25)).mirror(); //figure outt
+    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(113)).mirror(); //figure outt
 
-    private final Pose pickup2Pose = new Pose(22.5, 59, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
+    private final Pose pickup1Pose = new Pose(19.7, 38, Math.toRadians(180)).mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose control = new Pose( 60.15, 40, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
+
+    private final Pose pickup2Pose = new Pose(21.5, 59, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     private final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
 
-    private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
+    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
     private Path grab1;
 
     public void buildPaths() {
         startshoot = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
-
                 .build();
 
 //        grab1 = new Path(new BezierLine(scorePose, pickup1Pose));
@@ -118,6 +119,10 @@ public class sixspecautooored extends OpMode {
         return11 = follower.pathBuilder()
                 .addPath(new BezierLine(prescorePose, scorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+        return21 = follower.pathBuilder()
+                .addPath(new BezierLine(prescorePose, rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
                 .build();
 
 
@@ -216,7 +221,7 @@ public class sixspecautooored extends OpMode {
                     follower.followPath(return11);
                     settherotation(0.355);
                     setPathState(9);
-                    intake.setPower(-0.5);
+                    intake.setPower(-0.35);
                 }
             case 9:
                 if (pathTimer.getElapsedTimeSeconds() > 1.45 && !follower.isBusy()) {
@@ -288,9 +293,9 @@ public class sixspecautooored extends OpMode {
             case 18:
                 if (!follower.isBusy()) {
                     settherotation(0.355);
-                    follower.followPath(return11);
+                    follower.followPath(return21);
                     settherotation(0.355);
-                    intake.setPower(-0.5);
+                    intake.setPower(-0.35);
                     setPathState(19);
                 }
             case 19:

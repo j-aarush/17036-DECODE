@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "BLUEsixspec", preselectTeleOp = "NEWnewnewnew TELEOP")
+@Autonomous(name = "6-7 AUTO BLUE", preselectTeleOp = "NEWnewnewnew TELEOP")
 public class sixspecautoooo extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -40,7 +40,7 @@ public class sixspecautoooo extends OpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 1557;
+    public static float targetV = 1525;
 
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
@@ -81,18 +81,19 @@ public class sixspecautoooo extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.67)); //figure outt
-    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)); //figure outt
+    private final Pose scorePose = new Pose(60, 14, Math.toRadians(109)); //figure outt
+    private final Pose rescorePose = new Pose(59.75, 13.75, Math.toRadians(111.25)); //figure outt
+    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(142)); //figure outt
     private final Pose pickup1Pose = new Pose(20.22, 36.83, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose control = new Pose( 60.15, 37.81, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
-    private final Pose secondcontrol = new Pose(77, 59, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose secondcontrol = new Pose(80, 59, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(26.5, 59, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(23, 58, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     private final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
 
-    private PathChain grabPickup1, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
+    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
     private Path grab1;
 
     public void buildPaths() {
@@ -117,6 +118,10 @@ public class sixspecautoooo extends OpMode {
         return11 = follower.pathBuilder()
                 .addPath(new BezierLine(prescorePose, scorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+        return21 = follower.pathBuilder()
+                .addPath(new BezierLine(prescorePose, rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
                 .build();
 
 
@@ -145,7 +150,7 @@ public class sixspecautoooo extends OpMode {
 
                 break;
             case -2:
-                if (pathTimer.getElapsedTimeSeconds()>2.42) {
+                if (pathTimer.getElapsedTimeSeconds()>3) {
                     flickys.setPosition(flickup); //hopefully up
                     setPathState(0);
                 }
@@ -212,17 +217,17 @@ public class sixspecautoooo extends OpMode {
             case -10:
                 if (!follower.isBusy()) {
                     settherotation(0.355);
-                    follower.followPath(return11);
+                    follower.followPath(return21);
                     settherotation(0.355);
                     setPathState(9);
-                    intake.setPower(-0.5);
                 }
             case 9:
-                if (pathTimer.getElapsedTimeSeconds() > 1.45 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.05 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
                 }
-                if (pathTimer.getElapsedTimeSeconds()>2 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds()>2.6 && !follower.isBusy()) {
                     setPathState(10);
+                    intake.setPower(-0.5);
                     flickys.setPosition(flickdown); //hopefully up
                 }
 
@@ -287,17 +292,17 @@ public class sixspecautoooo extends OpMode {
             case 18:
                 if (!follower.isBusy()) {
                     settherotation(0.355);
-                    follower.followPath(return11);
+                    follower.followPath(return21);
                     settherotation(0.355);
-                    intake.setPower(-0.5);
                     setPathState(19);
                 }
             case 19:
-                if (pathTimer.getElapsedTimeSeconds() > 1.45 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.05 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
                 }
-                if (pathTimer.getElapsedTimeSeconds()>2 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds()>2.63 && !follower.isBusy()) {
                     setPathState(20);
+                    intake.setPower(-0.5);
                     flickys.setPosition(flickdown); //hopefully up
                 }
 
