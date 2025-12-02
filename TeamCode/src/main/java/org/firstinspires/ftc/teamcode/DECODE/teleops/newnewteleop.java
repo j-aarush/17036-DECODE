@@ -261,7 +261,7 @@ public class newnewteleop extends NextFTCOpMode {
 
         if (gamepad1.a)
         {
-            settherotation(0.355); //first pos figure out later
+            settherotation(0.23); //first pos figure out later
 
         }
 
@@ -343,7 +343,7 @@ public class newnewteleop extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.355);
+                settherotation(0.23);
                 previntakestage = 6;
                 if (intakeeee.time() > 0.15) {
                     intaekstage = 7;
@@ -365,7 +365,7 @@ public class newnewteleop extends NextFTCOpMode {
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.61);
+                settherotation(0.485);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -387,7 +387,7 @@ public class newnewteleop extends NextFTCOpMode {
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.865);
+                settherotation(0.74);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
@@ -406,7 +406,7 @@ public class newnewteleop extends NextFTCOpMode {
                 if (intakeeee.time() > 0.25) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(0.355);}
+                    settherotation(0.23);}
                 break;
 
         }
