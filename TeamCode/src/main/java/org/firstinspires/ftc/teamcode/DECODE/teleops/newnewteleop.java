@@ -219,7 +219,7 @@ public class newnewteleop extends NextFTCOpMode {
             targetV = 0;
         }
         if (gamepad1.x) {
-            targetV = 1200;
+            targetV = 1267;
         }
         if (gamepad1.b) {
             targetV = 1580;
