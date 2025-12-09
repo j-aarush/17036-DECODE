@@ -92,7 +92,7 @@ public class sixspecautooored extends OpMode {
     private final Pose pickup2Pose = new Pose(21.5, 59, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
-    private final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
+    static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
 
     private PathChain grabPickup1, return21, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
     private Path grab1;

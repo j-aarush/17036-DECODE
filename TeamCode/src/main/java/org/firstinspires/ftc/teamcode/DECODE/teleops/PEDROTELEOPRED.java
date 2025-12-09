@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import dev.nextftc.core.units.Angle;
+import dev.nextftc.extensions.pedro.TurnTo;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.DECODE.autos.sixspecautooored;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -19,6 +22,7 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
 import java.util.function.Supplier;
+
 
 
 
@@ -32,6 +36,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
+    double headinglockangle;
 
     public static Servo leftspindex, rightspindex;
 
@@ -42,6 +47,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
     public static DcMotorEx intake, flywheel;
     public static float targetV = 0;
+    boolean heaaidnglock = false;
 
     double kP = 0.11, kV = 0.000435;
     double error;
@@ -99,12 +105,13 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         flickys.setPosition(flickdown);
 
         follower = Constants.createFollower(hardwareMap);
-//        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        follower.update();
-        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 14))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(110.5), 0.8))
-                .build();
+        follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror());
+////        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+//        follower.update();
+//        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+//                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 14))))
+//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(110.5), 0.8))
+//                .build();
 
     }
 
@@ -248,12 +255,12 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 //        if (gamepad1.dpad_left) {
 //            settherotation(0);
 //        }
-        if (gamepad1.dpad_right) {
-            flickys.setPosition(flickup);
-        }
-        if (gamepad1.dpad_left) {
-            flickys.setPosition(flickdown);
-        }
+//        if (gamepad1.dpad_right) {
+//            flickys.setPosition(flickup);
+//        }
+//        if (gamepad1.dpad_left) {
+//            flickys.setPosition(flickdown);
+//        }
 
 
         if (!automatedDrive) {
@@ -274,9 +281,24 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             automatedDrive = true;
         }
         //Stop automated following if the follower is done
-        if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
+        if (automatedDrive && (gamepad1.dpadLeftWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
             automatedDrive = false;
+        }
+
+        double posx = follower.getPose().getX();
+        double posy = follower.getPose().getY();
+        double distx = 133 - posx;
+        double disty = 136 - posy;
+        double trigangle = Math.tan(distx/disty) * 180 / Math.PI;
+        headinglockangle = trigangle + 90;
+
+
+        if (gamepad1.dpadDownWasPressed()) {
+            heaaidnglock = true;
+        }
+        if (heaaidnglock) {
+            new TurnTo(Angle.fromDeg(headinglockangle));
         }
 
 
@@ -284,6 +306,12 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);
+        telemetry.addData("posx", posx);
+        telemetry.addData("posy", posy);
+        telemetry.addData("distx", distx);
+        telemetry.addData("disty", disty);
+        telemetry.addData("trigangle", trigangle);
+        telemetry.addData("headinglockangle", headinglockangle);
         telemetry.update();
 //claire skibidi toilet ohio
 

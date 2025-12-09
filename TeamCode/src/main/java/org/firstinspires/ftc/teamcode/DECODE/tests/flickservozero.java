@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.DECODE.PIDs.CRaxonSpindexer;
@@ -21,8 +22,11 @@ import dev.nextftc.bindings.Button;
 public class flickservozero extends LinearOpMode {
     //Custom variable declaration for button speed change
 
+    public static ElapsedTime intakeeee = new ElapsedTime(0);
 
+    int flickswitch = -1;
 
+    boolean truefalse;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -31,7 +35,7 @@ public class flickservozero extends LinearOpMode {
         double speed;
         DcMotorEx leftintake;
         Servo left, right;
-
+        intakeeee.reset();
 
         //Rintake; Lintake
 
@@ -61,15 +65,28 @@ public class flickservozero extends LinearOpMode {
         //arm cannont move from here
 
 
-
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //up.
                 flick.setPosition(0.0);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.5);
+                flickswitch = 0;
             }
+
+
+            switch (flickswitch) {
+                case 0:
+                    intakeeee.reset();
+                    flick.setPosition(0);
+                    if (intakeeee.time() > 0.25) {
+                        flickswitch = 1;}
+                    break;
+                case 1:
+                    flick.setPosition(0.5);
+                    break;
+            }
+
 
             if (gamepad2.a) {
                 left.setPosition(0);

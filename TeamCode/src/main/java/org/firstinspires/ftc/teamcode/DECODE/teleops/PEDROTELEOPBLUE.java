@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import dev.nextftc.core.units.Angle;
+import dev.nextftc.extensions.pedro.TurnTo;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -59,6 +61,8 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
     int intaekstage = -1, shooterstage = -1, previntakestage = -1;
+    boolean heaaidnglock = false;
+    double headinglockangle;
 
 
 
@@ -101,12 +105,12 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         flickys.setPosition(flickdown);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+        follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)));
         follower.update();
-        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(follower::getPose, follower.getPose())))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, scorePose.getHeading(), 0.8))
-                .build();
+//        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+//                .addPath(new Path(new BezierLine(follower::getPose, follower.getPose())))
+//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, scorePose.getHeading(), 0.8))
+//                .build();
 
     }
 
@@ -128,11 +132,16 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             targetV = 0;
         }
         if (gamepad1.x) {
-            targetV = 1200;
+            targetV = 1100;
         }
         if (gamepad1.b) {
-            targetV = 1550;
+            targetV += 1;
         }
+        if (gamepad1.a) {
+            targetV -= 1;
+        }
+        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
+        if (gamepad1.dpad_right) flickys.setPosition(flickup);
 
         telemetry.addData("targetV", targetV);
         telemetry.addData("velocity", flywheel.getVelocity());
@@ -159,7 +168,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
         if (gamepad1.a) {
-            settherotation(0.355); //default intake pos
+            settherotation(0.23); //default intake pos
 
         }
 
@@ -174,7 +183,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.355);
+                settherotation(0.23);
                 previntakestage = 6;
                 if (intakeeee.time() > 0.1) {
                     intaekstage = 7;
@@ -196,7 +205,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.61);
+                settherotation(0.485);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -218,7 +227,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.865);
+                settherotation(0.74);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
@@ -237,7 +246,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 if (intakeeee.time() > 0.25) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(0.355);}
+                    settherotation(0.23);}
                 break;
 
         }
@@ -250,12 +259,12 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 //        if (gamepad1.dpad_left) {
 //            settherotation(0);
 //        }
-        if (gamepad1.dpad_right) {
-            flickys.setPosition(flickup);
-        }
-        if (gamepad1.dpad_left) {
-            flickys.setPosition(flickdown);
-        }
+//        if (gamepad1.dpad_right) {
+//            flickys.setPosition(flickup);
+//        }
+//        if (gamepad1.dpad_left) {
+//            flickys.setPosition(flickdown);
+//        }
 
 
         if (!automatedDrive) {
@@ -282,12 +291,36 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
+        double posx = follower.getPose().getX();
+        double posy = follower.getPose().getY();
+        double distx = posx - 10;
+        double disty = Math.abs(137 - posy);
+        double diagonaldist = Math.sqrt(distx*distx + disty*disty);
+        double trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = 90 - trigangle + 90;
 
+
+        if (gamepad1.dpad_down) {
+            heaaidnglock = true;
+        }
+        if (heaaidnglock) {
+//            new TurnTo(Angle.fromDeg(headinglockangle));
+            follower.turnTo(headinglockangle);
+        }
+
+
+
+        telemetry.addData("diag dist", diagonaldist);
 
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);
+        telemetry.addData("posx", posx);
+        telemetry.addData("posy", posy);
+        telemetry.addData("distx", distx);
+        telemetry.addData("disty", disty);
+        telemetry.addData("trigangle", trigangle);
+        telemetry.addData("headinglockangle", headinglockangle);
         telemetry.update();
-//claire skibidi toilet ohio
 
 
 
