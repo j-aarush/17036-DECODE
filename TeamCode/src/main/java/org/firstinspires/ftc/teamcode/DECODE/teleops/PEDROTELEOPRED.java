@@ -139,9 +139,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             targetV = 1550;
         }
 
-        telemetry.addData("targetV", targetV);
-        telemetry.addData("velocity", flywheel.getVelocity());
-        telemetry.update();
 
 //            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
@@ -305,6 +302,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
 
         telemetry.addData("intake stage", intaekstage);
+        telemetry.addData("targetV", targetV);
+        telemetry.addData("velocity", flywheel.getVelocity());
         telemetry.addData("timer", intaketimercount);
         telemetry.addData("posx", posx);
         telemetry.addData("posy", posy);

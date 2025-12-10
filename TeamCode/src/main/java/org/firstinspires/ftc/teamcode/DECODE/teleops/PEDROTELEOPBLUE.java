@@ -45,7 +45,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 0;
+    public static double targetV = 0;
 
     double kP = 0.11, kV = 0.000435;
     double error;
@@ -122,6 +122,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(follower::getPose, follower::getPose)))
+                .setGlobalHeadingInterpolation(HeadingInterpolator.linear(follower.getHeading(), headinglockangle))
+                .build();
+
         follower.update();
 
         error = targetV - flywheel.getVelocity();
@@ -168,7 +173,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
         if (gamepad1.a) {
-            settherotation(0.23); //default intake pos
+            settherotation(0.372); //default intake pos
 
         }
 
@@ -183,7 +188,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.23);
+                settherotation(0.372);
                 previntakestage = 6;
                 if (intakeeee.time() > 0.1) {
                     intaekstage = 7;
@@ -192,20 +197,20 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 7:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 7;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 previntakestage = 8;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.485);
+                settherotation(0.622);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 10;
@@ -214,20 +219,20 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 10:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 10;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
                 previntakestage = 11;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.74);
+                settherotation(0.877);
                 previntakestage = 9;
                 if (intakeeee.time() > 0.7) {
                     intaekstage = 13;
@@ -236,17 +241,17 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 13:
                 flickys.setPosition(flickup); //hopefully up
                 previntakestage = 10;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = 14;
                     intakeeee.reset();}
                 break;
             case 14:
                 flickys.setPosition(flickdown); //hopefully down
                 previntakestage = 11;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.08) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(0.23);}
+                    settherotation(0.372);}
                 break;
 
         }
@@ -280,10 +285,10 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             //This is how it looks with slowMode on
         }
         //Automated PathFollowing
-        if (gamepad1.dpadUpWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
-        }
+//        if (gamepad1.dpadUpWasPressed()) {
+//            follower.followPath(pathChain.get());
+//            automatedDrive = true;
+//        }
         //Stop automated following if the follower is done
         if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
@@ -306,11 +311,18 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         if (heaaidnglock) {
 //            new TurnTo(Angle.fromDeg(headinglockangle));
             follower.turnTo(headinglockangle);
+            follower.
         }
 
 
 
         telemetry.addData("diag dist", diagonaldist);
+
+        error = targetV - flywheel.getVelocity();
+
+        flywheel.setPower(kP * error + kV * targetV);
+
+        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);

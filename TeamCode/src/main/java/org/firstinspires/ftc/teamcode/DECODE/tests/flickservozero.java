@@ -68,10 +68,10 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //up.
-                flick.setPosition(0.0);
+                flick.setPosition(0.1);
             }
             if (gamepad1.b) { //down
-                flickswitch = 0;
+                flick.setPosition(0.5);
             }
 
 

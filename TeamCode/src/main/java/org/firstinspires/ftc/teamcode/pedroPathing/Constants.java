@@ -28,6 +28,8 @@ public class Constants {
             .headingPIDFCoefficients(new PIDFCoefficients(1.3,0,0.0267,0.02))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0.05,0,0.6, 0.00001)) //0.2, 0.00045
             .centripetalScaling(0.0002) //0.002
+            .holdPointHeadingScaling(1)
+
             ;
     public static PathConstraints pathConstraints = new PathConstraints(0.975, 50, 1, 1);
     public static MecanumConstants driveConstants = new MecanumConstants()
