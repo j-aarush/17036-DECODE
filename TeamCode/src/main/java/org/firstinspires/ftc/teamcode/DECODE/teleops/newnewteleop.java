@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(name = "NEWnewnewnew TELEOP")
 @Configurable
 public class newnewteleop extends NextFTCOpMode {
-    public static NormalizedColorSensor colorSensor;
+//    public static NormalizedColorSensor colorSensor;
     public static Servo leftspindex, rightspindex;
 
     public void settherotation(double rotationn) {
@@ -155,7 +155,7 @@ public class newnewteleop extends NextFTCOpMode {
         flickys = hardwareMap.get(Servo.class, "flicky");
         flickys.setDirection(Servo.Direction.FORWARD);
 
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
+//        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
@@ -166,7 +166,7 @@ public class newnewteleop extends NextFTCOpMode {
         pinpoint.setHeading(0, AngleUnit.DEGREES);
 
         // Configure the sensor
-        colorSensor.setGain(100);
+//        colorSensor.setGain(100);
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);

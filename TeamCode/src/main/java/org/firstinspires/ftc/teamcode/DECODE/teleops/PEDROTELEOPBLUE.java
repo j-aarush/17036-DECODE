@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -32,7 +34,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)).mirror(); //figure outt
 
     private boolean automatedDrive;
-    private Supplier<PathChain> pathChain;
+    private PathChain pathChain;
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
@@ -59,6 +61,15 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     int shootercounter = 0;
     double rotationpos;
 
+    double turnerror;
+
+    PIDFController controller = new PIDFController(follower.constants.coefficientsHeadingPIDF)
+//            .setCoefficientsHeadingPIDF(new PIDFCoefficients(0,0,0,0)
+            ;
+
+
+
+    boolean headingLock = true;
 
     int intaekstage = -1, shooterstage = -1, previntakestage = -1;
     boolean heaaidnglock = false;
@@ -122,12 +133,10 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
-        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-                .addPath(new Path(new BezierLine(follower::getPose, follower::getPose)))
-                .setGlobalHeadingInterpolation(HeadingInterpolator.linear(follower.getHeading(), headinglockangle))
-                .build();
 
-        follower.update();
+
+
+
 
         error = targetV - flywheel.getVelocity();
 
@@ -272,28 +281,28 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 //        }
 
 
-        if (!automatedDrive) {
-            //Make the last parameter false for field-centric
-            //In case the drivers want to use a "slowMode" you can scale the vectors
-            //This is the normal version to use in the TeleOp
-            follower.setTeleOpDrive(
-                    -gamepad2.left_stick_y,
-                    -gamepad2.left_stick_x,
-                    -gamepad2.right_stick_x,
-                    true // Robot Centric
-            );
-            //This is how it looks with slowMode on
-        }
-        //Automated PathFollowing
-//        if (gamepad1.dpadUpWasPressed()) {
-//            follower.followPath(pathChain.get());
-//            automatedDrive = true;
+//        if (!automatedDrive) {
+//            //Make the last parameter false for field-centric
+//            //In case the drivers want to use a "slowMode" you can scale the vectors
+//            //This is the normal version to use in the TeleOp
+//            follower.setTeleOpDrive(
+//                    -gamepad2.left_stick_y,
+//                    -gamepad2.left_stick_x,
+//                    -gamepad2.right_stick_x,
+//                    true // Robot Centric
+//            );
+//            //This is how it looks with slowMode on
 //        }
-        //Stop automated following if the follower is done
-        if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
-            follower.startTeleopDrive();
-            automatedDrive = false;
-        }
+//        //Automated PathFollowing
+////        if (gamepad1.dpadUpWasPressed()) {
+////            follower.followPath(pathChain.get());
+////            automatedDrive = true;
+////        }
+//        //Stop automated following if the follower is done
+//        if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
+//            follower.startTeleopDrive();
+//            automatedDrive = false;
+//        }
 
 
         double posx = follower.getPose().getX();
@@ -305,15 +314,17 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         headinglockangle = 90 - trigangle + 90;
 
 
-        if (gamepad1.dpad_down) {
-            heaaidnglock = true;
-        }
-        if (heaaidnglock) {
-//            new TurnTo(Angle.fromDeg(headinglockangle));
-            follower.turnTo(headinglockangle);
-            follower.
-        }
+        if (gamepad1.left_trigger > 0.5) {
+            headingLock = true;
+        } else headingLock = false;
 
+        turnerror = headinglockangle - follower.getHeading();  controller.setCoefficients(follower.constants.coefficientsHeadingPIDF);
+        controller.updateError(turnerror);
+
+        if (headingLock)
+            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, controller.run(), true);
+        else
+            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
 
 
         telemetry.addData("diag dist", diagonaldist);
