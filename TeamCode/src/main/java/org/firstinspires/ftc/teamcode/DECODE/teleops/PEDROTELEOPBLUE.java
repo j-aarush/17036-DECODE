@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.FilteredPIDFController;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -47,6 +49,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     public static DcMotorEx intake, flywheel;
     public static double targetV = 0;
+    FilteredPIDFController controller = new FilteredPIDFController(new FilteredPIDFCoefficients(1,0,0,0,0 ));
 
     double kP = 0.11, kV = 0.000435;
     double error;
@@ -311,22 +314,22 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         double distx = posx - 10;
         double disty = Math.abs(137 - posy);
         double diagonaldist = Math.sqrt(distx*distx + disty*disty);
-//        double trigangle = Math.toDegrees(Math.atan(disty/distx));
-//        headinglockangle = 90 - trigangle + 90;
+        double trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = 90 - trigangle + 90;
 
-//
-//        if (gamepad1.left_trigger > 0.5) {
-//            headingLock = true;
-//        } else headingLock = false;
-//
-//        turnerror = headinglockangle - follower.getHeading();  controller.setCoefficients(follower.constants.coefficientsHeadingPIDF);
-//        controller.updateError(turnerror);
-//
-//        if (headingLock)
-//            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, controller.run(), true);
-//        else
-//            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
-//
+
+            if (gamepad1.left_trigger > 0.1) {
+                headingLock = true;
+            } else headingLock = false;
+
+            turnerror = headinglockangle - follower.getHeading();
+            controller.updateError(turnerror);
+
+            if (headingLock)
+                follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, controller.run(), true);
+            else
+                follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+
 
         telemetry.addData("diag dist", diagonaldist);
 
@@ -341,6 +344,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         telemetry.addData("posx", posx);
         telemetry.addData("posy", posy);
         telemetry.addData("distx", distx);
+        telemetry.addData("heading", headingLock);
         telemetry.addData("disty", disty);
 //        telemetry.addData("trigangle", trigangle);
         telemetry.addData("headinglockangle", headinglockangle);
