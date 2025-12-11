@@ -45,8 +45,15 @@ public class sixspecautooored extends OpMode {
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
 
+    double spina = 0.24;
+    double spinb = 0.495;
+    double spinc = 0.75;
+
+    double spind = 1;
+
+
     float greenv, bluev, redv;
-    double flickup = 0.0, flickdown = 0.5;
+    double flickup = 0.045, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -166,7 +173,7 @@ public class sixspecautooored extends OpMode {
             case 1:
                 if (pathTimer.getElapsedTimeSeconds()>0.35) {
                     setPathState(2);
-                    settherotation(0.485);
+                    settherotation(spinb);
                 }
                 break;
             case 2:
@@ -184,7 +191,7 @@ public class sixspecautooored extends OpMode {
             case 4:
                 if (pathTimer.getElapsedTimeSeconds()>0.35) {
                     setPathState(5);
-                    settherotation(0.74);
+                    settherotation(spinc);
                 }
                 break;
             case 5:
@@ -201,10 +208,11 @@ public class sixspecautooored extends OpMode {
                 }
                 break;
             case 7:
-                settherotation(0.23);
-                follower.followPath(intake1, true);
-                setPathState(-8);
-
+                if(pathTimer.getElapsedTimeSeconds()>0.2) {
+                    settherotation(spina);
+                    follower.followPath(intake1, true);
+                    setPathState(-8);
+                }
                 break;
 
             case -8:
@@ -217,9 +225,9 @@ public class sixspecautooored extends OpMode {
 
             case -10:
                 if (!follower.isBusy()) {
-                    settherotation(0.23);
+                    settherotation(spina);
                     follower.followPath(return11);
-                    settherotation(0.23);
+                    settherotation(spina);
                     setPathState(9);
                     intake.setPower(-0.35);
                 }
@@ -236,7 +244,7 @@ public class sixspecautooored extends OpMode {
             case 10:
                 if (pathTimer.getElapsedTimeSeconds()>0.35) {
                     setPathState(11);
-                    settherotation(0.485);
+                    settherotation(spinb);
                 }
                 break;
             case 11:
@@ -254,7 +262,7 @@ public class sixspecautooored extends OpMode {
             case 13:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
                     setPathState(14);
-                    settherotation(0.865);
+                    settherotation(spinc);
                 }
                 break;
             case 14:
@@ -275,11 +283,13 @@ public class sixspecautooored extends OpMode {
 
 
             case 16:
-                settherotation(0.23);
-                intake.setPower(1);
-                follower.followPath(grabPickup2, true);
-                setPathState(17);
+                if(pathTimer.getElapsedTimeSeconds()>0.2) {
 
+                    settherotation(spina);
+                    intake.setPower(1);
+                    follower.followPath(grabPickup2, true);
+                    setPathState(17);
+                }
                 break;
 
             case 17:
@@ -292,9 +302,9 @@ public class sixspecautooored extends OpMode {
 
             case 18:
                 if (!follower.isBusy()) {
-                    settherotation(0.23);
+                    settherotation(spina);
                     follower.followPath(return21);
-                    settherotation(0.23);
+                    settherotation(spina);
                     intake.setPower(-0.35);
                     setPathState(19);
                 }
@@ -311,7 +321,7 @@ public class sixspecautooored extends OpMode {
             case 20:
                 if (pathTimer.getElapsedTimeSeconds()>0.35) {
                     setPathState(21);
-                    settherotation(0.485);
+                    settherotation(spinb);
                 }
                 break;
             case 21:
@@ -329,7 +339,7 @@ public class sixspecautooored extends OpMode {
             case 23:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
                     setPathState(24);
-                    settherotation(0.74);
+                    settherotation(spinc);
                 }
                 break;
             case 24:
@@ -396,7 +406,7 @@ public class sixspecautooored extends OpMode {
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
-        settherotation(0.23); //first pos figure out later
+        settherotation(spina); //first pos figure out later
 
 
 

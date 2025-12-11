@@ -21,7 +21,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
-
 import java.util.function.Supplier;
 
 
@@ -63,7 +62,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     double turnerror;
 
-    PIDFController controller = new PIDFController(follower.constants.coefficientsHeadingPIDF)
+//    PIDFController controller = new PIDFController(follower.constants.coefficientsHeadingPIDF)
 //            .setCoefficientsHeadingPIDF(new PIDFCoefficients(0,0,0,0)
             ;
 
@@ -129,6 +128,8 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     public void onStartButtonPressed() {
         intakeeee.reset();
         follower.startTeleopDrive();
+        follower.update();
+
     }
 
     @Override
@@ -281,24 +282,24 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 //        }
 
 
-//        if (!automatedDrive) {
-//            //Make the last parameter false for field-centric
-//            //In case the drivers want to use a "slowMode" you can scale the vectors
-//            //This is the normal version to use in the TeleOp
-//            follower.setTeleOpDrive(
-//                    -gamepad2.left_stick_y,
-//                    -gamepad2.left_stick_x,
-//                    -gamepad2.right_stick_x,
-//                    true // Robot Centric
-//            );
-//            //This is how it looks with slowMode on
+        if (!automatedDrive) {
+            //Make the last parameter false for field-centric
+            //In case the drivers want to use a "slowMode" you can scale the vectors
+            //This is the normal version to use in the TeleOp
+            follower.setTeleOpDrive(
+                    -gamepad2.left_stick_y,
+                    -gamepad2.left_stick_x,
+                    -gamepad2.right_stick_x,
+                    true // Robot Centric
+            );
+            //This is how it looks with slowMode on
+        }
+        //Automated PathFollowing
+//        if (gamepad1.dpadUpWasPressed()) {
+//            follower.followPath(pathChain.get());
+//            automatedDrive = true;
 //        }
-//        //Automated PathFollowing
-////        if (gamepad1.dpadUpWasPressed()) {
-////            follower.followPath(pathChain.get());
-////            automatedDrive = true;
-////        }
-//        //Stop automated following if the follower is done
+        //Stop automated following if the follower is done
 //        if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
 //            follower.startTeleopDrive();
 //            automatedDrive = false;
@@ -310,22 +311,22 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         double distx = posx - 10;
         double disty = Math.abs(137 - posy);
         double diagonaldist = Math.sqrt(distx*distx + disty*disty);
-        double trigangle = Math.toDegrees(Math.atan(disty/distx));
-        headinglockangle = 90 - trigangle + 90;
+//        double trigangle = Math.toDegrees(Math.atan(disty/distx));
+//        headinglockangle = 90 - trigangle + 90;
 
-
-        if (gamepad1.left_trigger > 0.5) {
-            headingLock = true;
-        } else headingLock = false;
-
-        turnerror = headinglockangle - follower.getHeading();  controller.setCoefficients(follower.constants.coefficientsHeadingPIDF);
-        controller.updateError(turnerror);
-
-        if (headingLock)
-            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, controller.run(), true);
-        else
-            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
-
+//
+//        if (gamepad1.left_trigger > 0.5) {
+//            headingLock = true;
+//        } else headingLock = false;
+//
+//        turnerror = headinglockangle - follower.getHeading();  controller.setCoefficients(follower.constants.coefficientsHeadingPIDF);
+//        controller.updateError(turnerror);
+//
+//        if (headingLock)
+//            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, controller.run(), true);
+//        else
+//            follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
+//
 
         telemetry.addData("diag dist", diagonaldist);
 
@@ -341,7 +342,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         telemetry.addData("posy", posy);
         telemetry.addData("distx", distx);
         telemetry.addData("disty", disty);
-        telemetry.addData("trigangle", trigangle);
+//        telemetry.addData("trigangle", trigangle);
         telemetry.addData("headinglockangle", headinglockangle);
         telemetry.update();
 
