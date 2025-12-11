@@ -49,7 +49,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     public static DcMotorEx intake, flywheel;
     public static double targetV = 0;
-    FilteredPIDFController controller = new FilteredPIDFController(new FilteredPIDFCoefficients(1,0,0,0,0 ));
+    PIDFController controller = new PIDFController(new PIDFCoefficients(1.3,0,0.0267,0.02));
 
     double kP = 0.11, kV = 0.000435;
     double error;

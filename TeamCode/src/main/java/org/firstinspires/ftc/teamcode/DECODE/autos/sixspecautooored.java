@@ -92,11 +92,11 @@ public class sixspecautooored extends OpMode {
     private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(113)).mirror(); //figure outt
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
-    private final Pose pickup1Pose = new Pose(19.7, 38, Math.toRadians(180)).mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(22, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose control = new Pose( 60.15, 40, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
     private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(21.5, 59, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(23.8, 59, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
