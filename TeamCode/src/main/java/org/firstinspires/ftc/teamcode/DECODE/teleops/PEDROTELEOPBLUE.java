@@ -42,6 +42,13 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     double spina = 0.24;
     double spinb = 0.495;
     double spinc = 0.75;
+    double posx ;
+    double posy;
+    double distx;
+    double disty ;
+    double diagonaldist;
+    double trigangle;
+
 
     public static Servo leftspindex, rightspindex;
 
@@ -123,11 +130,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)));
         follower.update();
-//        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-//                .addPath(new Path(new BezierLine(follower::getPose, follower.getPose())))
-//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, scorePose.getHeading(), 0.8))
-//                .build();
-
     }
 
     @Override
@@ -143,12 +145,21 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
         follower.update();
 
+        posx = follower.getPose().getX();
+        posy = follower.getPose().getY();
+        distx = posx - 10;
+        disty = Math.abs(137 - posy);
+        diagonaldist = Math.sqrt(distx*distx + disty*disty);
+        trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = 90 - trigangle + 90;
 
 
+        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
         error = targetV - flywheel.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
+
 
         if (gamepad1.y) {
             targetV = 0;
@@ -166,7 +177,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         if (gamepad1.dpad_right) flickys.setPosition(flickup);
 
 
-//            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
             intaekstage = 5;
@@ -192,31 +202,26 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
 
-
         switch (intaekstage) {
             case 5:
-                previntakestage = 5;
                 if (intakeeee.time() > 0.025) {
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spina);
-                previntakestage = 6;
                 if (intakeeee.time() > 0.1) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 7;
                 if (intakeeee.time() > 0.067) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
-                previntakestage = 8;
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 9;
                     intakeeee.reset();}
@@ -224,43 +229,36 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                previntakestage = 9;
                 if (intakeeee.time() > 0.72) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 10;
                 if (intakeeee.time() > 0.67) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
-                previntakestage = 11;
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
             case 12:
-                rotationpos = rotationpos - 0.255;
                 settherotation(spinc);
-                previntakestage = 9;
                 if (intakeeee.time() > 0.72) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 10;
                 if (intakeeee.time() > 0.067) {
                     intaekstage = 14;
                     intakeeee.reset();}
                 break;
             case 14:
                 flickys.setPosition(flickdown); //hopefully down
-                previntakestage = 11;
                 if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
@@ -268,54 +266,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
 
         }
-
-
-
-//        if (gamepad1.dpad_right) {
-//            settherotation(0.5);
-//        }
-//        if (gamepad1.dpad_left) {
-//            settherotation(0);
-//        }
-//        if (gamepad1.dpad_right) {
-//            flickys.setPosition(flickup);
-//        }
-//        if (gamepad1.dpad_left) {
-//            flickys.setPosition(flickdown);
-//        }
-
-
-//        if (!automatedDrive) {
-//            //Make the last parameter false for field-centric
-//            //In case the drivers want to use a "slowMode" you can scale the vectors
-//            //This is the normal version to use in the TeleOp
-//            follower.setTeleOpDrive(
-//                    -gamepad2.left_stick_y,
-//                    -gamepad2.left_stick_x,
-//                    -gamepad2.right_stick_x,
-//                    true // Robot Centric
-//            );
-//            //This is how it looks with slowMode on
-//        }
-        //Automated PathFollowing
-//        if (gamepad1.dpadUpWasPressed()) {
-//            follower.followPath(pathChain.get());
-//            automatedDrive = true;
-//        }
-        //Stop automated following if the follower is done
-//        if (automatedDrive && (gamepad1.dpadDownWasPressed() || !follower.isBusy())) {
-//            follower.startTeleopDrive();
-//            automatedDrive = false;
-//        }
-
-
-        double posx = follower.getPose().getX();
-        double posy = follower.getPose().getY();
-        double distx = posx - 10;
-        double disty = Math.abs(137 - posy);
-        double diagonaldist = Math.sqrt(distx*distx + disty*disty);
-        double trigangle = Math.toDegrees(Math.atan(disty/distx));
-        headinglockangle = 90 - trigangle + 90;
 
 
             if (gamepad1.left_bumper) {
@@ -331,26 +281,15 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
+
+
         telemetry.addData("diag dist", diagonaldist);
-
-        error = targetV - flywheel.getVelocity();
-
-        flywheel.setPower(kP * error + kV * targetV);
-
-        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
-
         telemetry.addData("error", turnerror);
         telemetry.addData("current heading", follower.getHeading());
         telemetry.addData("targetV", targetV);
-        telemetry.addData("velocity", flywheel.getVelocity());
+        telemetry.addData("actualV", flywheel.getVelocity());
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);
-        telemetry.addData("posx", posx);
-        telemetry.addData("posy", posy);
-        telemetry.addData("distx", distx);
-        telemetry.addData("heading", headingLock);
-        telemetry.addData("disty", disty);
-//        telemetry.addData("trigangle", trigangle);
         telemetry.addData("headinglockangle", headinglockangle);
         telemetry.update();
 
@@ -360,13 +299,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 }
 //coding todos (for later):
-//set up pinpoint/pedro
 //format as much code as possible into seperate subsystem classes
 //heading lock via ll/pp
 //indexing
-//formula for flywheel speed
-
-
-//driver controls: field centric joysticks (objectively better than robot centric), shooter mode on/off (HOLD to keep shooting, not just press)
-//opperator controls: *heading lock on/off*, shooter speed, intake mode on/off, intake motor on/off
-//MONDAY -- FINISH TELEOP BY ADDING HEADING LOCK, TUNE PEDRO (SO WE CAN HAVE A BASIC AUTO)
