@@ -44,6 +44,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     double spinc = 0.75;
     double posx ;
     double posy;
+    boolean lefttoggle = false;
     double distx;
     double disty ;
     double diagonaldist;
@@ -59,7 +60,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
     public static DcMotorEx intake, flywheel;
     public static double targetV = 0;
-    PIDFController controller = new PIDFController(new PIDFCoefficients(0.06,0,0.006,0.000001));
+    PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
     double kP = 0.11, kV = 0.000435;
     double error;
@@ -81,11 +82,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
 
-    boolean headingLock = true;
 
     int intaekstage = -1, shooterstage = -1, previntakestage = -1;
     boolean heaaidnglock = false;
     double headinglockangle;
+    boolean headingLock;
 
 
 
@@ -130,6 +131,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)));
         follower.update();
+        headingLock = false;
     }
 
     @Override
@@ -145,6 +147,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
         follower.update();
 
+        botHeading = follower.getHeading();
         posx = follower.getPose().getX();
         posy = follower.getPose().getY();
         distx = posx - 10;
@@ -205,6 +208,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         switch (intaekstage) {
             case 5:
                 if (intakeeee.time() > 0.025) {
+                    headingLock = true;
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
@@ -216,7 +220,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.067) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
@@ -229,13 +233,13 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.72) {
+                if (intakeeee.time() > 0.75) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.67) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
@@ -247,18 +251,20 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.72) {
+                if (intakeeee.time() > 0.75) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.067) {
+                if (intakeeee.time() > 0.07) {
+                    headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
                 break;
             case 14:
                 flickys.setPosition(flickdown); //hopefully down
+                headingLock = false;
                 if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
@@ -268,11 +274,19 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
-            if (gamepad1.left_bumper) {
-                headingLock = true;
-            } else headingLock = false;
+            if (gamepad1.left_bumper && !lefttoggle) {
+                lefttoggle = true;
+                if (headingLock) {
+                    headingLock = false;
+                } else if (!headingLock) {
+                    headingLock = true;
+                }
+            }
+            if (!gamepad1.left_bumper) {
+                lefttoggle = false;
+            }
 
-            turnerror = headinglockangle - Math.toDegrees(follower.getHeading());
+            turnerror = headinglockangle - Math.toDegrees(botHeading);
             controller.updateError(turnerror);
 
             if (headingLock)
