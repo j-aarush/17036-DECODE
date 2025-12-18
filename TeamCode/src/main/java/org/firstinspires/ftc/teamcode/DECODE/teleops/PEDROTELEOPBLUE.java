@@ -8,6 +8,7 @@ import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -75,6 +76,13 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     double rotationpos;
 
     double turnerror;
+    public static Servo leftpark, rightpark;
+
+    public void parksettherotation(double rotationn) {
+        leftpark.setPosition(rotationn);
+        rightpark.setPosition(rotationn);
+    }
+
 
 //    PIDFController controller = new PIDFController(follower.constants.coefficientsHeadingPIDF)
 //            .setCoefficientsHeadingPIDF(new PIDFCoefficients(0,0,0,0)
@@ -124,6 +132,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
 
+        leftpark = hardwareMap.get(Servo.class, "leftpark");
+        rightpark = hardwareMap.get(Servo.class, "rightpark");
+        leftpark.setDirection(Servo.Direction.FORWARD);
+        rightpark.setDirection(Servo.Direction.REVERSE);
+
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
@@ -150,7 +163,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         botHeading = follower.getHeading();
         posx = follower.getPose().getX();
         posy = follower.getPose().getY();
-        distx = posx - 10;
+        distx = posx - 9;
         disty = Math.abs(137 - posy);
         diagonaldist = Math.sqrt(distx*distx + disty*disty);
         trigangle = Math.toDegrees(Math.atan(disty/distx));
@@ -167,15 +180,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         if (gamepad1.y) {
             targetV = 0;
         }
-        if (gamepad1.x) {
-            targetV = 1100;
-        }
-        if (gamepad1.b) {
-            targetV += 1;
-        }
-        if (gamepad1.a) {
-            targetV -= 1;
-        }
+
         if (gamepad1.dpad_left) flickys.setPosition(flickdown);
         if (gamepad1.dpad_right) flickys.setPosition(flickup);
 
@@ -295,6 +300,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
+        if (gamepad1.a) {
+            parksettherotation(0);
+        }
+        if (gamepad1.b) {
+            parksettherotation(0.75);
 
 
         telemetry.addData("diag dist", diagonaldist);
@@ -309,6 +319,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
 
 
+    }
     }
 
 }

@@ -31,12 +31,24 @@ import java.util.function.Supplier;
 public class PEDROTELEOPRED extends NextFTCOpMode {
     private Follower follower;
     public static Pose startingPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
+    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)); //figure outt
     private boolean automatedDrive;
-    private Supplier<PathChain> pathChain;
+    private PathChain pathChain;
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
     double headinglockangle;
+
+    double spina = 0.24;
+    double spinb = 0.495;
+    double spinc = 0.75;
+    double posx ;
+    double posy;
+    boolean lefttoggle = false;
+    double distx;
+    double disty ;
+    double diagonaldist;
+    double trigangle;
 
     public static Servo leftspindex, rightspindex;
 
@@ -271,11 +283,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     true // Robot Centric
             );
                 //This is how it looks with slowMode on
-        }
-        //Automated PathFollowing
-        if (gamepad1.dpadUpWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
         }
         //Stop automated following if the follower is done
         if (automatedDrive && (gamepad1.dpadLeftWasPressed() || !follower.isBusy())) {

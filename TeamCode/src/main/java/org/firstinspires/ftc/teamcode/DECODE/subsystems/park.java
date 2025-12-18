@@ -36,7 +36,7 @@ public class park extends LinearOpMode {
 
         leftpark = hardwareMap.get(Servo.class, "leftpark");
         rightpark = hardwareMap.get(Servo.class, "rightpark");
-        leftpark.setDirection(Servo.Direction.REVERSE);
+        leftpark.setDirection(Servo.Direction.FORWARD);
         rightpark.setDirection(Servo.Direction.REVERSE);
 
 
@@ -53,11 +53,10 @@ public class park extends LinearOpMode {
 
 
             if (gamepad1.a) {
-                leftpark.setPosition(0.5);
+            settherotation(0);
             }
             if (gamepad1.b) {
-                leftpark.setPosition(1);
-
+            settherotation(0.75);
             }
             if (gamepad1.x) {
                 rightpark.setPosition(0.2);
