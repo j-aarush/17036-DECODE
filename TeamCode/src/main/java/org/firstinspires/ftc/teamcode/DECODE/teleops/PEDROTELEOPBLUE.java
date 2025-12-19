@@ -300,7 +300,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
-        if (gamepad1.a) {
+        if (gamepad1.y) {
             parksettherotation(0);
         }
         if (gamepad1.b) {

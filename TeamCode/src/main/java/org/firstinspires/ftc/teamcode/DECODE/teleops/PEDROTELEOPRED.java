@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -58,7 +60,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 0;
+    public static double targetV = 0;
     boolean heaaidnglock = false;
 
     double kP = 0.11, kV = 0.000435;
@@ -73,10 +75,20 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     int shootercounter = 0;
     double rotationpos;
 
+    double turnerror;
+    public static Servo leftpark, rightpark;
+
+    public void parksettherotation(double rotationn) {
+        leftpark.setPosition(rotationn);
+        rightpark.setPosition(rotationn);
+    }
+    PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
+
 
     int intaekstage = -1, shooterstage = -1, previntakestage = -1;
 
 
+    boolean headingLock;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
     Servo flickys;
@@ -112,18 +124,20 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
 
+        leftpark = hardwareMap.get(Servo.class, "leftpark");
+        rightpark = hardwareMap.get(Servo.class, "rightpark");
+        leftpark.setDirection(Servo.Direction.FORWARD);
+        rightpark.setDirection(Servo.Direction.REVERSE);
+
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
 
+
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror());
-////        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-//        follower.update();
-//        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
-//                .addPath(new Path(new BezierLine(follower::getPose, new Pose(60, 14))))
-//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(110.5), 0.8))
-//                .build();
+        follower.update();
+        headingLock = false;
 
     }
 
@@ -131,28 +145,38 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     public void onStartButtonPressed() {
         intakeeee.reset();
         follower.startTeleopDrive();
+        follower.update();
     }
 
     @Override
     public void onUpdate() {
         follower.update();
 
+        botHeading = follower.getHeading();
+        posx = follower.getPose().mirror().getX();
+        posy = follower.getPose().mirror().getY();
+        distx = posx - 9;
+        disty = Math.abs(137 - posy);
+        diagonaldist = Math.sqrt(distx*distx + disty*disty);
+        trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = trigangle;
+
+
+        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
+
         error = targetV - flywheel.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
 
+
         if (gamepad1.y) {
             targetV = 0;
         }
-        if (gamepad1.x) {
-            targetV = 1200;
-        }
-        if (gamepad1.b) {
-            targetV = 1550;
-        }
+
+        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
+        if (gamepad1.dpad_right) flickys.setPosition(flickup);
 
 
-//            shootingfsmbutton.whenTrue(() -> shootingfsm());
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
             intaekstage = 5;
@@ -160,7 +184,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         }
 
 
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_trigger > 0.5) {
             intake.setPower(-1);
         }
         if (gamepad1.right_bumper) {
@@ -173,159 +197,122 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
 
         if (gamepad1.a) {
-            settherotation(0.355); //default intake pos
-
+            settherotation(spina); //default intake pos
         }
-
 
 
 
         switch (intaekstage) {
             case 5:
-                previntakestage = 5;
                 if (intakeeee.time() > 0.025) {
+                    headingLock = true;
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
             case 6:
-                settherotation(0.355);
-                previntakestage = 6;
-                if (intakeeee.time() > 0.025) {
+                settherotation(spina);
+                if (intakeeee.time() > 0.1) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 7;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
-                previntakestage = 8;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 rotationpos = rotationpos - 0.255;
-                settherotation(0.61);
-                previntakestage = 9;
-                if (intakeeee.time() > 0.67) {
+                settherotation(spinb);
+                if (intakeeee.time() > 0.75) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 10;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
-                previntakestage = 11;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.07) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
             case 12:
-                rotationpos = rotationpos - 0.255;
-                settherotation(0.865);
-                previntakestage = 9;
-                if (intakeeee.time() > 0.67) {
+                settherotation(spinc);
+                if (intakeeee.time() > 0.75) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                previntakestage = 10;
-                if (intakeeee.time() > 0.25) {
+                if (intakeeee.time() > 0.07) {
+                    headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
                 break;
             case 14:
                 flickys.setPosition(flickdown); //hopefully down
-                previntakestage = 11;
-                if (intakeeee.time() > 0.25) {
+                headingLock = false;
+                if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(0.355);}
+                    settherotation(spina);}
                 break;
 
         }
 
 
-
-//        if (gamepad1.dpad_right) {
-//            settherotation(0.5);
-//        }
-//        if (gamepad1.dpad_left) {
-//            settherotation(0);
-//        }
-//        if (gamepad1.dpad_right) {
-//            flickys.setPosition(flickup);
-//        }
-//        if (gamepad1.dpad_left) {
-//            flickys.setPosition(flickdown);
-//        }
-
-
-        if (!automatedDrive) {
-            //Make the last parameter false for field-centric
-            //In case the drivers want to use a "slowMode" you can scale the vectors
-            //This is the normal version to use in the TeleOp
-            follower.setTeleOpDrive(
-                    -gamepad2.left_stick_y,
-                    -gamepad2.left_stick_x,
-                    -gamepad2.right_stick_x,
-                    true // Robot Centric
-            );
-                //This is how it looks with slowMode on
+        if (gamepad1.left_bumper && !lefttoggle) {
+            lefttoggle = true;
+            if (headingLock) {
+                headingLock = false;
+            } else if (!headingLock) {
+                headingLock = true;
+            }
         }
-        //Stop automated following if the follower is done
-        if (automatedDrive && (gamepad1.dpadLeftWasPressed() || !follower.isBusy())) {
-            follower.startTeleopDrive();
-            automatedDrive = false;
+        if (!gamepad1.left_bumper) {
+            lefttoggle = false;
         }
 
-        double posx = follower.getPose().getX();
-        double posy = follower.getPose().getY();
-        double distx = 133 - posx;
-        double disty = 136 - posy;
-        double trigangle = Math.tan(distx/disty) * 180 / Math.PI;
-        headinglockangle = trigangle + 90;
+        turnerror = headinglockangle - Math.toDegrees(botHeading);
+        controller.updateError(turnerror);
+
+        if (headingLock)
+            follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, controller.run(), true);
+        else
+            follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
-        if (gamepad1.dpadDownWasPressed()) {
-            heaaidnglock = true;
+        if (gamepad1.y) {
+            parksettherotation(0);
         }
-        if (heaaidnglock) {
-            new TurnTo(Angle.fromDeg(headinglockangle));
+        if (gamepad1.b) {
+            parksettherotation(0.75);
+
+
+            telemetry.addData("diag dist", diagonaldist);
+            telemetry.addData("error", turnerror);
+            telemetry.addData("current heading", follower.getHeading());
+            telemetry.addData("targetV", targetV);
+            telemetry.addData("actualV", flywheel.getVelocity());
+            telemetry.addData("intake stage", intaekstage);
+            telemetry.addData("timer", intaketimercount);
+            telemetry.addData("headinglockangle", headinglockangle);
+            telemetry.update();
+
+
         }
 
-
-
-
-        telemetry.addData("intake stage", intaekstage);
-        telemetry.addData("targetV", targetV);
-        telemetry.addData("velocity", flywheel.getVelocity());
-        telemetry.addData("timer", intaketimercount);
-        telemetry.addData("posx", posx);
-        telemetry.addData("posy", posy);
-        telemetry.addData("distx", distx);
-        telemetry.addData("disty", disty);
-        telemetry.addData("trigangle", trigangle);
-        telemetry.addData("headinglockangle", headinglockangle);
-        telemetry.update();
-//claire skibidi toilet ohio
-
-
-
-    }
-
-}
+}}
 //coding todos (for later):
 //set up pinpoint/pedro
 //format as much code as possible into seperate subsystem classes
