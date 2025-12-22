@@ -40,7 +40,7 @@ public class sixspecautooored extends OpMode {
     }
 
     public static DcMotorEx intake, flywheel;
-    public static float targetV = 1535;
+    public static float         targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
@@ -423,6 +423,15 @@ public class sixspecautooored extends OpMode {
     @Override
     public void loop() {
         error = targetV - flywheel.getVelocity();
+        botHeading = follower.getHeading();
+        posx = follower.getPose().getX();
+        posy = follower.getPose().getY();
+        distx = posx - 8;
+        disty = Math.abs(137 - posy);
+        diagonaldist = Math.sqrt(distx*distx + disty*disty);
+        trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = 90 - trigangle + 90;
+
         flywheel.setPower(kP * error + kV * targetV);
         follower.update();
         autonomousPathUpdate();

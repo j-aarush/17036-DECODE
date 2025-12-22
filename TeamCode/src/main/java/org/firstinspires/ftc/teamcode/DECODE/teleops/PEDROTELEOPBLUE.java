@@ -63,7 +63,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     public static double targetV = 0;
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
-    double kP = 0.11, kV = 0.000435;
+    double kP = 0.1167, kV = 0.000434;
     double error;
 
     float greenv, bluev, redv;
@@ -163,7 +163,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         botHeading = follower.getHeading();
         posx = follower.getPose().getX();
         posy = follower.getPose().getY();
-        distx = posx - 9;
+        distx = posx - 8;
         disty = Math.abs(137 - posy);
         diagonaldist = Math.sqrt(distx*distx + disty*disty);
         trigangle = Math.toDegrees(Math.atan(disty/distx));
@@ -238,7 +238,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.75) {
+                if (intakeeee.time() > 1.25) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -256,7 +256,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.75) {
+                if (intakeeee.time() > 1.25) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;

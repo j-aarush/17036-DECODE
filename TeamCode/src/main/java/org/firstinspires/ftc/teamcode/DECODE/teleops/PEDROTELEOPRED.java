@@ -63,7 +63,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     public static double targetV = 0;
     boolean heaaidnglock = false;
 
-    double kP = 0.11, kV = 0.000435;
+    double kP = 0.1167, kV = 0.000434;
     double error;
 
     float greenv, bluev, redv;
@@ -230,7 +230,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.75) {
+                if (intakeeee.time() > 1.2) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -248,7 +248,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.75) {
+                if (intakeeee.time() > 1.2) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
