@@ -202,6 +202,10 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             intake.setPower(0);
         }
 
+        if (gamepad1.x) {
+            settherotation(spina + 0.25);
+            settherotation(spina);
+        }
 
 
         if (gamepad1.a) {
@@ -292,12 +296,19 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             }
 
             turnerror = headinglockangle - Math.toDegrees(botHeading);
-            controller.updateError(turnerror);
+            if (gamepad1.left_stick_button) {
+                turnerror = 270 - Math.toDegrees(botHeading);
+            }
+        controller.updateError(turnerror);
+
 
             if (headingLock)
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, controller.run(), true);
+            else if (gamepad1.left_stick_button)
+                follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, 270, true);
+
             else
-                follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
+                    follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
         if (gamepad1.y) {

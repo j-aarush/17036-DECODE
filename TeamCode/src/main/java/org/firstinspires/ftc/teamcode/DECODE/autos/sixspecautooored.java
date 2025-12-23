@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -29,7 +30,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "6-7 AUTO RED", preselectTeleOp = "NEWnewnewnew TELEOP")
+@Autonomous(name = "9 AUTO RED", preselectTeleOp = "NEWnewnewnew TELEOP")
 public class sixspecautooored extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -39,11 +40,27 @@ public class sixspecautooored extends OpMode {
         rightspindex.setPosition(rotationn);
     }
 
+    double diagonaldist;
+
+    double headinglockangle;
+    double turnerror;
+
     public static DcMotorEx intake, flywheel;
-    public static float         targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
+
+    PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
+
+    public double         targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
     double kP = 0.11, kV = 0.000435;
     double error =0 ;
+    double botHeading;
+
+    double posx ;
+    double posy;
+    boolean lefttoggle = false;
+    double distx;
+    double disty ;
+    double trigangle;
 
     double spina = 0.24;
     double spinb = 0.495;
@@ -88,8 +105,8 @@ public class sixspecautooored extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.25)).mirror(); //figure outt
-    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(113)).mirror(); //figure outt
+    private final Pose scorePose = new Pose(60, 14, Math.toRadians(controller.run())).mirror(); //figure outt
+    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(controller.run())).mirror(); //figure outt
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
     private final Pose pickup1Pose = new Pose(22, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -424,13 +441,16 @@ public class sixspecautooored extends OpMode {
     public void loop() {
         error = targetV - flywheel.getVelocity();
         botHeading = follower.getHeading();
-        posx = follower.getPose().getX();
-        posy = follower.getPose().getY();
-        distx = posx - 8;
+        posx = follower.getPose().mirror().getX();
+        posy = follower.getPose().mirror().getY();
+        distx = posx - 9;
         disty = Math.abs(137 - posy);
         diagonaldist = Math.sqrt(distx*distx + disty*disty);
         trigangle = Math.toDegrees(Math.atan(disty/distx));
-        headinglockangle = 90 - trigangle + 90;
+        headinglockangle = trigangle;
+        turnerror = headinglockangle - Math.toDegrees(botHeading);
+        controller.updateError(turnerror);
+
 
         flywheel.setPower(kP * error + kV * targetV);
         follower.update();
