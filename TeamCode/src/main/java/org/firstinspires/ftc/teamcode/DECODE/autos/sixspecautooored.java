@@ -105,8 +105,8 @@ public class sixspecautooored extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(controller.run())).mirror(); //figure outt
-    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(controller.run())).mirror(); //figure outt
+    private final Pose scorePose = new Pose(60, 14, (Math.atan(disty/distx))).mirror(); //figure outt
+    private final Pose rescorePose = new Pose(60.25, 14.25, (Math.atan(disty/distx))).mirror();
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
     private final Pose pickup1Pose = new Pose(22, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -448,8 +448,8 @@ public class sixspecautooored extends OpMode {
         diagonaldist = Math.sqrt(distx*distx + disty*disty);
         trigangle = Math.toDegrees(Math.atan(disty/distx));
         headinglockangle = trigangle;
-        turnerror = headinglockangle - Math.toDegrees(botHeading);
-        controller.updateError(turnerror);
+//        turnerror = headinglockangle - Math.toDegrees(botHeading);
+//        controller.updateError(turnerror);
 
 
         flywheel.setPower(kP * error + kV * targetV);

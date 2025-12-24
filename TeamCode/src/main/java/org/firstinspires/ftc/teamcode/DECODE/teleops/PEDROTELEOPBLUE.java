@@ -242,7 +242,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 1.25) {
+                if (intakeeee.time() > 0.5) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -260,7 +260,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 1.25) {
+                if (intakeeee.time() > 0.5) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
