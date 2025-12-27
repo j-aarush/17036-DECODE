@@ -118,8 +118,8 @@ public class sixspecautoooo extends OpMode {
                 .build();
 
         return1 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1Pose, control, prescorePose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), prescorePose.getHeading())
+                .addPath(new BezierCurve(pickup1Pose, control, rescorePose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), rescorePose.getHeading())
                 .build();
 
         return11 = follower.pathBuilder()
@@ -138,8 +138,8 @@ public class sixspecautoooo extends OpMode {
                 .build();
 
         scorePickup2 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup2Pose, prescorePose))
-                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), prescorePose.getHeading())
+                .addPath(new BezierLine(pickup2Pose, rescorePose))
+                .setLinearHeadingInterpolation(pickup2Pose.getHeading(), rescorePose.getHeading())
                 .build();
 
         park = follower.pathBuilder()
@@ -148,12 +148,11 @@ public class sixspecautoooo extends OpMode {
                 .build();
 
     }
-
     public void autonomousPathUpdate() {
         switch (pathState) {
             case -1:
                 follower.followPath(startshoot,true );
-                    setPathState(-2);
+                setPathState(-2);
 
                 break;
             case -2:
@@ -163,7 +162,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 0:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(1);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -182,7 +181,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 3:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(4);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -200,7 +199,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 6:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(7);
                     flickys.setPosition(flickdown); //hopefully up
                     intake.setPower(1);
@@ -228,7 +227,7 @@ public class sixspecautoooo extends OpMode {
                 if (!follower.isBusy()) {
                     settherotation(spina);
                     intake.setPower(-0.35);
-                    follower.followPath(return21);
+//                    follower.followPath(return21);
                     settherotation(spina);
 
                     setPathState(9);
@@ -237,7 +236,7 @@ public class sixspecautoooo extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
                 }
-                if (pathTimer.getElapsedTimeSeconds()>1.25 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
                     setPathState(10);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -256,7 +255,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 12:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(13);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -274,7 +273,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 15:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     flickys.setPosition(flickdown); //hopefully up]
                     setPathState(16);
                 }
@@ -306,7 +305,7 @@ public class sixspecautoooo extends OpMode {
                 if (!follower.isBusy()) {
                     settherotation(spina);
                     intake.setPower(-0.35);
-                    follower.followPath(return21);
+//                    follower.followPath(return21);
                     settherotation(spina);
                     setPathState(19);
                 }
@@ -314,7 +313,7 @@ public class sixspecautoooo extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
                 }
-                if (pathTimer.getElapsedTimeSeconds()>1.5 && !follower.isBusy()) {
+                if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(20);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -333,7 +332,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 22:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(23);
                     flickys.setPosition(flickdown); //hopefully up
                 }
@@ -351,7 +350,7 @@ public class sixspecautoooo extends OpMode {
                 }
                 break;
             case 25:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     flickys.setPosition(flickdown); //hopefully up]
                     setPathState(26);
                 }

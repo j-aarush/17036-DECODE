@@ -40,9 +40,9 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
-    double spina = 0.24;
-    double spinb = 0.495;
-    double spinc = 0.75;
+    double spina = 0.233;
+    double spinb = 0.49;
+    double spinc = 0.743;
     double posx ;
     double posy;
     boolean lefttoggle = false;
@@ -223,7 +223,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 6:
                 settherotation(spina);
-                if (intakeeee.time() > 0.1) {
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
@@ -242,7 +242,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 0.67) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -260,7 +260,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 0.67) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
@@ -318,6 +318,8 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             parksettherotation(0.75);
 
 
+        telemetry.addData("x pos", posx);
+        telemetry.addData("y pos", posy);
         telemetry.addData("diag dist", diagonaldist);
         telemetry.addData("error", turnerror);
         telemetry.addData("current heading", follower.getHeading());
@@ -326,7 +328,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);
         telemetry.addData("headinglockangle", headinglockangle);
-        telemetry.update();
+            telemetry.update();
 
 
 
