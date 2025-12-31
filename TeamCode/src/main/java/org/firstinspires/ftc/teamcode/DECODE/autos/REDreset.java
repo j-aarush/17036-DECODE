@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "RED RESET/park", preselectTeleOp = "PEDROTELEOPRED")
+@Autonomous(name = "RED RESET/park", preselectTeleOp = "RED TELEOP")
 public class REDreset extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -46,7 +46,7 @@ public class REDreset extends OpMode {
     double error =0 ;
 
     float greenv, bluev, redv;
-    double flickup = 0.1, flickdown = 0.52;
+    double flickup = 0, flickdown = 0.53;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;

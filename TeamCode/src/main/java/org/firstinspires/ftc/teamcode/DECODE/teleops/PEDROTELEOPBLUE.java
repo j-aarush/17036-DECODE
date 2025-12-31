@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.control.FilteredPIDFCoefficients;
@@ -17,6 +21,7 @@ import dev.nextftc.extensions.pedro.TurnTo;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.DECODE.botconstants.*;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -28,7 +33,7 @@ import java.util.function.Supplier;
 
 
 
-@TeleOp(name = "PEDROTELEOPBLUE")
+@TeleOp(name = "BLUE TELEOP")
 @Configurable
 public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private Follower follower;
@@ -40,9 +45,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
-    double spina = 0.233;
-    double spinb = 0.49;
-    double spinc = 0.743;
     double posx ;
     double posy;
     boolean lefttoggle = false;
@@ -223,7 +225,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 6:
                 settherotation(spina);
-                if (intakeeee.time() > 0.05) {
+                if (!follower.isBusy()) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
@@ -242,7 +244,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.67) {
+                if (intakeeee.time() > 0.57) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -260,7 +262,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.67) {
+                if (intakeeee.time() > 0.57) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;

@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "6-7 AUTO BLUE", preselectTeleOp = "NEWnewnewnew TELEOP")
+@Autonomous(name = "9 FAR BLUE", preselectTeleOp = "BLUE TELEOP")
 public class sixspecautoooo extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -88,8 +88,8 @@ public class sixspecautoooo extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(111)); //figure outt
-    private final Pose rescorePose = new Pose(59.75, 13.75, Math.toRadians(112.5)); //figure outt
+    private final Pose scorePose = new Pose(60, 14, Math.toRadians(111.2)); //figure outt
+    private final Pose rescorePose = new Pose(59.75, 13.75, Math.toRadians(111.75)); //figure outt
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(180)); //figure outt
     private final Pose pickup1Pose = new Pose(20.22, 36.83, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose control = new Pose( 60.15, 37.81, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
@@ -156,7 +156,7 @@ public class sixspecautoooo extends OpMode {
 
                 break;
             case -2:
-                if (pathTimer.getElapsedTimeSeconds()>2.75) {
+                if (pathTimer.getElapsedTimeSeconds()>2.5) {
                     setPathState(0);
                     flickys.setPosition(flickup);
                 }

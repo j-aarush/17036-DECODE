@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -30,7 +35,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "NEWnewnewnew TELEOP")
+@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "BLUE TELEOP")
 public class BLUEFRONT extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -49,9 +54,9 @@ public class BLUEFRONT extends OpMode {
 
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
-    public double         targetV = 1325;
+    public double         targetV = 1305;
 
-    double kP = 0.11, kV = 0.000435;
+    double kP = 0.111, kV = 0.0004349;
     double error;
     double botHeading;
 
@@ -62,15 +67,11 @@ public class BLUEFRONT extends OpMode {
     double disty ;
     double trigangle;
 
-    double spina = 0.233;
-    double spinb = 0.49;
-    double spinc = 0.743;
 
     double spind = 1;
 
 
     float greenv, bluev, redv;
-    double flickup = 0, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -103,13 +104,13 @@ public class BLUEFRONT extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = (new Pose(39.273, 129.226, Math.toRadians(90)));
-    private final Pose realstartpose = (new Pose(24.125, 127.169, Math.toRadians(145)));
-    private final Pose scorepose = (new Pose(54, 81, Math.toRadians(134.67)));
-    private final Pose pickup1 = (new Pose(9, 60.592, Math.toRadians(180)));
-    private final Pose pickup2 = (new Pose(17, 84.904, Math.toRadians(180)));
-    private final Pose pickup3 = (new Pose(10.099, 35.719, Math.toRadians(180)));
-    private final Pose parkpos = (new Pose(38.338, 80.977, Math.toRadians(167)));
+    private final Pose startPose = (new Pose(17, 112, Math.toRadians(180)));
+    private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
+    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5)));
+    private final Pose pickup1 = (new Pose(20, 69.75, Math.toRadians(180)));
+    private final Pose pickup2 = (new Pose(22.1, 86, Math.toRadians(180)));
+    private final Pose pickup3 = (new Pose(12.75, 35.7, Math.toRadians(180)));
+    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140)));
 
 
 
@@ -122,35 +123,36 @@ public class BLUEFRONT extends OpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), realstartpose.getHeading())
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new BezierLine(realstartpose, scorepose))
-                .setLinearHeadingInterpolation(realstartpose.getHeading(), scorepose.getHeading())
+                .addPath(new BezierLine(startPose, scorepose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose,                                    new Pose(64.332, 44.696),
-                        new Pose(27.117, 52.177),
-                        new Pose(25.621, 69.008),
+                .addPath(new BezierCurve(scorepose,
+                        new Pose(63.77, 50.86),
+                        new Pose(-50, 51),
+                        new Pose(49.5, 64.9),
                         pickup1))
-                .setLinearHeadingInterpolation(scorepose.getHeading(), pickup1.getHeading())
+                .setConstantHeadingInterpolation((Math.toRadians(180)))
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1, new Pose(43.574, 49.745), scorepose))
+                .addPath(new BezierCurve(pickup1, new Pose(46, 63), scorepose))
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(43.2, 75.74), pickup2))
-                .setLinearHeadingInterpolation(scorepose.getHeading(), pickup2.getHeading())
+                .addPath(new BezierCurve(scorepose, pickup2))
+                .setConstantHeadingInterpolation((Math.toRadians(180)))
                 .build();
         score3 = follower.pathBuilder()
                 .addPath(new BezierCurve(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(65.642, 26.743), pickup3))
-                .setLinearHeadingInterpolation(scorepose.getHeading(), pickup3.getHeading())
+                .addPath(new BezierCurve(scorepose, new Pose(67.67, 41), pickup3))
+                .setLinearHeadingInterpolation((Math.toRadians(150)), (Math.toRadians(180)))
                 .build();
         score3rd = follower.pathBuilder()
                 .addPath(new BezierLine(pickup3, scorepose))
-                .setLinearHeadingInterpolation(pickup3.getHeading(), scorepose.getHeading())
+                .setLinearHeadingInterpolation((Math.toRadians(145)), scorepose.getHeading())
                 .build();
         park = follower.pathBuilder()
                 .addPath(new BezierLine(scorepose, parkpos))
@@ -163,62 +165,293 @@ public class BLUEFRONT extends OpMode {
 
      void autonomousPathUpdate() {
         switch (pathState) {
-            case 1:
+            case -10:
+                follower.followPath(initpath, true);
+                setPathState(-9);
+                break;
+            case -9:
                 if (!follower.isBusy()) {
-                    follower.followPath(initpath);
+                follower.followPath(score1, true);
+                setPathState(-2); }
+                break;
+            case -2:
+                if (pathTimer.getElapsedTimeSeconds()>2.5) {
+                    setPathState(0);
+                    flickys.setPosition(flickup);
+                }
+                break;
+            case 0:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    setPathState(1);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 1:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
                     setPathState(2);
+                    settherotation(spinb);
                 }
                 break;
             case 2:
-                if (!follower.isBusy()) {
-                    follower.followPath(score1);
+                if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(3);
+                    flickys.setPosition(flickup); //hopefully up
                 }
                 break;
             case 3:
-                if (!follower.isBusy()) {
-                    follower.followPath(grabPickup1);
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(4);
+                    flickys.setPosition(flickdown); //hopefully up
                 }
                 break;
             case 4:
-                if (!follower.isBusy()) {
-                    follower.followPath(score2);
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
                     setPathState(5);
+                    settherotation(spinc);
                 }
                 break;
             case 5:
-                if (!follower.isBusy()) {
-                    follower.followPath(grabPickup2);
+                if (pathTimer.getElapsedTimeSeconds()>0.8) {
                     setPathState(6);
+                    flickys.setPosition(flickup); //hopefully up
                 }
                 break;
             case 6:
-                if (!follower.isBusy()) {
-                    follower.followPath(score3);
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(7);
+                    flickys.setPosition(flickdown); //hopefully up
+                    intake.setPower(1);
                 }
                 break;
             case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(pickup3rd);
+                if(pathTimer.getElapsedTimeSeconds()>0.125) {
+                    settherotation(spina);
+                    follower.followPath(grabPickup1, true);
                     setPathState(8);
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
-                    follower.followPath(score3rd);
+                    follower.followPath(score2, true);
+                    setPathState(-3);
+                }
+                break;
+            case -3:
+                if (!follower.isBusy()) {
+                    settherotation(spina);
+                    intake.setPower(-0.35);
                     setPathState(9);
                 }
-                break;
             case 9:
-                if (!follower.isBusy()) {
-                    follower.followPath(park);
+                if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
                     setPathState(10);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 10:
+                if (pathTimer.getElapsedTimeSeconds()>0.1) {
+                    setPathState(11);
+                    settherotation(spinb);
                 }
                 break;
+            case 11:
+                if (pathTimer.getElapsedTimeSeconds()>0.55) {
+                    setPathState(12);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 12:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    setPathState(13);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 13:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(14);
+                    settherotation(spinc);
+                }
+                break;
+            case 14:
+                if (pathTimer.getElapsedTimeSeconds()>0.70) {
+                    flickys.setPosition(flickup); //hopefully up]
+                    setPathState(15);
+                }
+                break;
+            case 15:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    flickys.setPosition(flickdown); //hopefully up]
+                    setPathState(16);
+                }
+                break;
+
+
+
+
+
+            case 16:
+                if(pathTimer.getElapsedTimeSeconds()>0.15) {
+
+                    settherotation(spina);
+                    intake.setPower(1);
+                    follower.followPath(grabPickup2, true);
+                    setPathState(17);
+                }
+                break;
+
+            case 17:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(score3,true);
+                    setPathState(18);
+                }
+                break;
+
+            case 18:
+                if (!follower.isBusy()) {
+                    settherotation(spina);
+                    intake.setPower(-0.35);
+//                    follower.followPath(return21);
+                    settherotation(spina);
+                    setPathState(19);
+                }
+            case 19:
+                if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
+                    setPathState(20);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 20:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(21);
+                    settherotation(spinb);
+                }
+                break;
+            case 21:
+                if (pathTimer.getElapsedTimeSeconds()>0.55) {
+                    setPathState(22);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 22:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    setPathState(23);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 23:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(24);
+                    settherotation(spinc);
+                }
+                break;
+            case 24:
+                if (pathTimer.getElapsedTimeSeconds()>0.70) {
+                    flickys.setPosition(flickup); //hopefully up]
+                    setPathState(25);
+                }
+                break;
+            case 25:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    flickys.setPosition(flickdown); //hopefully up]
+                    setPathState(27);
+                }
+                break;
+
+
+
+
+            case 27:
+                if(pathTimer.getElapsedTimeSeconds()>0.15) {
+
+                    settherotation(spina);
+                    intake.setPower(1);
+                    follower.followPath(pickup3rd, true);
+                    setPathState(28);
+                }
+                break;
+
+            case 28:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(score3rd,true);
+                    setPathState(29);
+                }
+                break;
+
+            case 29:
+                if (!follower.isBusy()) {
+                    settherotation(spina);
+                    intake.setPower(-0.35);
+//                    follower.followPath(return21);
+                    settherotation(spina);
+                    setPathState(30);
+                }
+            case 30:
+                if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
+                    setPathState(31);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 31:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(32);
+                    settherotation(spinb);
+                }
+                break;
+            case 32:
+                if (pathTimer.getElapsedTimeSeconds()>0.55) {
+                    setPathState(33);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 33:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    setPathState(34);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 34:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(35);
+                    settherotation(spinc);
+                }
+                break;
+            case 35:
+                if (pathTimer.getElapsedTimeSeconds()>0.70) {
+                    flickys.setPosition(flickup); //hopefully up]
+                    setPathState(36);
+                }
+                break;
+            case 36:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    flickys.setPosition(flickdown); //hopefully up]
+                    setPathState(26);
+                }
+                break;
+            case 26:
+                if (!follower.isBusy()) {
+                    follower.followPath(park, true);
+                    setPathState(67);
+                }
+                break;
+
         }
-    }
+        }
+
 
 
     /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
@@ -272,11 +505,15 @@ public class BLUEFRONT extends OpMode {
     }
 
     @Override
+    public void init_loop() {
+    }
+
+    @Override
     public void start() {
         error = targetV - flywheel.getVelocity();
         flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
-        setPathState(1);
+        setPathState(-9);
     }
 
     @Override
@@ -305,6 +542,10 @@ public class BLUEFRONT extends OpMode {
 
     }
 
+    @Override
+    public void stop() {
+//        follower.getPose();
+    }
 
 
 }

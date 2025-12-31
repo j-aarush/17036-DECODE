@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 
 
-@TeleOp(name = "PEDROTELEOPRED")
+@TeleOp(name = "RED TELEOP")
 @Configurable
 public class PEDROTELEOPRED extends NextFTCOpMode {
     private Follower follower;
@@ -211,7 +211,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 6:
                 settherotation(spina);
-                if (intakeeee.time() > 0.1) {
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
@@ -230,7 +230,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 1.2) {
+                if (intakeeee.time() > 0.67) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -248,7 +248,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 1.2) {
+                if (intakeeee.time() > 0.67) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
@@ -269,7 +269,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
 
         }
-
 
         if (gamepad1.left_bumper && !lefttoggle) {
             lefttoggle = true;
