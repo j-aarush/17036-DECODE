@@ -37,8 +37,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "BLUE TELEOP")
-public class BLUEFRONT extends OpMode {
+@Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP")
+public class REDFRONT extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -106,13 +106,13 @@ public class BLUEFRONT extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = (new Pose(16, 112, Math.toRadians(180)));
-    private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
-    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.7)));
-    private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180)));
-    private final Pose pickup2 = (new Pose(18.5, 82, Math.toRadians(180)));
-    private final Pose pickup3 = (new Pose(42, 36.8, Math.toRadians(180)));
-    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140)));
+    private final Pose startPose = (new Pose(16, 112, Math.toRadians(180))).mirror();
+    private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145))).mirror();
+    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.7))).mirror();
+    private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
+    private final Pose pickup2 = (new Pose(18.5, 82, Math.toRadians(180))).mirror();
+    private final Pose pickup3 = (new Pose(42, 36.8, Math.toRadians(180))).mirror();
+    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140))).mirror();
 
 
 
@@ -130,35 +130,35 @@ public class BLUEFRONT extends OpMode {
                 .build();
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierCurve(scorepose,
-                        new Pose(63.77, 50.86),
-                        new Pose(-50, 51),
-                        new Pose(49.5, 64.9),
+                        new Pose(63.77, 50.86).mirror(),
+                        new Pose(-50, 51).mirror(),
+                        new Pose(49.5, 64.9).mirror(),
                         pickup1))
-                .setConstantHeadingInterpolation((Math.toRadians(180)))
+                .setConstantHeadingInterpolation((Math.toRadians(0)))
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1, new Pose(39, 60), scorepose))
+                .addPath(new BezierCurve(pickup1, new Pose(39, 60).mirror(), scorepose))
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierCurve(scorepose, pickup2))
-                .setConstantHeadingInterpolation((Math.toRadians(180)))
+                .setConstantHeadingInterpolation((Math.toRadians(0)))
                 .build();
         score3 = follower.pathBuilder()
                 .addPath(new BezierCurve(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(59, 41), pickup3))
-                .setLinearHeadingInterpolation((Math.toRadians(150)), (Math.toRadians(180)))
+                .addPath(new BezierCurve(scorepose, new Pose(59, 41).mirror(), pickup3))
+                .setLinearHeadingInterpolation((Math.toRadians(30)), (Math.toRadians(0)))
                 .build();
         pickup3pt2 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup3, new Pose(9.75, 36.7)))
-                .setLinearHeadingInterpolation((Math.toRadians(180)), (Math.toRadians(180)))
+                .addPath(new BezierLine(pickup3, new Pose(9.75, 36.7).mirror()))
+                .setLinearHeadingInterpolation((Math.toRadians(0)), (Math.toRadians(0)))
                 .build();
         score3rd = follower.pathBuilder()
                 .addPath(new BezierLine(pickup3, scorepose))
-                .setLinearHeadingInterpolation((Math.toRadians(180)), scorepose.getHeading())
+                .setLinearHeadingInterpolation((Math.toRadians(0)), scorepose.getHeading())
                 .build();
         park = follower.pathBuilder()
                 .addPath(new BezierLine(scorepose, parkpos))
@@ -169,7 +169,7 @@ public class BLUEFRONT extends OpMode {
     }
 
 
-     void autonomousPathUpdate() {
+    void autonomousPathUpdate() {
         switch (pathState) {
             case -10:
                 follower.followPath(initpath, true);
@@ -177,8 +177,8 @@ public class BLUEFRONT extends OpMode {
                 break;
             case -9:
                 if (!follower.isBusy()) {
-                follower.followPath(score1, true);
-                setPathState(-2); }
+                    follower.followPath(score1, true);
+                    setPathState(-2); }
                 break;
             case -2:
                 if (pathTimer.getElapsedTimeSeconds()>2.5) {
@@ -462,7 +462,7 @@ public class BLUEFRONT extends OpMode {
                 break;
 
         }
-        }
+    }
 
 
 

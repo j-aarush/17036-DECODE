@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -61,7 +62,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         rightspindex.setPosition(rotationn);
     }
 
-    public static DcMotorEx intake, flywheel;
+    public static DcMotorEx intake, flywheel, sencoder;
     public static double targetV = 0;
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
@@ -120,6 +121,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         BR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
+        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
         FR = hardwareMap.get(DcMotorEx.class, "BR");
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -144,7 +146,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         flickys.setPosition(flickdown);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(50.5, 25.0, Math.toRadians(108.0)));
+        follower.setStartingPose(autoendpose);
         follower.update();
         headingLock = false;
     }
@@ -174,7 +176,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
         targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
-        error = targetV - flywheel.getVelocity();
+        error = targetV - sencoder.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
 
@@ -313,6 +315,9 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                     follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
+            if (gamepad1.dpad_down) {
+            }
+
         if (gamepad1.y) {
             parksettherotation(0);
         }
@@ -326,7 +331,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         telemetry.addData("error", turnerror);
         telemetry.addData("current heading", follower.getHeading());
         telemetry.addData("targetV", targetV);
-        telemetry.addData("actualV", flywheel.getVelocity());
+        telemetry.addData("actualV", sencoder.getVelocity());
         telemetry.addData("intake stage", intaekstage);
         telemetry.addData("timer", intaketimercount);
         telemetry.addData("headinglockangle", headinglockangle);

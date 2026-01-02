@@ -37,8 +37,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "BLUE TELEOP")
-public class BLUEFRONT extends OpMode {
+@Autonomous(name = "12 BLUE GATE FRONT", preselectTeleOp = "BLUE TELEOP")
+public class BLUEFRONTGATE extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -108,15 +108,15 @@ public class BLUEFRONT extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = (new Pose(16, 112, Math.toRadians(180)));
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
-    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.7)));
+    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5)));
     private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180)));
-    private final Pose pickup2 = (new Pose(18.5, 82, Math.toRadians(180)));
-    private final Pose pickup3 = (new Pose(42, 36.8, Math.toRadians(180)));
+    private final Pose pickup2 = (new Pose(22.1, 86, Math.toRadians(180)));
+    private final Pose pickup3 = (new Pose(11.46, 60, Math.toRadians(150)));
     private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140)));
 
 
 
-    private PathChain pickup3pt2, score3rd, score3, initpath, score1, grabPickup1, score2, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, pickup3rd, park;
+    private PathChain score3rd, score3, initpath, score1, grabPickup1, score2, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, pickup3rd, park;
     private Path grab1;
 
     public void buildPaths() {
@@ -137,7 +137,7 @@ public class BLUEFRONT extends OpMode {
                 .setConstantHeadingInterpolation((Math.toRadians(180)))
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1, new Pose(39, 60), scorepose))
+                .addPath(new BezierCurve(pickup1, new Pose(46, 63), scorepose))
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
@@ -149,16 +149,12 @@ public class BLUEFRONT extends OpMode {
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(59, 41), pickup3))
-                .setLinearHeadingInterpolation((Math.toRadians(150)), (Math.toRadians(180)))
-                .build();
-        pickup3pt2 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup3, new Pose(9.75, 36.7)))
-                .setLinearHeadingInterpolation((Math.toRadians(180)), (Math.toRadians(180)))
+                .addPath(new BezierCurve(scorepose, new Pose(15.9, 45.5), pickup3))
+                .setLinearHeadingInterpolation((scorepose.getHeading()), (Math.toRadians(180)))
                 .build();
         score3rd = follower.pathBuilder()
                 .addPath(new BezierLine(pickup3, scorepose))
-                .setLinearHeadingInterpolation((Math.toRadians(180)), scorepose.getHeading())
+                .setLinearHeadingInterpolation((Math.toRadians(170)), scorepose.getHeading())
                 .build();
         park = follower.pathBuilder()
                 .addPath(new BezierLine(scorepose, parkpos))
@@ -169,7 +165,7 @@ public class BLUEFRONT extends OpMode {
     }
 
 
-     void autonomousPathUpdate() {
+    void autonomousPathUpdate() {
         switch (pathState) {
             case -10:
                 follower.followPath(initpath, true);
@@ -177,8 +173,8 @@ public class BLUEFRONT extends OpMode {
                 break;
             case -9:
                 if (!follower.isBusy()) {
-                follower.followPath(score1, true);
-                setPathState(-2); }
+                    follower.followPath(score1, true);
+                    setPathState(-2); }
                 break;
             case -2:
                 if (pathTimer.getElapsedTimeSeconds()>2.5) {
@@ -200,7 +196,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 2:
-                if (pathTimer.getElapsedTimeSeconds()>0.53) {
+                if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(3);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -218,7 +214,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 5:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.6) {
                     setPathState(6);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -266,7 +262,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 11:
-                if (pathTimer.getElapsedTimeSeconds()>0.53) {
+                if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(12);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -284,7 +280,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 14:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.6) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(15);
                 }
@@ -305,7 +301,7 @@ public class BLUEFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.77, true);
+                    follower.followPath(pickup3rd, 0.9, true);
                     setPathState(17);
                 }
                 break;
@@ -313,7 +309,7 @@ public class BLUEFRONT extends OpMode {
             case 17:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(score3,true);
+                    follower.followPath(score3rd,true);
                     setPathState(18);
                 }
                 break;
@@ -343,7 +339,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 21:
-                if (pathTimer.getElapsedTimeSeconds()>0.53) {
+                if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(22);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -361,7 +357,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 24:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.60) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(25);
                 }
@@ -381,21 +377,15 @@ public class BLUEFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(pickup3rd, true);
-                    setPathState(50);
-                }
-                break;
-
-            case 50:
-                if (!follower.isBusy()) {
-                    follower.followPath(pickup3pt2, true);
+                    follower.followPath(grabPickup2, true);
                     setPathState(28);
                 }
+                break;
 
             case 28:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(score3rd,true);
+                    follower.followPath(score3,true);
                     setPathState(29);
                 }
                 break;
@@ -425,7 +415,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 32:
-                if (pathTimer.getElapsedTimeSeconds()>0.53) {
+                if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(33);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -443,7 +433,7 @@ public class BLUEFRONT extends OpMode {
                 }
                 break;
             case 35:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.60) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(36);
                 }
@@ -462,7 +452,7 @@ public class BLUEFRONT extends OpMode {
                 break;
 
         }
-        }
+    }
 
 
 
@@ -481,6 +471,7 @@ public class BLUEFRONT extends OpMode {
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
+        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -493,7 +484,6 @@ public class BLUEFRONT extends OpMode {
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
-        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
 
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");

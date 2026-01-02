@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -464,6 +465,10 @@ public class sixspecautooored extends OpMode {
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.update();
 
+    }
+    @Override
+    public void stop() {
+        autoendpose = follower.getPose();
     }
 
 

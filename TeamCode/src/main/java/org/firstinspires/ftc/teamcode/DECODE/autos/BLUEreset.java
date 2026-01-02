@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -322,18 +323,18 @@ public class BLUEreset extends OpMode {
 
     @Override
     public void start() {
-        error = targetV - flywheel.getVelocity();
-        flywheel.setPower(kP * error + kV * targetV);
+//        error = targetV - flywheel.getVelocity();
+//        flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
-        setPathState(-1);
+//        setPathState(-1);
     }
 
     @Override
     public void loop() {
-        error = targetV - flywheel.getVelocity();
-        flywheel.setPower(kP * error + kV * targetV);
+//        error = targetV - flywheel.getVelocity();
+//        flywheel.setPower(kP * error + kV * targetV);
         follower.update();
-        autonomousPathUpdate();
+//        autonomousPathUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
@@ -343,6 +344,10 @@ public class BLUEreset extends OpMode {
 
     }
 
+    @Override
+    public void stop() {
+        autoendpose = follower.getPose();
+    }
 
 
 }
