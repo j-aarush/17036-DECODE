@@ -450,6 +450,10 @@ public class BLUEFRONTGATE extends OpMode {
                     setPathState(67);
                 }
                 break;
+            case 67:
+                if (!follower.isBusy()) {
+                    autoendpose = follower.getPose();
+                }
 
         }
     }

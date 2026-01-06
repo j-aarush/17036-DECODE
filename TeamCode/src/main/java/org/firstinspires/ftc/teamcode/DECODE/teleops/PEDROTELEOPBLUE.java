@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
@@ -40,8 +41,15 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private Follower follower;
     public static Pose startingPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)).mirror(); //figure outt
-
+    PathChain park;
+//    public void buildPaths() {
+//        park = follower.pathBuilder()
+//                .addPath(new BezierLine(follower::getPose, new Pose(40, 36)))
+//                .setConstantHeadingInterpolation((Math.toRadians(270)))
+//                .build();
+//    }
     private boolean automatedDrive;
+    boolean holdshooting = false;
     private PathChain pathChain;
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
@@ -53,6 +61,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     double disty ;
     double diagonaldist;
     double trigangle;
+    boolean defense = false;
 
 
     public static Servo leftspindex, rightspindex;
@@ -141,6 +150,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         leftpark.setDirection(Servo.Direction.FORWARD);
         rightpark.setDirection(Servo.Direction.REVERSE);
 
+//        buildPaths();
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
@@ -174,7 +184,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         headinglockangle = 90 - trigangle + 90;
 
 
-        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
         error = targetV - sencoder.getVelocity();
 
@@ -183,6 +192,8 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
 
         if (gamepad1.y) {
             targetV = 0;
+        } else {
+            targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
         }
 
         if (gamepad1.dpad_left) flickys.setPosition(flickdown);
@@ -196,18 +207,18 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad1.left_trigger > 0.25) {
             intake.setPower(-1);
         }
         if (gamepad1.right_bumper) {
             intake.setPower(1);
         }
-        if (gamepad1.right_trigger > 0.5) {
+        if (gamepad1.right_trigger > 0.25) {
             intake.setPower(0);
         }
 
         if (gamepad1.x) {
-            settherotation(spina + 0.25);
+            settherotation(spina + 0.5);
             settherotation(spina);
         }
 
@@ -233,6 +244,9 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
+                if (holdshooting) {
+                    parksettherotation(0.05);
+                }
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
                     intakeeee.reset();}
@@ -246,7 +260,7 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.57) {
+                if (intakeeee.time() > 0.5) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -276,8 +290,9 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 14:
-                flickys.setPosition(flickdown); //hopefully down
+                parksettherotation(0);
                 headingLock = false;
+                flickys.setPosition(flickdown); //hopefully down
                 if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
@@ -287,36 +302,33 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
-            if (gamepad1.left_bumper && !lefttoggle) {
-                lefttoggle = true;
-                if (headingLock) {
-                    headingLock = false;
-                } else if (!headingLock) {
-                    headingLock = true;
-                }
-            }
-            if (!gamepad1.left_bumper) {
-                lefttoggle = false;
-            }
+        if (gamepad1.left_stick_button) {
+            intaekstage = -100;
+            headingLock = false;
+            flickys.setPosition(flickdown);
+            parksettherotation(0);
+            settherotation(spina);
+        }
+
+
+        if (gamepad1.dpad_down) {
+            holdshooting = true;
+        }
+        if (gamepad1.dpad_up) {
+            holdshooting = false;
+            parksettherotation(0);
+        }
 
             turnerror = headinglockangle - Math.toDegrees(botHeading);
-            if (gamepad1.left_stick_button) {
-                turnerror = 270 - Math.toDegrees(botHeading);
-            }
-        controller.updateError(turnerror);
+            controller.updateError(turnerror);
 
 
             if (headingLock)
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, controller.run(), true);
-            else if (gamepad1.left_stick_button)
-                follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, 270, true);
-
             else
-                    follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
+                follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
-            if (gamepad1.dpad_down) {
-            }
 
         if (gamepad1.y) {
             parksettherotation(0);
@@ -343,7 +355,3 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     }
 
 }
-//coding todos (for later):
-//format as much code as possible into seperate subsystem classes
-//heading lock via ll/pp
-//indexing

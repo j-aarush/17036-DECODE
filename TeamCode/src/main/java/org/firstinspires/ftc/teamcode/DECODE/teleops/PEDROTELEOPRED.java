@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
@@ -37,15 +40,13 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     public static Pose startingPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)); //figure outt
     private boolean automatedDrive;
+    boolean holdshooting = false;
     private PathChain pathChain;
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
     private double slowModeMultiplier = 0.5;
     double headinglockangle;
 
-    double spina = 0.24;
-    double spinb = 0.495;
-    double spinc = 0.75;
     double posx ;
     double posy;
     boolean lefttoggle = false;
@@ -63,7 +64,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
     public static DcMotorEx intake, flywheel, sencoder;
     public static double targetV = 0;
-    boolean heaaidnglock = false;
 
     double kP = 0.1167, kV = 0.000434;
     double error;
@@ -166,7 +166,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         headinglockangle = trigangle;
 
 
-        targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
         error = targetV - sencoder.getVelocity();
 
@@ -175,6 +174,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         if (gamepad1.y) {
             targetV = 0;
+        } else {
+            targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
         }
 
         if (gamepad1.dpad_left) flickys.setPosition(flickdown);
@@ -188,16 +189,20 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         }
 
 
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad1.left_trigger > 0.25) {
             intake.setPower(-1);
         }
         if (gamepad1.right_bumper) {
             intake.setPower(1);
         }
-        if (gamepad1.right_trigger > 0.5) {
+        if (gamepad1.right_trigger > 0.25) {
             intake.setPower(0);
         }
 
+        if (gamepad1.x) {
+            settherotation(spina + 0.5);
+            settherotation(spina);
+        }
 
 
         if (gamepad1.a) {
@@ -215,12 +220,15 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 6:
                 settherotation(spina);
-                if (intakeeee.time() > 0.05) {
+                if (!follower.isBusy()) {
                     intaekstage = 7;
                     intakeeee.reset();}
                 break;
             case 7:
                 flickys.setPosition(flickup); //hopefully up
+                if (holdshooting) {
+                    parksettherotation(0.05);
+                }
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
                     intakeeee.reset();}
@@ -234,7 +242,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             case 9:
                 rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.67) {
+                if (intakeeee.time() > 0.5) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -252,7 +260,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.67) {
+                if (intakeeee.time() > 0.57) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
@@ -264,8 +272,9 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 14:
-                flickys.setPosition(flickdown); //hopefully down
+                parksettherotation(0);
                 headingLock = false;
+                flickys.setPosition(flickdown); //hopefully down
                 if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
@@ -274,17 +283,26 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         }
 
-        if (gamepad1.left_bumper && !lefttoggle) {
-            lefttoggle = true;
-            if (headingLock) {
-                headingLock = false;
-            } else if (!headingLock) {
-                headingLock = true;
-            }
+
+        //add automated park
+
+        if (gamepad1.left_stick_button) {
+            intaekstage = -100;
+            headingLock = false;
+            flickys.setPosition(flickdown);
+            parksettherotation(0);
+            settherotation(spina);
         }
-        if (!gamepad1.left_bumper) {
-            lefttoggle = false;
+
+
+        if (gamepad1.dpad_down) {
+            holdshooting = true;
         }
+        if (gamepad1.dpad_up) {
+            holdshooting = false;
+            parksettherotation(0);
+        }
+
 
         turnerror = headinglockangle - Math.toDegrees(botHeading);
         controller.updateError(turnerror);
@@ -316,14 +334,3 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         }
 
 }}
-//coding todos (for later):
-//set up pinpoint/pedro
-//format as much code as possible into seperate subsystem classes
-//heading lock via ll/pp
-//indexing
-//formula for flywheel speed
-
-
-//driver controls: field centric joysticks (objectively better than robot centric), shooter mode on/off (HOLD to keep shooting, not just press)
-//opperator controls: *heading lock on/off*, shooter speed, intake mode on/off, intake motor on/off
-//MONDAY -- FINISH TELEOP BY ADDING HEADING LOCK, TUNE PEDRO (SO WE CAN HAVE A BASIC AUTO)

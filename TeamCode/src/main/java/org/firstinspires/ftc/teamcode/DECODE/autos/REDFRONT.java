@@ -106,7 +106,7 @@ public class REDFRONT extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = (new Pose(16, 112, Math.toRadians(180))).mirror();
+    private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180))).mirror();
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145))).mirror();
     private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.7))).mirror();
     private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
@@ -460,6 +460,10 @@ public class REDFRONT extends OpMode {
                     setPathState(67);
                 }
                 break;
+            case 67:
+                if (!follower.isBusy()) {
+                    autoendpose = follower.getPose();
+                }
 
         }
     }

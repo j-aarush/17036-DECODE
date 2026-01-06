@@ -426,10 +426,23 @@ public class newnewteleop extends NextFTCOpMode {
             flickys.setPosition(flickdown);
         }
 
+        if (gamepad2.x) {
+            BL.setPower(1);
+            FL.setPower(1);
+            BR.setPower(-1);
+            FR.setPower(-1);
+        }
+        if (gamepad2.y) {
+            BL.setPower(-1);
+            FL.setPower(-1);
+            BR.setPower(1);
+            FR.setPower(1);
+        }
 
 
 
-         rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
+
+        rx = -gamepad2.left_stick_y; // Remember, Y stick value is reversed
          x = gamepad2.left_stick_x * 1.1; // Counteract imperfect strafing
          y = gamepad2.right_stick_x;
 

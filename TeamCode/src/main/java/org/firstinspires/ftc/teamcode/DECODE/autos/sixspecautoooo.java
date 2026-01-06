@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -55,9 +58,6 @@ public class sixspecautoooo extends OpMode {
     int shootercounter = 0;
     double rotationpos;
 
-    double spina = 0.233;
-    double spinb = 0.49;
-    double spinc = 0.743;
 
     double spind = 1;
 
@@ -362,6 +362,11 @@ public class sixspecautoooo extends OpMode {
                     setPathState(67);
                 }
                 break;
+            case 67:
+                if (!follower.isBusy()) {
+                    autoendpose = follower.getPose();
+                }
+
         }
     }
 
