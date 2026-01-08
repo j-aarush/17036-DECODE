@@ -315,6 +315,7 @@ public class REDFRONTGATE extends OpMode {
             case 17:
                 if(pathTimer.getElapsedTimeSeconds() > 2)
                 {
+
                     follower.followPath(score3rd,true);
                     setPathState(18);
                 }
