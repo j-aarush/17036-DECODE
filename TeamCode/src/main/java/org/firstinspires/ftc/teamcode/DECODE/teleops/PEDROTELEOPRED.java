@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
@@ -37,8 +40,9 @@ import java.util.function.Supplier;
 @Configurable
 public class PEDROTELEOPRED extends NextFTCOpMode {
     private Follower follower;
-    public static Pose startingPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
-    private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)); //figure outt
+    Boolean intakepressed = false;
+    Boolean intaketoggle;
+
     private boolean automatedDrive;
     boolean holdshooting = false;
     private PathChain pathChain;
@@ -69,7 +73,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     double error;
 
     float greenv, bluev, redv;
-    double flickup = 0.0, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -103,6 +106,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     }
 
     double intaketimercount;
+
 
     @Override
     public void onInit() {
@@ -143,6 +147,10 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         follower.update();
         headingLock = false;
 
+        pathChain = follower.pathBuilder()
+                .addPath(new BezierLine(follower::getPose, new Pose(42,35)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(270), 0.8))
+                .build();
     }
 
     @Override
@@ -172,15 +180,15 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         flywheel.setPower(kP * error + kV * targetV);
 
 
-        if (gamepad1.y) {
+        if (gamepad1.b) {
             targetV = 0;
         } else {
             targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
         }
 
-        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
-        if (gamepad1.dpad_right) flickys.setPosition(flickup);
-
+//        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
+//        if (gamepad1.dpad_right) flickys.setPosition(flickup);
+//
 
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
@@ -189,15 +197,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         }
 
 
-        if (gamepad1.left_trigger > 0.25) {
-            intake.setPower(-1);
-        }
-        if (gamepad1.right_bumper) {
-            intake.setPower(1);
-        }
-        if (gamepad1.right_trigger > 0.25) {
-            intake.setPower(0);
-        }
 
         if (gamepad1.x) {
             settherotation(spina + 0.5);
@@ -213,7 +212,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         switch (intaekstage) {
             case 5:
-                if (intakeeee.time() > 0.025) {
+                if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     intaekstage = 6;
                     intakeeee.reset();}
@@ -225,10 +224,10 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 7:
-                flickys.setPosition(flickup); //hopefully up
                 if (holdshooting) {
-                    parksettherotation(0.05);
+                    parksettherotation(0.1);
                 }
+                flickys.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
                     intakeeee.reset();}
@@ -240,9 +239,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 9:
-                rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 0.56) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -283,16 +281,60 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         }
 
+        if (gamepad1.rightStickButtonWasPressed()) {
+            follower.followPath(pathChain);
+        }
+        if (gamepad1.rightStickButtonWasReleased()) {
+            follower.breakFollowing();
+            follower.startTeleopDrive();
+        }
 
-        //add automated park
+        if (gamepad1.dpad_left) {
+            follower.setPose(new Pose(72,9,(Math.toRadians(90))));
+        }
+
 
         if (gamepad1.left_stick_button) {
-            intaekstage = -100;
+            intaekstage = -1;
             headingLock = false;
             flickys.setPosition(flickdown);
             parksettherotation(0);
             settherotation(spina);
         }
+
+
+//        if (gamepad1.right_trigger > 0.2 && !intakepressed) {
+//            intakepressed = true;
+//            if (intaketoggle) {
+//                intaketoggle = false;
+//            } else if (!intaketoggle) {
+//                intaketoggle = true;
+//            }
+//        }
+//        if (gamepad1.right_trigger < 0.2) {
+//            intakepressed = false;
+//        }
+
+        if (gamepad1.right_bumper) {
+            intake.setPower(1);
+        }
+        if (gamepad1.right_trigger > 0.25) {
+            intake.setPower(0);
+        }
+        if (gamepad1.left_trigger > 0.25) {
+            intake.setPower(-1);
+        }
+
+//        if (intaketoggle) {
+//            intake.setPower(-1);
+//        }
+//        if (!intaketoggle) {
+//            intake.setPower(0);
+//        }
+
+        if (gamepad1.left_bumper) {
+            headingLock = true;
+            }
 
 
         if (gamepad1.dpad_down) {
@@ -317,12 +359,11 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             parksettherotation(0);
         }
         if (gamepad1.b) {
-            parksettherotation(0.75);
+            parksettherotation(0.8);
 
 
             telemetry.addData("diag dist", diagonaldist);
             telemetry.addData("error", turnerror);
-            telemetry.addData("current heading", follower.getHeading());
             telemetry.addData("targetV", targetV);
             telemetry.addData("actualV", sencoder.getVelocity());
             telemetry.addData("intake stage", intaekstage);
@@ -334,3 +375,21 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         }
 
 }}
+
+
+/// OPERATOR CONTROLS AS FOLLOWS:
+
+/// left trigger: ------
+/// left bumper: enable heading lock
+/// right trigger: toggle intake off / outtake
+/// right bumper: intake in
+/// dpad up: enable defense brakes
+/// dpad down: disable defense brakes
+/// dpad left: reset pose
+/// dpad right: -------
+/// a: reset spindexer plate
+/// b: park, turn flywheel off if held
+/// x: shake spindexer
+/// y: retract park
+/// left stick button: reset shooting cycle
+/// right stick button: hold to auto park, release to manual drive

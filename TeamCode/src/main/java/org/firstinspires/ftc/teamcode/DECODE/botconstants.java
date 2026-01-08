@@ -9,6 +9,7 @@ public  class botconstants {
 
  public static double autoendx, autoendy, autoendhead;
  public static Pose autoendpose;
+ public static double autoendheading;
     public  static double spina = 0.2605;
 
  public  static double spinb = 0.5105;

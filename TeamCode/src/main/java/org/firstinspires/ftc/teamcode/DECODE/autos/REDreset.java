@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendheading;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
@@ -227,6 +228,7 @@ public class REDreset extends OpMode {
     @Override
     public void stop() {
         autoendpose = follower.getPose();
+        autoendheading = follower.getHeading();
     }
 
 }

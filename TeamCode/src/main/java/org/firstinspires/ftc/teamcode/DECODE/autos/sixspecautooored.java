@@ -44,6 +44,8 @@ public class sixspecautooored extends OpMode {
         rightspindex.setPosition(rotationn);
     }
 
+    DcMotorEx sencoder;
+
     double diagonaldist;
 
     double headinglockangle;
@@ -110,7 +112,7 @@ public class sixspecautooored extends OpMode {
     private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(111)).mirror();
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
-    private final Pose pickup1Pose = new Pose(22, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(18.67, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose control = new Pose( 60.15, 40, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
     private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
 
@@ -400,6 +402,7 @@ public class sixspecautooored extends OpMode {
     public void init() {
 
         flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
+        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
@@ -440,7 +443,7 @@ public class sixspecautooored extends OpMode {
 
     @Override
     public void start() {
-        error = targetV - flywheel.getVelocity();
+        error = targetV - sencoder.getVelocity();
         flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
         setPathState(-1);
@@ -448,7 +451,7 @@ public class sixspecautooored extends OpMode {
 
     @Override
     public void loop() {
-        error = targetV - flywheel.getVelocity();
+        error = targetV - sencoder.getVelocity();
 //        botHeading = follower.getHeading();
 //        posx = follower.getPose().mirror().getX();
 //        posy = follower.getPose().mirror().getY();

@@ -305,7 +305,7 @@ public class BLUEFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.77, true);
+                    follower.followPath(grabPickup2, 0.7, true);
                     setPathState(17);
                 }
                 break;
@@ -536,6 +536,8 @@ public class BLUEFRONT extends OpMode {
     @Override
     public void loop() {
         error = targetV - sencoder.getVelocity();
+        flywheel.setPower(kP * error + kV * targetV);
+
 //        botHeading = follower.getHeading();
 //        posx = follower.getPose().mirror().getX();
 //        posy = follower.getPose().mirror().getY();
@@ -548,7 +550,6 @@ public class BLUEFRONT extends OpMode {
 //        controller.updateError(turnerror);
 
 
-        flywheel.setPower(kP * error + kV * targetV);
         follower.update();
         autonomousPathUpdate();
         telemetry.addData("path state", pathState);

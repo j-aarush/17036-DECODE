@@ -106,12 +106,12 @@ public class BLUEFRONTGATE extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = (new Pose(16, 112, Math.toRadians(180)));
+    private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180)));
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
     private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5)));
     private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180)));
     private final Pose pickup2 = (new Pose(22.1, 86, Math.toRadians(180)));
-    private final Pose pickup3 = (new Pose(11.46, 60, Math.toRadians(150)));
+    private final Pose pickup3 = (new Pose(17, 60, Math.toRadians(138)));
     private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140)));
 
 
@@ -137,7 +137,7 @@ public class BLUEFRONTGATE extends OpMode {
                 .setConstantHeadingInterpolation((Math.toRadians(180)))
                 .build();
         score2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1, new Pose(46, 63), scorepose))
+                .addPath(new BezierCurve(pickup1, new Pose(52, 63), scorepose))
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
@@ -149,8 +149,8 @@ public class BLUEFRONTGATE extends OpMode {
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(15.9, 45.5), pickup3))
-                .setLinearHeadingInterpolation((scorepose.getHeading()), (Math.toRadians(180)))
+                .addPath(new BezierCurve(scorepose, new Pose(24.5, 47), pickup3))
+                .setLinearHeadingInterpolation((scorepose.getHeading()), (Math.toRadians(150)))
                 .build();
         score3rd = follower.pathBuilder()
                 .addPath(new BezierLine(pickup3, scorepose))
@@ -196,7 +196,7 @@ public class BLUEFRONTGATE extends OpMode {
                 }
                 break;
             case 2:
-                if (pathTimer.getElapsedTimeSeconds()>0.5) {
+                if (pathTimer.getElapsedTimeSeconds()>0.53) {
                     setPathState(3);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -214,7 +214,7 @@ public class BLUEFRONTGATE extends OpMode {
                 }
                 break;
             case 5:
-                if (pathTimer.getElapsedTimeSeconds()>0.6) {
+                if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     setPathState(6);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -280,7 +280,7 @@ public class BLUEFRONTGATE extends OpMode {
                 }
                 break;
             case 14:
-                if (pathTimer.getElapsedTimeSeconds()>0.6) {
+                if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(15);
                 }
@@ -301,13 +301,18 @@ public class BLUEFRONTGATE extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(pickup3rd, 0.9, true);
-                    setPathState(17);
+                    follower.followPath(pickup3rd, 0.99, true);
+                    setPathState(1067);
                 }
                 break;
+            case 1067:
+                if (!follower.isBusy()) {
+                    pathTimer.resetTimer();
+                    setPathState(17);
+                }
 
             case 17:
-                if(!follower.isBusy())
+                if(pathTimer.getElapsedTimeSeconds() > 2)
                 {
                     follower.followPath(score3rd,true);
                     setPathState(18);
@@ -357,7 +362,7 @@ public class BLUEFRONTGATE extends OpMode {
                 }
                 break;
             case 24:
-                if (pathTimer.getElapsedTimeSeconds()>0.60) {
+                if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(25);
                 }
@@ -433,7 +438,7 @@ public class BLUEFRONTGATE extends OpMode {
                 }
                 break;
             case 35:
-                if (pathTimer.getElapsedTimeSeconds()>0.60) {
+                if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(36);
                 }

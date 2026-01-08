@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -39,15 +41,11 @@ import java.util.function.Supplier;
 @Configurable
 public class PEDROTELEOPBLUE extends NextFTCOpMode {
     private Follower follower;
+    Boolean intakepressed = false;
+    Boolean intaketoggle;
     public static Pose startingPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(110.57)).mirror(); //figure outt
     PathChain park;
-//    public void buildPaths() {
-//        park = follower.pathBuilder()
-//                .addPath(new BezierLine(follower::getPose, new Pose(40, 36)))
-//                .setConstantHeadingInterpolation((Math.toRadians(270)))
-//                .build();
-//    }
     private boolean automatedDrive;
     boolean holdshooting = false;
     private PathChain pathChain;
@@ -79,7 +77,6 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
     double error;
 
     float greenv, bluev, redv;
-    double flickup = 0.0, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -159,6 +156,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         follower.setStartingPose(autoendpose);
         follower.update();
         headingLock = false;
+        pathChain = follower.pathBuilder()
+                .addPath(new BezierLine(follower::getPose, new Pose(96,35)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(270), 0.8))
+                .build();
+
     }
 
     @Override
@@ -179,10 +181,9 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         posy = follower.getPose().getY();
         distx = posx - 8;
         disty = Math.abs(137 - posy);
-        diagonaldist = Math.sqrt(distx*distx + disty*disty);
-        trigangle = Math.toDegrees(Math.atan(disty/distx));
+        diagonaldist = Math.sqrt(distx * distx + disty * disty);
+        trigangle = Math.toDegrees(Math.atan(disty / distx));
         headinglockangle = 90 - trigangle + 90;
-
 
 
         error = targetV - sencoder.getVelocity();
@@ -193,12 +194,11 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         if (gamepad1.y) {
             targetV = 0;
         } else {
-            targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
+            targetV = 2447 + -51.2 * diagonaldist + 0.753 * diagonaldist * diagonaldist + -0.00437 * diagonaldist * diagonaldist * diagonaldist + 0.0000091 * diagonaldist * diagonaldist * diagonaldist * diagonaldist;
         }
 
-        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
-        if (gamepad1.dpad_right) flickys.setPosition(flickup);
-
+//        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
+//        if (gamepad1.dpad_right) flickys.setPosition(flickup);
 
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
@@ -207,14 +207,8 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
-        if (gamepad1.left_trigger > 0.25) {
-            intake.setPower(-1);
-        }
         if (gamepad1.right_bumper) {
             intake.setPower(1);
-        }
-        if (gamepad1.right_trigger > 0.25) {
-            intake.setPower(0);
         }
 
         if (gamepad1.x) {
@@ -228,66 +222,73 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
         }
 
 
-
         switch (intaekstage) {
             case 5:
-                if (intakeeee.time() > 0.025) {
+                if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     intaekstage = 6;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 6:
                 settherotation(spina);
                 if (!follower.isBusy()) {
                     intaekstage = 7;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 7:
-                flickys.setPosition(flickup); //hopefully up
                 if (holdshooting) {
-                    parksettherotation(0.05);
+                    parksettherotation(0.1);
                 }
+                flickys.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 8;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 9;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 9:
-                rotationpos = rotationpos - 0.255;
                 settherotation(spinb);
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 0.56) {
                     intaekstage = 10;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 11;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
                 if (intakeeee.time() > 0.07) {
                     intaekstage = 12;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 12:
                 settherotation(spinc);
                 if (intakeeee.time() > 0.57) {
                     intaekstage = 13;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.07) {
                     headingLock = false;
                     intaekstage = 14;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 14:
                 parksettherotation(0);
@@ -296,28 +297,64 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 if (intakeeee.time() > 0.07) {
                     intaekstage = -1;
                     intakeeee.reset();
-                    settherotation(spina);}
+                    settherotation(spina);
+                }
                 break;
 
         }
 
-
-        if (gamepad1.left_stick_button) {
-            intaekstage = -100;
-            headingLock = false;
-            flickys.setPosition(flickdown);
-            parksettherotation(0);
-            settherotation(spina);
+        if (gamepad1.rightStickButtonWasPressed()) {
+            follower.followPath(pathChain);
+        }
+        if (gamepad1.rightStickButtonWasReleased()) {
+            follower.breakFollowing();
         }
 
+        if (gamepad1.dpad_left) {
+            follower.setPose(new Pose(72, 9, (Math.toRadians(90))));
+        }
 
-        if (gamepad1.dpad_down) {
-            holdshooting = true;
+        if (gamepad1.right_trigger > 0.25) {
+            intake.setPower(0);
         }
-        if (gamepad1.dpad_up) {
-            holdshooting = false;
-            parksettherotation(0);
-        }
+        if (gamepad1.left_trigger > 0.25) {
+            intake.setPower(-1);
+
+
+//        if (gamepad1.right_trigger > 0.2 && !intakepressed) {
+//            intakepressed = true;
+//            if (intaketoggle) {
+//                intaketoggle = false;
+//            } else if (!intaketoggle) {
+//                intaketoggle = true;
+//            }
+//        }
+//        if (gamepad1.right_trigger < 0.2) {
+//            intakepressed = false;
+//        }
+//        if (intaketoggle) {
+//            intake.setPower(-1);
+//        } else if (!intaketoggle) {
+//            intake.setPower(0);
+//        }
+
+
+            if (gamepad1.left_stick_button) {
+                intaekstage = -1;
+                headingLock = false;
+                flickys.setPosition(flickdown);
+                parksettherotation(0);
+                settherotation(spina);
+            }
+
+
+            if (gamepad1.dpad_down) {
+                holdshooting = true;
+            }
+            if (gamepad1.dpad_up) {
+                holdshooting = false;
+                parksettherotation(0);
+            }
 
             turnerror = headinglockangle - Math.toDegrees(botHeading);
             controller.updateError(turnerror);
@@ -329,29 +366,27 @@ public class PEDROTELEOPBLUE extends NextFTCOpMode {
                 follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
 
+            if (gamepad1.y) {
+                parksettherotation(0);
+            }
+            if (gamepad1.b) {
+                parksettherotation(0.8);
 
-        if (gamepad1.y) {
-            parksettherotation(0);
+
+                telemetry.addData("x pos", posx);
+                telemetry.addData("y pos", posy);
+                telemetry.addData("diag dist", diagonaldist);
+                telemetry.addData("error", turnerror);
+                telemetry.addData("current heading", follower.getHeading());
+                telemetry.addData("targetV", targetV);
+                telemetry.addData("actualV", sencoder.getVelocity());
+                telemetry.addData("intake stage", intaekstage);
+                telemetry.addData("timer", intaketimercount);
+                telemetry.addData("headinglockangle", headinglockangle);
+                telemetry.update();
+
+
+            }
         }
-        if (gamepad1.b) {
-            parksettherotation(0.75);
 
-
-        telemetry.addData("x pos", posx);
-        telemetry.addData("y pos", posy);
-        telemetry.addData("diag dist", diagonaldist);
-        telemetry.addData("error", turnerror);
-        telemetry.addData("current heading", follower.getHeading());
-        telemetry.addData("targetV", targetV);
-        telemetry.addData("actualV", sencoder.getVelocity());
-        telemetry.addData("intake stage", intaekstage);
-        telemetry.addData("timer", intaketimercount);
-        telemetry.addData("headinglockangle", headinglockangle);
-            telemetry.update();
-
-
-
-    }
-    }
-
-}
+    }}
