@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "BLUE TELEOP")
+@Autonomous(name = "12 FRONT BLUE", preselectTeleOp = "BLUE TELEOP 2", group = "blueautos")
 public class BLUEFRONT extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -109,10 +109,10 @@ public class BLUEFRONT extends OpMode {
     private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180)));
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
     private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.7)));
-    private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180)));
-    private final Pose pickup2 = (new Pose(18.5, 82, Math.toRadians(180)));
+    private final Pose pickup1 = (new Pose(18, 68.75, Math.toRadians(180)));
+    private final Pose pickup2 = (new Pose(18.5, 83, Math.toRadians(180)));
     private final Pose pickup3 = (new Pose(42, 36.8, Math.toRadians(180)));
-    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140)));
+    private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140)));
 
 
 
@@ -233,7 +233,7 @@ public class BLUEFRONT extends OpMode {
             case 7:
                 if(pathTimer.getElapsedTimeSeconds()>0.125) {
                     settherotation(spina);
-                    follower.followPath(grabPickup1, true);
+                    follower.followPath(grabPickup1, 0.9, true);
                     setPathState(8);
                 }
                 break;
@@ -305,7 +305,7 @@ public class BLUEFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.7, true);
+                    follower.followPath(grabPickup2, 0.6, true);
                     setPathState(17);
                 }
                 break;

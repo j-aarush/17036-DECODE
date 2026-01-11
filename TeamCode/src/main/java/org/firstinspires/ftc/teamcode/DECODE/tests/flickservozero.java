@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.tests;
 
 import static dev.nextftc.bindings.Bindings.button;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -19,6 +20,7 @@ import dev.nextftc.bindings.Button;
 
 
 @Autonomous
+@Disabled
 public class flickservozero extends LinearOpMode {
     //Custom variable declaration for button speed change
 

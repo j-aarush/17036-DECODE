@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "3 ball TELEOP")
 @Configurable
+@Disabled
 public class threeballteleop extends NextFTCOpMode {
     public static NormalizedColorSensor colorSensor;
     public static Servo leftspindex, rightspindex;

@@ -8,7 +8,6 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -17,25 +16,18 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.extensions.pedro.FollowPath;
-import dev.nextftc.ftc.NextFTCOpMode;
-
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "9 FAR RED", preselectTeleOp = "RED TELEOP")
-public class sixspecautooored extends OpMode {
+@Autonomous(name = "9 FAR RED", preselectTeleOp = "RED TELEOP", group = "redautos")
+public class REDFARNINE extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -432,6 +424,7 @@ public class sixspecautooored extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
+        follower.setMaxPower(0.9);
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);

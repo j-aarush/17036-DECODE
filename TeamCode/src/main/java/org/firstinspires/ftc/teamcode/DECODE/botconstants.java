@@ -10,10 +10,16 @@ public  class botconstants {
  public static double autoendx, autoendy, autoendhead;
  public static Pose autoendpose;
  public static double autoendheading;
+//    public  static double spina = 0.1355;
+//
+// public  static double spinb = 0.3855;
+//    public static double spinc = 0.635;
+
     public  static double spina = 0.2605;
 
- public  static double spinb = 0.5105;
+    public  static double spinb = 0.5105;
     public static double spinc = 0.7605;
+
   public static double flickup = 0.0, flickdown = 0.53;
 
 

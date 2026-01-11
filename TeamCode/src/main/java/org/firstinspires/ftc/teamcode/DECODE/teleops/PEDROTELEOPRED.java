@@ -6,7 +6,6 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
@@ -17,23 +16,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import dev.nextftc.core.units.Angle;
-import dev.nextftc.extensions.pedro.TurnTo;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.DECODE.autos.sixspecautooored;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
-
-import java.util.function.Supplier;
-
-
 
 
 @TeleOp(name = "RED TELEOP")
@@ -287,6 +278,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         if (gamepad1.rightStickButtonWasReleased()) {
             follower.breakFollowing();
             follower.startTeleopDrive();
+            slowMode = true;
+            headingLock = false;
         }
 
         if (gamepad1.dpad_left) {
@@ -336,6 +329,10 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             headingLock = true;
             }
 
+        if (gamepad1.dpad_right) {
+            slowMode = false;
+        }
+
 
         if (gamepad1.dpad_down) {
             holdshooting = true;
@@ -351,6 +348,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
         if (headingLock)
             follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, controller.run(), true);
+        else if (slowMode)
+            follower.setTeleOpDrive(-gamepad2.left_stick_y*0.5, -gamepad2.left_stick_x*0.5, -gamepad2.right_stick_x*0.5, true);
         else
             follower.setTeleOpDrive(-gamepad2.left_stick_y, -gamepad2.left_stick_x, -gamepad2.right_stick_x, true);
 
@@ -359,7 +358,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             parksettherotation(0);
         }
         if (gamepad1.b) {
-            parksettherotation(0.8);
+            parksettherotation(0.9);
 
 
             telemetry.addData("diag dist", diagonaldist);
@@ -386,10 +385,13 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 /// dpad up: enable defense brakes
 /// dpad down: disable defense brakes
 /// dpad left: reset pose
-/// dpad right: -------
+/// dpad right: slowmode off
 /// a: reset spindexer plate
 /// b: park, turn flywheel off if held
 /// x: shake spindexer
 /// y: retract park
 /// left stick button: reset shooting cycle
 /// right stick button: hold to auto park, release to manual drive
+
+
+///ADD SLOWMODE TO BLUE

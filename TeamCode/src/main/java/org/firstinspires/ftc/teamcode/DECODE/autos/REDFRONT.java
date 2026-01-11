@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP")
+@Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP", group = "redautos")
 public class REDFRONT extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -112,7 +112,7 @@ public class REDFRONT extends OpMode {
     private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
     private final Pose pickup2 = (new Pose(18.5, 82, Math.toRadians(180))).mirror();
     private final Pose pickup3 = (new Pose(42, 36.8, Math.toRadians(180))).mirror();
-    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140))).mirror();
+    private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
 
 
 
@@ -233,7 +233,7 @@ public class REDFRONT extends OpMode {
             case 7:
                 if(pathTimer.getElapsedTimeSeconds()>0.125) {
                     settherotation(spina);
-                    follower.followPath(grabPickup1, true);
+                    follower.followPath(grabPickup1, 0.9, true);
                     setPathState(8);
                 }
                 break;
@@ -305,7 +305,7 @@ public class REDFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.7, true);
+                    follower.followPath(grabPickup2, 0.6, true);
                     setPathState(17);
                 }
                 break;

@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 RED GATE FRONT", preselectTeleOp = "RED TELEOP")
+@Autonomous(name = "12 RED GATE FRONT", preselectTeleOp = "RED TELEOP", group = "redautos")
 public class REDFRONTGATE extends OpMode {
 
     public static Servo leftspindex, rightspindex;
@@ -112,7 +112,7 @@ public class REDFRONTGATE extends OpMode {
     private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
     private final Pose pickup2 = (new Pose(22.1, 86, Math.toRadians(180))).mirror();
     private final Pose pickup3 = (new Pose(17, 60, Math.toRadians(138))).mirror();
-    private final Pose parkpos = (new Pose(25, 60, Math.toRadians(140))).mirror();
+    private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
 
 
 

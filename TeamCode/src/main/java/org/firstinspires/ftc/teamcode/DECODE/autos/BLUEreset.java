@@ -30,7 +30,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "BLUE RESET/park", preselectTeleOp = "BLUE TELEOP")
+@Autonomous(name = "BLUE RESET/park", preselectTeleOp = "BLUE TELEOP 2", group = "blueautos")
 public class BLUEreset extends OpMode {
 
     public static Servo leftspindex, rightspindex;
