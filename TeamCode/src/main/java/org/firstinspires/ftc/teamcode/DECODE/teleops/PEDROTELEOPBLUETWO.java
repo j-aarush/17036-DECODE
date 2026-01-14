@@ -358,7 +358,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             parksettherotation(0);
         }
         if (gamepad1.b) {
-            parksettherotation(0.9);
+            parksettherotation(1);
 
 
             telemetry.addData("diag dist", diagonaldist);

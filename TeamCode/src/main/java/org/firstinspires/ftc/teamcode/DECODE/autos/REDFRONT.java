@@ -305,7 +305,7 @@ public class REDFRONT extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.6, true);
+                    follower.followPath(grabPickup2, 0.78, true);
                     setPathState(17);
                 }
                 break;

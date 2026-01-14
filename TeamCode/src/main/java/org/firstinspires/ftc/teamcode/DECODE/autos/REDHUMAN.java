@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendx;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -11,7 +8,6 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -20,25 +16,18 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.extensions.pedro.FollowPath;
-import dev.nextftc.ftc.NextFTCOpMode;
-
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 RED GATE FRONT", preselectTeleOp = "RED TELEOP", group = "redautos")
-public class REDFRONTGATE extends OpMode {
+@Autonomous(name = "REDHUMAN", preselectTeleOp = "RED TELEOP", group = "redautos")
+public class REDHUMAN extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -47,19 +36,21 @@ public class REDFRONTGATE extends OpMode {
         rightspindex.setPosition(rotationn);
     }
 
+    DcMotorEx sencoder;
+
     double diagonaldist;
 
     double headinglockangle;
     double turnerror;
 
-    public static DcMotorEx intake, flywheel, sencoder;
+    public static DcMotorEx intake, flywheel;
 
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
-    public double         targetV = 1305;
+    public double         targetV = 1535;
 
-    double kP = 0.111, kV = 0.0004349;
-    double error;
+    double kP = 0.11, kV = 0.000435;
+    double error =0 ;
     double botHeading;
 
     double posx ;
@@ -74,6 +65,7 @@ public class REDFRONTGATE extends OpMode {
 
 
     float greenv, bluev, redv;
+    double flickup = 0.045, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -106,79 +98,90 @@ public class REDFRONTGATE extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180))).mirror();
-    private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145))).mirror();
-    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5))).mirror();
-    private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
-    private final Pose pickup2 = (new Pose(21, 86, Math.toRadians(180))).mirror();
-    private final Pose pickup3 = (new Pose(16, 59, Math.toRadians(135))).mirror();
-    private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
+    private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
+    private final Pose scorePose = new Pose(58, 14, Math.toRadians(108.2)).mirror(); //figure outt
+    private final Pose rescorePose = new Pose(58, 14.25, Math.toRadians(107.6)).mirror(); //110
+    private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.8)).mirror(); //110
 
+    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
+    private final Pose pickup1Pose = new Pose(8, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose control = new Pose( 60.15, 40, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private PathChain score3rd, score3, initpath, score1, grabPickup1, score2, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, pickup3rd, park;
+    private final Pose pickup2Pose = new Pose(18, 14, Math.toRadians(190)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
+
+    static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
+
+    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
     private Path grab1;
 
     public void buildPaths() {
-        initpath = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, realstartpose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), realstartpose.getHeading())
-                .build();
-        score1 = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, scorepose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorepose.getHeading())
-                .build();
-        grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose,
-                        new Pose(63.77, 50.86).mirror(),
-                        new Pose(-50, 51).mirror(),
-                        new Pose(49.5, 64.9).mirror(),
-                        pickup1))
-                .setConstantHeadingInterpolation((Math.toRadians(0)))
-                .build();
-        score2 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1, new Pose(52, 63).mirror(), scorepose))
-                .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
-                .build();
-        grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, pickup2))
-                .setConstantHeadingInterpolation((Math.toRadians(0)))
-                .build();
-        score3 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup2, scorepose))
-                .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
-                .build();
-        pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(24.5, 47).mirror(), pickup3))
-                .setLinearHeadingInterpolation((scorepose.getHeading()), (Math.toRadians(35)))
-                .setTValueConstraint(0.97)
-                .build();
-        score3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup3, new Pose(30, 50).mirror(), scorepose))
-                .setLinearHeadingInterpolation((Math.toRadians(10)), scorepose.getHeading())
-                .build();
-        park = follower.pathBuilder()
-                .addPath(new BezierLine(scorepose, parkpos))
-                .setLinearHeadingInterpolation(scorepose.getHeading(), parkpos.getHeading())
+        startshoot = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, scorePose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
 
+//        grab1 = new Path(new BezierLine(scorePose, pickup1Pose));
+//        grab1.setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading());
+
+        intake1 = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose, control, pickup1Pose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
+                .build();
+
+        return1 = follower.pathBuilder()
+                .addPath(new BezierCurve(pickup1Pose, control, rescorePose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), rescorePose.getHeading())
+                .build();
+
+        return11 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, scorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+        return21 = follower.pathBuilder()
+                .addPath(new BezierLine(prescorePose, rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
+                .build();
+
+
+        grabPickup2 = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose, pickup2Pose))
+                .addPath(new BezierCurve(pickup2Pose, pickup67Pose))
+                .addPath(new BezierCurve(pickup67Pose, pickup2Pose))
+                .setConstantHeadingInterpolation((Math.toRadians(182)))
+//                .setLinearHeadingInterpolation((Math.toRadians(175)), pickup2Pose.getHeading())
+                .setTValueConstraint(0.8)
+                .build();
+
+        grabPickup67 = follower.pathBuilder()
+                .addPath(new BezierLine(prescorePose, rescorePose3))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose3.getHeading())
+                .build();
+
+
+        scorePickup2 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, rescorePose))
+                .setLinearHeadingInterpolation((Math.toRadians(180)), rescorePose.getHeading())
+                .build();
+
+        park = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, finishPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), finishPose.getHeading())
+                .build();
 
     }
-
-
-    void autonomousPathUpdate() {
+    public void autonomousPathUpdate() {
         switch (pathState) {
-            case -10:
-                follower.followPath(initpath, true);
-                setPathState(-9);
-                break;
-            case -9:
-                if (!follower.isBusy()) {
-                    follower.followPath(score1, true);
-                    setPathState(-2); }
+            case -1:
+                follower.followPath(startshoot,true );
+                setPathState(-2);
+
                 break;
             case -2:
-                if (pathTimer.getElapsedTimeSeconds()>2.5) {
+                if (pathTimer.getElapsedTimeSeconds()>2.75) {
                     setPathState(0);
                     flickys.setPosition(flickup);
                 }
@@ -197,7 +200,7 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 2:
-                if (pathTimer.getElapsedTimeSeconds()>0.5) {
+                if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(3);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -215,7 +218,7 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 5:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.8) {
                     setPathState(6);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -228,22 +231,30 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 7:
-                if(pathTimer.getElapsedTimeSeconds()>0.125) {
+                if(pathTimer.getElapsedTimeSeconds()>0.15) {
+
                     settherotation(spina);
-                    follower.followPath(grabPickup1, true);
-                    setPathState(8);
+                    follower.followPath(intake1, true);
+                    setPathState(-8);
+                }
+
+                break;
+
+            case -8:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(return1,true);
+                    setPathState(-10);
                 }
                 break;
-            case 8:
-                if (!follower.isBusy()) {
-                    follower.followPath(score2, true);
-                    setPathState(-3);
-                }
-                break;
-            case -3:
+
+            case -10:
                 if (!follower.isBusy()) {
                     settherotation(spina);
                     intake.setPower(-0.35);
+//                    follower.followPath(return21);
+                    settherotation(spina);
+
                     setPathState(9);
                 }
             case 9:
@@ -263,7 +274,7 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 11:
-                if (pathTimer.getElapsedTimeSeconds()>0.5) {
+                if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(12);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -281,7 +292,7 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 14:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.80) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(15);
                 }
@@ -302,21 +313,15 @@ public class REDFRONTGATE extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(pickup3rd, 1, true);
-                    setPathState(1067);
-                }
-                break;
-            case 1067:
-                if (!follower.isBusy()) {
-                    pathTimer.resetTimer();
+                    follower.followPath(grabPickup2, true);
                     setPathState(17);
                 }
+                break;
 
             case 17:
-                if(pathTimer.getElapsedTimeSeconds() > 2)
+                if(!follower.isBusy())
                 {
-
-                    follower.followPath(score3rd,true);
+                    follower.followPath(return11,true);
                     setPathState(18);
                 }
                 break;
@@ -346,7 +351,7 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 21:
-                if (pathTimer.getElapsedTimeSeconds()>0.5) {
+                if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(22);
                     flickys.setPosition(flickup); //hopefully up
                 }
@@ -364,96 +369,94 @@ public class REDFRONTGATE extends OpMode {
                 }
                 break;
             case 24:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
+                if (pathTimer.getElapsedTimeSeconds()>0.80) {
                     flickys.setPosition(flickup); //hopefully up]
                     setPathState(25);
                 }
                 break;
             case 25:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
-                    flickys.setPosition(flickdown); //hopefully up]
-                    setPathState(27);
-                }
-                break;
-
-
-
-
-            case 27:
-                if(pathTimer.getElapsedTimeSeconds()>0.15) {
-
-                    settherotation(spina);
-                    intake.setPower(1);
-                    follower.followPath(grabPickup2, 0.80, true);
-                    setPathState(28);
-                }
-                break;
-
-            case 28:
-                if(!follower.isBusy())
-                {
-                    follower.followPath(score3,true);
-                    setPathState(29);
-                }
-                break;
-
-            case 29:
-                if (!follower.isBusy()) {
-                    settherotation(spina);
-                    intake.setPower(-0.35);
-//                    follower.followPath(return21);
-                    settherotation(spina);
-                    setPathState(30);
-                }
-            case 30:
-                if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
-                }
-                if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
-                    setPathState(31);
-                    flickys.setPosition(flickdown); //hopefully up
-                }
-
-                break;
-            case 31:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
-                    setPathState(32);
-                    settherotation(spinb);
-                }
-                break;
-            case 32:
-                if (pathTimer.getElapsedTimeSeconds()>0.5) {
-                    setPathState(33);
-                    flickys.setPosition(flickup); //hopefully up
-                }
-                break;
-            case 33:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
-                    setPathState(34);
-                    flickys.setPosition(flickdown); //hopefully up
-                }
-                break;
-            case 34:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
-                    setPathState(35);
-                    settherotation(spinc);
-                }
-                break;
-            case 35:
-                if (pathTimer.getElapsedTimeSeconds()>0.67) {
-                    flickys.setPosition(flickup); //hopefully up]
-                    setPathState(36);
-                }
-                break;
-            case 36:
-                if (pathTimer.getElapsedTimeSeconds()>0.15) {
                     flickys.setPosition(flickdown); //hopefully up]
                     setPathState(26);
                 }
                 break;
             case 26:
+                if(pathTimer.getElapsedTimeSeconds()>0.15) {
+
+                    settherotation(spina);
+                    intake.setPower(1);
+                    follower.followPath(grabPickup2, true);
+                    setPathState(27);
+                }
+                break;
+
+            case 27:
+                if(!follower.isBusy())
+                {
+                    follower.followPath(return11,true);
+                    setPathState(28);
+                }
+                break;
+
+            case 28:
                 if (!follower.isBusy()) {
-                    follower.followPath(park, true);
+                    settherotation(spina);
+                    intake.setPower(-0.35);
+                    follower.followPath(grabPickup67);
+                    settherotation(spina);
+                    setPathState(29);
+                }
+            case 29:
+                if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
+                    setPathState(30);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+
+                break;
+            case 30:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(31);
+                    settherotation(spinb);
+                }
+                break;
+            case 31:
+                if (pathTimer.getElapsedTimeSeconds()>0.65) {
+                    setPathState(32);
+                    flickys.setPosition(flickup); //hopefully up
+                }
+                break;
+            case 32:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    setPathState(33);
+                    flickys.setPosition(flickdown); //hopefully up
+                }
+                break;
+            case 33:
+                if (pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setPathState(34);
+                    settherotation(spinc);
+                }
+                break;
+            case 34:
+                if (pathTimer.getElapsedTimeSeconds()>0.80) {
+                    flickys.setPosition(flickup); //hopefully up]
+                    setPathState(35);
+                }
+                break;
+            case 35:
+                if (pathTimer.getElapsedTimeSeconds()>0.20) {
+                    flickys.setPosition(flickdown); //hopefully up]
+                    setPathState(36);
+                }
+                break;
+
+
+            case 36:
+                if (!follower.isBusy()) {
+                    follower.followPath(park);
                     setPathState(67);
                 }
                 break;
@@ -464,7 +467,6 @@ public class REDFRONTGATE extends OpMode {
 
         }
     }
-
 
 
     /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
@@ -478,11 +480,11 @@ public class REDFRONTGATE extends OpMode {
     public void init() {
 
         flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
+        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
-        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -507,8 +509,8 @@ public class REDFRONTGATE extends OpMode {
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
-
         follower.setStartingPose(startPose);
+        follower.setMaxPower(0.9);
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
@@ -519,15 +521,11 @@ public class REDFRONTGATE extends OpMode {
     }
 
     @Override
-    public void init_loop() {
-    }
-
-    @Override
     public void start() {
         error = targetV - sencoder.getVelocity();
         flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
-        setPathState(-9);
+        setPathState(-1);
     }
 
     @Override
@@ -555,12 +553,11 @@ public class REDFRONTGATE extends OpMode {
         telemetry.update();
 
     }
-
     @Override
     public void stop() {
-//        follower.getPose();
         autoendpose = follower.getPose();
     }
+
 
 
 }
