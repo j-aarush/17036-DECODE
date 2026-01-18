@@ -28,3 +28,12 @@ public  class botconstants {
 //    targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
 
 }
+
+
+//todo's
+//limelight for heading/velocity
+//cr spindexer pid
+//retune pedro
+//retune heading pid
+//account for bot velocity for heading/velocity
+//try field centric

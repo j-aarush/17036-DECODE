@@ -17,25 +17,25 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(12.1)
-            .forwardZeroPowerAcceleration(-34.290)
-            .lateralZeroPowerAcceleration(-73.3)
+            .mass(11.8)
+            .forwardZeroPowerAcceleration(-36.6021)
+            .lateralZeroPowerAcceleration(-72.855)
             .useSecondaryTranslationalPIDF(true)
             .useSecondaryHeadingPIDF(true)
 //            .useSecondaryDrivePIDF(true)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.07,0,0.0167,0.0267))
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.015,0.002))
-            .headingPIDFCoefficients(new PIDFCoefficients(1.3,0,0.0267,0.02))
-//            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.2,0,0.1,0.009))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.3,0,0.03,0.02)) //1.3
+            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2.5,0,0,0.009)) //1.5
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.086,0.05,0,0.6, 0.00001)) //0.2, 0.00045
-            .centripetalScaling(0.0002) //0.002
+            .centripetalScaling(0.00025) //0.002
             .holdPointHeadingScaling(1)
 //            .setCoefficientsHeadingPIDF(new PIDFCoefficients(0,0,0,0))
             ;
     public static PathConstraints pathConstraints = new PathConstraints(0.975, 50, 1, 1);
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .xVelocity(85.202)
-            .yVelocity(65.95505)
+            .xVelocity(90.44085288)
+            .yVelocity(70.95980667)
             .maxPower(1)
 
             .rightFrontMotorName("FR")
