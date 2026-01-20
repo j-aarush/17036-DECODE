@@ -20,7 +20,6 @@ import dev.nextftc.bindings.Button;
 
 
 @Autonomous
-@Disabled
 public class flickservozero extends LinearOpMode {
     //Custom variable declaration for button speed change
 
@@ -70,24 +69,24 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //up.
-                flick.setPosition(0.1);
+                flick.setPosition(0.2);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.5);
+                flick.setPosition(0.1);
             }
 
 
-            switch (flickswitch) {
-                case 0:
-                    intakeeee.reset();
-                    flick.setPosition(0);
-                    if (intakeeee.time() > 0.25) {
-                        flickswitch = 1;}
-                    break;
-                case 1:
-                    flick.setPosition(0.5);
-                    break;
-            }
+//            switch (flickswitch) {
+//                case 0:
+//                    intakeeee.reset();
+//                    flick.setPosition(0);
+//                    if (intakeeee.time() > 0.25) {
+//                        flickswitch = 1;}
+//                    break;
+//                case 1:
+//                    flick.setPosition(0.5);
+//                    break;
+//            }
 
 
             if (gamepad2.a) {

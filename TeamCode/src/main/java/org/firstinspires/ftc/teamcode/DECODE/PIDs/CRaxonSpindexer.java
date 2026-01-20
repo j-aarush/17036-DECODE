@@ -236,7 +236,7 @@ public class CRaxonSpindexer {
     public double getCurrentAngle() {
 //        if (servoEncoder == null) return 0;
 //        return (servoEncoder.getVoltage() / 3.3) * (direction.equals(Direction.REVERSE) ? -360 : 360);
-        return (revencoder.getCurrentPosition() * 360 / 8192.0 );
+        return (revencoder.getCurrentPosition() * 360 / 8192.0 / 1.5);
     }
 
     // Check if servo is at target (default tolerance)
