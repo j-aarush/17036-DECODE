@@ -6,6 +6,7 @@ import static dev.nextftc.bindings.Bindings.button;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.DECODE.PIDs.CRaxonSpindexer;
 import dev.nextftc.bindings.Button;
 
 
-@Autonomous
+@TeleOp(name = "flicky")
 public class flickservozero extends LinearOpMode {
     //Custom variable declaration for button speed change
 
@@ -68,11 +69,15 @@ public class flickservozero extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad1.a) { //up.
-                flick.setPosition(0.2);
+            if (gamepad1.a) { //downnnnnn.
+                flick.setPosition(0.3);
             }
             if (gamepad1.b) { //down
                 flick.setPosition(0.1);
+            }
+
+            if (gamepad1.y) { //upppppp
+                flick.setPosition(0.05);
             }
 
 

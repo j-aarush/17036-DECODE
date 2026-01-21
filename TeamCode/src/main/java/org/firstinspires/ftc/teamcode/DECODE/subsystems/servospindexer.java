@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.DECODE.subsystems;
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
+
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -57,13 +61,13 @@ public class servospindexer extends LinearOpMode {
 
 
             if (gamepad1.a) {
-                settherotation(0.625);  //SHOOTER 3 hoewfjepwa //0.45 1
+                settherotation(spina);  //SHOOTER 3 hoewfjepwa //0.45 1
             }
             if (gamepad1.b) {
-                settherotation(0.884);
+                settherotation(spinb);
             }
             if (gamepad1.x) {
-                settherotation(1); //SHOOTER 2
+                settherotation(spinc); //SHOOTER 2
 
             }
             if (gamepad1.y) {

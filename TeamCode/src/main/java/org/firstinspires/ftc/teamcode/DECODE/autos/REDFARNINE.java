@@ -101,7 +101,7 @@ public class REDFARNINE extends OpMode {
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(110)).mirror(); //figure outt
-    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(111)).mirror();
+    private final Pose rescorePose = new Pose(60.25, 14.25, Math.toRadians(110)).mirror();
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
     private final Pose pickup1Pose = new Pose(18.67, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -128,6 +128,7 @@ public class REDFARNINE extends OpMode {
         intake1 = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, control, pickup1Pose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
+                .setTValueConstraint(0.5)
                 .build();
 
         return1 = follower.pathBuilder()

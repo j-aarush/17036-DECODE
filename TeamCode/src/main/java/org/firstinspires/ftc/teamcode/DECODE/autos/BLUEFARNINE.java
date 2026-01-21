@@ -81,10 +81,10 @@ public class BLUEFARNINE extends OpMode {
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
     private final Pose scorePose = new Pose(60, 14, Math.toRadians(111.2)); //figure outt
-    private final Pose rescorePose = new Pose(59.75, 13.75, Math.toRadians(111.75)); //figure outt
+    private final Pose rescorePose = new Pose(59.75, 13.75, Math.toRadians(111.2)); //figure outt 111.75
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(180)); //figure outt
     private final Pose pickup1Pose = new Pose(18.67, 36.83, Math.toRadians(180)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose control = new Pose( 60.15, 37.81, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose control = new Pose( 55.15, 42.81, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
     private final Pose secondcontrol = new Pose(80, 59, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
     private final Pose pickup2Pose = new Pose(23, 58, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
@@ -107,6 +107,7 @@ public class BLUEFARNINE extends OpMode {
         intake1 = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, control, pickup1Pose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
+                .setTValueConstraint(0.5)
                 .build();
 
         return1 = follower.pathBuilder()
