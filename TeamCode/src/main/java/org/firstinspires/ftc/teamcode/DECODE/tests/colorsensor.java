@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.tests;
 import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.configvelocity;
 import static org.firstinspires.ftc.teamcode.DECODE.PIDs.flywheelpid.flywheelvelocity;
 
+import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,6 +26,9 @@ public class colorsensor extends LinearOpMode {
     Servo flickys;
     float greenintake, blueintake, greenleft, blueleft, greenright, blueright;
 
+    final float[] hsvValuesintake = new float[3];
+    final float[] hsvValuesright = new float[3];
+    final float[] hsvValuesleft = new float[3];
 
     DcMotorEx leftinake;
 //    Button gamepad1a = button(() -> gamepad1.a);
@@ -57,9 +61,9 @@ public class colorsensor extends LinearOpMode {
 
 
         waitForStart();
-        intakecs.setGain(100);
-        rightcs.setGain(100);
-        leftcs.setGain(100);
+        intakecs.setGain(12);
+        rightcs.setGain(12);
+        leftcs.setGain(12);
 
 
         while(opModeIsActive()) {
@@ -76,6 +80,10 @@ public class colorsensor extends LinearOpMode {
             greenleft = colorleft.green;
             blueleft = colorleft.blue;
 
+
+            Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
+            Color.colorToHSV(colorright.toColor(), hsvValuesright);
+            Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
 
 
 
@@ -107,6 +115,15 @@ public class colorsensor extends LinearOpMode {
             telemetry.addLine()
                     .addData("rightGreen", "%.3f", greenright)
                     .addData("rightBlue", "%.3f", blueright);
+            telemetry.addLine()
+                    .addData("intakeHue", "%.3f", hsvValuesintake[0])
+                    .addData("intakeSaturation", "%.3f", hsvValuesintake[2]);
+            telemetry.addLine()
+                    .addData("leftHue", "%.3f", hsvValuesleft[0])
+                    .addData("leftSaturation", "%.3f", hsvValuesleft[2]);
+            telemetry.addLine()
+                    .addData("rightHue", "%.3f", hsvValuesright[0])
+                    .addData("rightSaturation", "%.3f", hsvValuesright[2]);
 
 
 
