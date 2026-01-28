@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kP;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kV;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -60,7 +62,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     public static DcMotorEx intake, flywheel, sencoder;
     public static double targetV = 0;
 
-    double kP = 0.1167, kV = 0.000434;
     double error;
 
     float greenv, bluev, redv;
@@ -219,13 +220,13 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     parksettherotation(0.1);
                 }
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -237,13 +238,13 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -255,7 +256,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -264,7 +265,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.04) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}

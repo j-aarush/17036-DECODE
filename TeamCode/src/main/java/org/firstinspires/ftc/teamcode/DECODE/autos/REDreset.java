@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendheading;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -44,11 +46,9 @@ public class REDreset extends OpMode {
     public static DcMotorEx intake, flywheel;
     public static float targetV = 1545;
 
-    double kP = 0.12, kV = 0.00042;
     double error =0 ;
 
     float greenv, bluev, redv;
-    double flickup = 0, flickdown = 0.53;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -199,7 +199,6 @@ public class REDreset extends OpMode {
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
-        settherotation(0.24); //first pos figure out later
 
 
 

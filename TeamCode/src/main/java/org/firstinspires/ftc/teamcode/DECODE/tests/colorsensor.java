@@ -57,9 +57,9 @@ public class colorsensor extends LinearOpMode {
 
 
         waitForStart();
-        intakecs.setGain(12);
-        rightcs.setGain(12);
-        leftcs.setGain(12);
+        intakecs.setGain(100);
+        rightcs.setGain(100);
+        leftcs.setGain(100);
 
 
         while(opModeIsActive()) {
@@ -108,6 +108,9 @@ public class colorsensor extends LinearOpMode {
                     .addData("rightGreen", "%.3f", greenright)
                     .addData("rightBlue", "%.3f", blueright);
 
+
+
+            //if green for back: 1.1 < green < 0.9;
 
             telemetry.update();
 

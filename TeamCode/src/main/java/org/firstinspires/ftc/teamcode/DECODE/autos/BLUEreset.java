@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
@@ -47,7 +49,6 @@ public class BLUEreset extends OpMode {
     double error =0 ;
 
     float greenv, bluev, redv;
-    double flickup = 0, flickdown = 0.53;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
@@ -315,7 +316,6 @@ public class BLUEreset extends OpMode {
 
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
-        settherotation(0.372); //first pos figure out later
 
 
 

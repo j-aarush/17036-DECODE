@@ -166,6 +166,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 
 
 
+
         error = targetV - sencoder.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
@@ -219,13 +220,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     parksettherotation(0.1);
                 }
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -237,13 +238,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -255,7 +256,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -264,7 +265,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.07) {
+                if (intakeeee.time() > 0.055) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}

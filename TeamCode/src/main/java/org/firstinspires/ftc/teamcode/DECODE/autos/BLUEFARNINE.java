@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -41,7 +43,6 @@ public class BLUEFARNINE extends OpMode {
     double error =0 ;
 
     float greenv, bluev, redv;
-    double flickup = 0, flickdown = 0.53; //0.1
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;

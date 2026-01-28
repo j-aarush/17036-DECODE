@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.DECODE.autos;
 
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kP;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kV;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -49,7 +53,6 @@ public class BLUEHUMAN extends OpMode {
 
     public double         targetV = 1535;
 
-    double kP = 0.11, kV = 0.000435;
     double error =0 ;
     double botHeading;
 
@@ -65,7 +68,6 @@ public class BLUEHUMAN extends OpMode {
 
 
     float greenv, bluev, redv;
-    double flickup = 0.045, flickdown = 0.5;
     double distancev;
     boolean move = false, intakeonoffb = false;
     boolean intakeswitch = false;
