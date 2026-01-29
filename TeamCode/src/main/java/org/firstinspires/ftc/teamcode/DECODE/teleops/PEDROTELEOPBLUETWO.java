@@ -11,6 +11,9 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,6 +28,8 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
+
+import java.util.List;
 
 
 @TeleOp(name = "BLUE TELEOP 2")
@@ -97,10 +102,27 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     }
 
     double intaketimercount;
+    public Limelight3A limelight;
+    int llresultt;
+
+    public int getPatternIdAuto() { // only for auto just returns the tag id for patterns
+        this.limelight.pipelineSwitch(0);
+        LLResult result = this.limelight.getLatestResult();
+        List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+        if (result.isValid()) {
+            for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                return fiducial.getFiducialId();
+            }
+        }
+        return 0;
+    }
+
 
 
     @Override
     public void onInit() {
+
+        limelight = hardwareMap.get(Limelight3A.class, "lime");
 
         flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
 
@@ -343,6 +365,10 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             parksettherotation(0);
         }
 
+        if (gamepad2.dpad_left) {
+            llresultt = getPatternIdAuto();
+        }
+
 
         turnerror = headinglockangle - Math.toDegrees(botHeading);
         controller.updateError(turnerror);
@@ -369,6 +395,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             telemetry.addData("intake stage", intaekstage);
             telemetry.addData("timer", intaketimercount);
             telemetry.addData("headinglockangle", headinglockangle);
+            telemetry.addData("llresult", llresultt);
             telemetry.update();
 
 

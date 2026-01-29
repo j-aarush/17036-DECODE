@@ -13,6 +13,9 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import dev.nextftc.core.commands.Command;
@@ -30,6 +33,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.List;
 
 
 @Autonomous(name = "BLUE RESET/park", preselectTeleOp = "BLUE TELEOP 2", group = "blueautos")
@@ -279,6 +284,20 @@ public class BLUEreset extends OpMode {
         pathTimer.resetTimer();
     }
 
+    public Limelight3A limelight;
+    int llresultt;
+
+    public int getPatternIdAuto() { // only for auto just returns the tag id for patterns
+        this.limelight.pipelineSwitch(0);
+        LLResult result = this.limelight.getLatestResult();
+        List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+        if (result.isValid()) {
+            for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                return fiducial.getFiducialId();
+            }
+        }
+        return 0;
+    }
 
     @Override
     public void init() {
@@ -314,6 +333,8 @@ public class BLUEreset extends OpMode {
         buildPaths();
         follower.setStartingPose(startPose);
 
+        limelight = hardwareMap.get(Limelight3A.class, "lime");
+
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
 
@@ -334,12 +355,16 @@ public class BLUEreset extends OpMode {
 //        error = targetV - flywheel.getVelocity();
 //        flywheel.setPower(kP * error + kV * targetV);
         follower.update();
+            llresultt = getPatternIdAuto();
+
+
 //        autonomousPathUpdate();
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("shooter vel", flywheel.getVelocity());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
+        telemetry.addData("llresult", llresultt);
         telemetry.update();
 
     }
