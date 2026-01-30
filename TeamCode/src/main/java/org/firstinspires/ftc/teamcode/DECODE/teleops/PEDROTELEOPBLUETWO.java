@@ -171,6 +171,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         intakeeee.reset();
         follower.startTeleopDrive();
         follower.update();
+        limelight.start();
     }
 
     @Override

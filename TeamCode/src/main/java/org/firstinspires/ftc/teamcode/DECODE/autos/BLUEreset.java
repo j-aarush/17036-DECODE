@@ -32,6 +32,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.List;
@@ -357,6 +358,11 @@ public class BLUEreset extends OpMode {
         follower.update();
             llresultt = getPatternIdAuto();
 
+        limelight.updateRobotOrientation(follower.getHeading());
+        LLResult result = limelight.getLatestResult();
+
+        double x = result.getBotpose_MT2().getPosition().toUnit(DistanceUnit.INCH).x;
+        double y = result.getBotpose_MT2().getPosition().toUnit(DistanceUnit.INCH).y;
 
 //        autonomousPathUpdate();
         telemetry.addData("path state", pathState);
@@ -365,6 +371,9 @@ public class BLUEreset extends OpMode {
         telemetry.addData("shooter vel", flywheel.getVelocity());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("llresult", llresultt);
+        telemetry.addData("ll x", x);
+        telemetry.addData("ll y", y);
+
         telemetry.update();
 
     }
