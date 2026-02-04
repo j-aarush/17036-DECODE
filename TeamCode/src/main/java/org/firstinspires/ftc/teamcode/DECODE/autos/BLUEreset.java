@@ -7,8 +7,11 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
@@ -33,6 +36,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.List;
@@ -349,6 +354,9 @@ public class BLUEreset extends OpMode {
 //        flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
 //        setPathState(-1);
+        limelight.start();
+        limelight.pipelineSwitch(0);
+
     }
 
     @Override
@@ -358,11 +366,17 @@ public class BLUEreset extends OpMode {
         follower.update();
             llresultt = getPatternIdAuto();
 
-        limelight.updateRobotOrientation(follower.getHeading());
+        limelight.updateRobotOrientation(Math.toRadians(follower.getHeading()));
         LLResult result = limelight.getLatestResult();
 
-        double x = result.getBotpose_MT2().getPosition().toUnit(DistanceUnit.INCH).x;
-        double y = result.getBotpose_MT2().getPosition().toUnit(DistanceUnit.INCH).y;
+        Pose3D limelightPose = result.getBotpose_MT2();
+
+
+        Pose roboPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, limelightPose.getPosition().x, limelightPose.getPosition().y, AngleUnit.RADIANS, follower.getHeading()), InvertedFTCCoordinates.INSTANCE);
+
+        roboPose.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+
+        Pose pedroPose = InvertedFTCCoordinates.INSTANCE.convertToPedro(roboPose);
 
 //        autonomousPathUpdate();
         telemetry.addData("path state", pathState);
@@ -371,8 +385,9 @@ public class BLUEreset extends OpMode {
         telemetry.addData("shooter vel", flywheel.getVelocity());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("llresult", llresultt);
-        telemetry.addData("ll x", x);
-        telemetry.addData("ll y", y);
+        telemetry.addData("ll x", roboPose.getX());
+        telemetry.addData("ll y", roboPose.getY());
+        telemetry.addData("ll y", roboPose);
 
         telemetry.update();
 

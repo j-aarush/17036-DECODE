@@ -243,13 +243,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     parksettherotation(0.1);
                 }
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -261,13 +261,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -279,7 +279,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -288,7 +288,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.055) {
+                if (intakeeee.time() > 0.065) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}
