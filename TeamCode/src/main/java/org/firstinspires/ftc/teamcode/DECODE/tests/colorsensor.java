@@ -21,7 +21,7 @@ import dev.nextftc.bindings.BindingManager;
 public class colorsensor extends LinearOpMode {
 
     public static Servo leftspindex, rightspindex;
-    NormalizedColorSensor intakecs, rightcs, leftcs;
+    NormalizedColorSensor intakecs, leftcs;
     View relativeLayout;
     Servo flickys;
     float greenintake, blueintake, greenleft, blueleft, greenright, blueright;
@@ -40,6 +40,8 @@ public class colorsensor extends LinearOpMode {
         rightspindex.setPosition(rotationn);
     }
 
+    boolean leftisgreen, leftispurple, rightisgreen, rightispurple, noballleft, noballright;
+
 
     @Override
     public void runOpMode() {
@@ -51,7 +53,6 @@ public class colorsensor extends LinearOpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         leftinake = hardwareMap.get(DcMotorEx.class, "Lintake");
         intakecs = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
-        rightcs = hardwareMap.get(NormalizedColorSensor.class, "rightcs");
         leftcs = hardwareMap.get(NormalizedColorSensor.class, "leftcs");
 
 
@@ -62,27 +63,22 @@ public class colorsensor extends LinearOpMode {
 
         waitForStart();
         intakecs.setGain(12);
-        rightcs.setGain(12);
         leftcs.setGain(12);
 
 
         while(opModeIsActive()) {
             NormalizedRGBA colorintake = intakecs.getNormalizedColors();
-            NormalizedRGBA colorright = rightcs.getNormalizedColors();
             NormalizedRGBA colorleft = leftcs.getNormalizedColors();
 
             greenintake = colorintake.green;
             blueintake= colorintake.blue;
 
-            greenright = colorright.green;
-            blueright = colorright.blue;
 
             greenleft = colorleft.green;
             blueleft = colorleft.blue;
 
 
             Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
-            Color.colorToHSV(colorright.toColor(), hsvValuesright);
             Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
 
 
@@ -105,6 +101,50 @@ public class colorsensor extends LinearOpMode {
                 settherotation(0.24); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
             }
 
+            if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
+                rightisgreen = true;
+                noballright = false;
+                rightispurple = false;
+            } else if (hsvValuesintake[0] > 179 && hsvValuesintake[0] < 230 && hsvValuesintake[2] > 0.015 && hsvValuesintake[2] < 0.033) {
+                rightisgreen = false;
+                noballright = false;
+                rightispurple = true;
+            } else {
+                rightispurple = false;
+                rightisgreen = false;
+                noballright = true;
+            }
+
+            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
+                leftisgreen = true;
+                noballleft = false;
+                leftispurple = false;
+            } else if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.033) {
+                leftisgreen = false;
+                noballleft = false;
+                leftispurple = true;
+            } else {
+                leftisgreen = false;
+                noballleft = true;
+                leftispurple = false;
+            }
+
+
+
+
+
+            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
+                leftisgreen = true;
+                noballleft = false;
+            } else leftisgreen = false;
+
+
+            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
+                leftispurple = true;
+                noballleft = false;
+            } else leftispurple = false;
+
+
 
             telemetry.addLine()
                     .addData("intakeGreen", "%.3f", greenintake)
@@ -113,21 +153,24 @@ public class colorsensor extends LinearOpMode {
                     .addData("leftGreen", "%.3f", greenleft)
                     .addData("leftBlue", "%.3f", blueleft);
             telemetry.addLine()
-                    .addData("rightGreen", "%.3f", greenright)
-                    .addData("rightBlue", "%.3f", blueright);
-            telemetry.addLine()
                     .addData("intakeHue", "%.3f", hsvValuesintake[0])
                     .addData("intakeSaturation", "%.3f", hsvValuesintake[2]);
             telemetry.addLine()
                     .addData("leftHue", "%.3f", hsvValuesleft[0])
                     .addData("leftSaturation", "%.3f", hsvValuesleft[2]);
-            telemetry.addLine()
-                    .addData("rightHue", "%.3f", hsvValuesright[0])
-                    .addData("rightSaturation", "%.3f", hsvValuesright[2]);
+            telemetry.addData("leftisgreen", leftisgreen);
+            telemetry.addData("leftispurple", leftispurple);
+            telemetry.addData("leftisnone", noballleft);
+            telemetry.addData("rightisgreen", rightisgreen);
+            telemetry.addData("rightispurple", rightispurple);
+            telemetry.addData("rightisnone", noballright);
 
 
 
-            //if green for back: 1.1 < green < 0.9;
+            //green hue: 130-176
+            //green saturation: 0.019 - 0.041
+            //purple hue: 179-230
+            //purple saturation 0.015-0.03
 
             telemetry.update();
 

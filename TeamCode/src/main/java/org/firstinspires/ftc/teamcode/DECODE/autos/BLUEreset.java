@@ -366,17 +366,16 @@ public class BLUEreset extends OpMode {
         follower.update();
             llresultt = getPatternIdAuto();
 
-        limelight.updateRobotOrientation(Math.toRadians(follower.getHeading()));
+        limelight.updateRobotOrientation(Math.toDegrees(follower.getHeading()));
         LLResult result = limelight.getLatestResult();
 
         Pose3D limelightPose = result.getBotpose_MT2();
 
 
-        Pose roboPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, limelightPose.getPosition().x, limelightPose.getPosition().y, AngleUnit.RADIANS, follower.getHeading()), InvertedFTCCoordinates.INSTANCE);
+        Pose roboPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, limelightPose.getPosition().x, limelightPose.getPosition().y, AngleUnit.DEGREES, Math.toDegrees(follower.getHeading())), InvertedFTCCoordinates.INSTANCE);
 
         roboPose.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
 
-        Pose pedroPose = InvertedFTCCoordinates.INSTANCE.convertToPedro(roboPose);
 
 //        autonomousPathUpdate();
         telemetry.addData("path state", pathState);
@@ -385,9 +384,10 @@ public class BLUEreset extends OpMode {
         telemetry.addData("shooter vel", flywheel.getVelocity());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("llresult", llresultt);
-        telemetry.addData("ll x", roboPose.getX());
-        telemetry.addData("ll y", roboPose.getY());
-        telemetry.addData("ll y", roboPose);
+        telemetry.addData("pp x", roboPose.getX());
+        telemetry.addData("pp y", roboPose.getY());
+        telemetry.addData("ll x", limelightPose.getPosition().toUnit(DistanceUnit.INCH).x);
+        telemetry.addData("ll y", limelightPose.getPosition().toUnit(DistanceUnit.INCH).y);
 
         telemetry.update();
 
