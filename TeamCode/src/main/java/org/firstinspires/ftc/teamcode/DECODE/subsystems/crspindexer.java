@@ -26,6 +26,7 @@ public class crspindexer extends LinearOpMode {
     Button gamepad1b = button(() -> gamepad1.b);
     Button gamepad1x = button(() -> gamepad1.x);
 
+
     void settherotation(double rotationn) {
         leftleft.setTargetRotation(rotationn);
         rightright.setTargetRotation(rotationn);
@@ -39,6 +40,7 @@ public class crspindexer extends LinearOpMode {
         angle = hardwareMap.get(DcMotorEx.class, "Lintake");
         angle.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         angle.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
 
 
         leftspindex = hardwareMap.get(CRServo.class, "leftspindex");

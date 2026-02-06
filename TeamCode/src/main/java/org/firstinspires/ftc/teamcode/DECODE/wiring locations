@@ -3,7 +3,7 @@ names listed are config names
 Chub
 Motor 3 - BR
 Motor 2 - FR
-Servo 0 flicky (injector 4)
+Servo 0 flicky (injector 1)
 Servo 1 leftspindex (injector 5/6)
 Servo 4 rightspindex (injector 5/6)
 MOTOR 0 - shooter
@@ -19,6 +19,7 @@ Motor 2 - FL
 Motor 3 - BL
 analog 2-3 - lefte; righte (spindexer analog output)
 I2C 3 - rightcs
+servo 1 - rightflick
 
 
 rightgreen:

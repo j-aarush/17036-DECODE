@@ -27,13 +27,15 @@ public class flickservozero extends LinearOpMode {
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     int flickswitch = -1;
+    public static double flickup = 0, flickdown = 0.33;
+
 
     boolean truefalse;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
-        Servo flick;
+        Servo flick, flickright;
         double speed;
         DcMotorEx leftintake;
         Servo left, right;
@@ -45,6 +47,7 @@ public class flickservozero extends LinearOpMode {
         // reverse the left side instead.
         // See the note about this earlier on this page.
         flick = hardwareMap.get(Servo.class, "flicky");
+        flickright = hardwareMap.get(Servo.class, "flickyr");
         left = hardwareMap.get(Servo.class, "leftspindex");
         right = hardwareMap.get(Servo.class, "rightspindex");
         flick.setDirection(Servo.Direction.FORWARD);
@@ -70,14 +73,14 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //downnnnnn.
-                flick.setPosition(0.3);
+                flickright.setPosition(flickdown);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.1);
+                flick.setPosition(0.1515);
             }
 
             if (gamepad1.y) { //upppppp
-                flick.setPosition(0.05);
+                flickright.setPosition(flickup);
             }
 
 
