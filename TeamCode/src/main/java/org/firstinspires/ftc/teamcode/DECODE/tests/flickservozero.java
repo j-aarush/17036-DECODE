@@ -27,7 +27,7 @@ public class flickservozero extends LinearOpMode {
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     int flickswitch = -1;
-    public static double flickup = 0, flickdown = 0.33;
+    public static double flickup = 0.02, flickdown = 0.2;
 
 
     boolean truefalse;
@@ -51,6 +51,7 @@ public class flickservozero extends LinearOpMode {
         left = hardwareMap.get(Servo.class, "leftspindex");
         right = hardwareMap.get(Servo.class, "rightspindex");
         flick.setDirection(Servo.Direction.FORWARD);
+        flickright.setDirection(Servo.Direction.REVERSE);
 
 
 
@@ -73,6 +74,7 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //downnnnnn.
+                flick.setPosition(flickdown);
                 flickright.setPosition(flickdown);
             }
             if (gamepad1.b) { //down
@@ -80,6 +82,7 @@ public class flickservozero extends LinearOpMode {
             }
 
             if (gamepad1.y) { //upppppp
+                flick.setPosition(flickup);
                 flickright.setPosition(flickup);
             }
 

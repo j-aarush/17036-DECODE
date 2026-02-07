@@ -166,7 +166,6 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         headinglockangle = trigangle;
 
 
-
         error = targetV - sencoder.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
