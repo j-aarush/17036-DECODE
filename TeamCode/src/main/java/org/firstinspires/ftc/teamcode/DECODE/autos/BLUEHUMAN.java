@@ -545,6 +545,7 @@ public class BLUEHUMAN extends OpMode {
 //        controller.updateError(turnerror);
 
 
+        //make pitch 12; up height from ground
         flywheel.setPower(kP * error + kV * targetV);
         follower.update();
         autonomousPathUpdate();
