@@ -27,7 +27,7 @@ public class flickservozero extends LinearOpMode {
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     int flickswitch = -1;
-    public static double flickup = 0.02, flickdown = 0.2;
+    public static double flickup = 0.172, flickdown = 0.491;
 
 
     boolean truefalse;
@@ -50,7 +50,11 @@ public class flickservozero extends LinearOpMode {
         flickright = hardwareMap.get(Servo.class, "flickyr");
         left = hardwareMap.get(Servo.class, "leftspindex");
         right = hardwareMap.get(Servo.class, "rightspindex");
-        flick.setDirection(Servo.Direction.FORWARD);
+        Servo rightwall = hardwareMap.get(Servo.class, "rightwall");
+        Servo leftwall = hardwareMap.get(Servo.class, "leftwall");
+        leftwall.setDirection(Servo.Direction.FORWARD);
+        flickright = hardwareMap.get(Servo.class, "flickyr");
+        flick.setDirection(Servo.Direction.REVERSE);
         flickright.setDirection(Servo.Direction.REVERSE);
 
 
@@ -84,6 +88,25 @@ public class flickservozero extends LinearOpMode {
             if (gamepad1.y) { //upppppp
                 flick.setPosition(flickup);
                 flickright.setPosition(flickup);
+            }
+
+            if (gamepad2.a) {
+                rightwall.setPosition(0.45); //down
+            }
+            if (gamepad2.b) {
+                rightwall.setPosition(0.285); //up
+            }
+            if (gamepad2.x) {
+                rightwall.setPosition(1);
+            }
+            if (gamepad2.a) {
+                leftwall.setPosition(0.259); //down
+            }
+            if (gamepad2.b) {
+                leftwall.setPosition(0.42); //up
+            }
+            if (gamepad2.x) {
+                leftwall.setPosition(1);
             }
 
 

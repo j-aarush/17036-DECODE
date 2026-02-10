@@ -47,6 +47,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     private double slowModeMultiplier = 0.5;
     double headinglockangle;
 
+    Servo flickright;
+
     double posx ;
     double posy;
     boolean lefttoggle = false;
@@ -137,7 +139,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         flickys = hardwareMap.get(Servo.class, "flicky");
-        flickys.setDirection(Servo.Direction.FORWARD);
+        Servo flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickys.setDirection(Servo.Direction.REVERSE);
+        flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
@@ -150,8 +154,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         rightpark.setDirection(Servo.Direction.REVERSE);
 
 
-        flickys.setPosition(flickup);
-        flickys.setPosition(flickdown);
 
 
         follower = Constants.createFollower(hardwareMap);
@@ -243,12 +245,15 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     parksettherotation(0.1);
                 }
                 flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
+                flickright.setPosition(flickdown); //hopefully up
+
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 9;
                     intakeeee.reset();}
@@ -261,12 +266,16 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 10:
                 flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
+
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
+                flickright.setPosition(flickdown); //hopefully up
+
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 12;
                     intakeeee.reset();}
@@ -279,6 +288,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 13:
                 flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
+
                 if (intakeeee.time() > 0.065) {
                     headingLock = false;
                     intaekstage = 14;
@@ -288,6 +299,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 flickys.setPosition(flickdown); //hopefully down
+                flickright.setPosition(flickdown); //hopefully up
+
                 if (intakeeee.time() > 0.065) {
                     intaekstage = -1;
                     intakeeee.reset();
@@ -315,6 +328,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             intaekstage = -1;
             headingLock = false;
             flickys.setPosition(flickdown);
+            flickright.setPosition(flickdown); //hopefully up
             parksettherotation(0);
             settherotation(spina);
         }
