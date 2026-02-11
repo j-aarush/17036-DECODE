@@ -27,7 +27,7 @@ public  class botconstants {
 
     public static double flickup = 0.06, flickdown = 0.31;
 
-    public static Servo flick, flickright, leftwall, rightwall;
+    public Servo flick, flickright, leftwall, rightwall;
     //MAKE SURE BOTH ARE REVERSED, set up in configs
 
   public static double kP = 0.1167, kV = 0.000434;
@@ -41,19 +41,19 @@ public  class botconstants {
     public static double leftup = 0.42;
     public static double rightup = 0.285;
 
-    public static void setleftdown() {
+    public void setleftdown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightup);
     }
-    public static void setrightdown() {
+    public void setrightdown() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwaldown() {
+    public void bothwaldown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwallup() {
+    public void bothwallup() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightup);
     }

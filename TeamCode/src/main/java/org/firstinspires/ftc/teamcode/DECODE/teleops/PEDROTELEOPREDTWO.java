@@ -42,9 +42,9 @@ import com.pedropathing.paths.PathChain;
 import java.util.List;
 
 
-@TeleOp(name = "BLUE TELEOP 2")
+@TeleOp(name = "RED TELEOP 2")
 @Configurable
-public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
+public class PEDROTELEOPREDTWO extends NextFTCOpMode {
 
     boolean skiponee, reverseonee, dononee;
     private Follower follower;
@@ -171,91 +171,91 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 //call method forever. when need to use, set to 5 once. call case 4 when identifying pattern/order to prepare. case 5 when to shoot.
     //THE TWO LETTER PHRASE REFERS TO THE TWO BALLS IDENTIFIED BY COLOR SENSOR. FIRST LETTER IS BALL ON LEFT, SECOND IS BALL ON RIGHT.
 
-public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND PP; GPP AND GP
-    switch (skip1) {
-        case 4:
-            bothwallup();
-            settherotation(spinb);
-            intakeeee.reset();
-            skip1 = 3;
-            break;
-        case 3:
-            if (intakeeee.time() > 0.5) {
-                setrightdown();
-            }
-            break;
-        case 5:
-            if (intakeeee.time() > 0.0005) {
-                headingLock = true;
-                bothwalldown();
-                intaekstage = 6;
-                intakeeee.reset();}
-            break;
-        case 6:
-            settherotation(spinb);
-            if (!follower.isBusy()) {
-                intaekstage = 7;
-                intakeeee.reset();}
-            break;
-        case 7:
-            if (holdshooting) {
-                parksettherotation(0.1);
-            }
-            spinflickup();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 8;
-                intakeeee.reset();}
-            break;
-        case 8:
-            spinflickdown();
-            setrightdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 9;
-                intakeeee.reset();}
-            break;
-        case 9:
-            settherotation(spinc);
-            if (intakeeee.time() > 0.56) {
-                intaekstage = 10;
-                intakeeee.reset();}
-            break;
-        case 10:
-            spinflickup();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 11;
-                intakeeee.reset();}
-            break;
-        case 11:
-            spinflickdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 12;
-                intakeeee.reset();}
-            break;
-        case 12:
-            settherotation(spind);
-            if (intakeeee.time() > 0.57) {
-                intaekstage = 13;
-                intakeeee.reset();}
-            break;
-        case 13:
-            spinflickup();
-            if (intakeeee.time() > 0.65) {
-                headingLock = false;
-                intaekstage = 14;
-                intakeeee.reset();}
-            break;
-        case 14:
-            parksettherotation(0);
-            headingLock = false;
-            spinflickdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = -1;
+    public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND PP; GPP AND GP
+        switch (skip1) {
+            case 4:
+                bothwallup();
+                settherotation(spinb);
                 intakeeee.reset();
-                settherotation(spina);}
-            break;
+                skip1 = 3;
+                break;
+            case 3:
+                if (intakeeee.time() > 0.5) {
+                    setrightdown();
+                }
+                break;
+            case 5:
+                if (intakeeee.time() > 0.0005) {
+                    headingLock = true;
+                    bothwalldown();
+                    intaekstage = 6;
+                    intakeeee.reset();}
+                break;
+            case 6:
+                settherotation(spinb);
+                if (!follower.isBusy()) {
+                    intaekstage = 7;
+                    intakeeee.reset();}
+                break;
+            case 7:
+                if (holdshooting) {
+                    parksettherotation(0.1);
+                }
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
+                    intaekstage = 8;
+                    intakeeee.reset();}
+                break;
+            case 8:
+                spinflickdown();
+                setrightdown();
+                if (intakeeee.time() > 0.056) {
+                    intaekstage = 9;
+                    intakeeee.reset();}
+                break;
+            case 9:
+                settherotation(spinc);
+                if (intakeeee.time() > 0.56) {
+                    intaekstage = 10;
+                    intakeeee.reset();}
+                break;
+            case 10:
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
+                    intaekstage = 11;
+                    intakeeee.reset();}
+                break;
+            case 11:
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
+                    intaekstage = 12;
+                    intakeeee.reset();}
+                break;
+            case 12:
+                settherotation(spind);
+                if (intakeeee.time() > 0.57) {
+                    intaekstage = 13;
+                    intakeeee.reset();}
+                break;
+            case 13:
+                spinflickup();
+                if (intakeeee.time() > 0.65) {
+                    headingLock = false;
+                    intaekstage = 14;
+                    intakeeee.reset();}
+                break;
+            case 14:
+                parksettherotation(0);
+                headingLock = false;
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
+                    intaekstage = -1;
+                    intakeeee.reset();
+                    settherotation(spina);}
+                break;
 
+        }
     }
-}
     public void sorttwo() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PP; PPG AND GP; GPP AND PG;
         switch (reverse1) {
             case 4:
@@ -466,7 +466,7 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
         headingLock = false;
 
         pathChain = follower.pathBuilder()
-                .addPath(new BezierLine(follower::getPose, new Pose(110,35)))
+                .addPath(new BezierLine(follower::getPose, new Pose(42,35)))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(270), 0.8))
                 .build();
     }
@@ -484,13 +484,13 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
         follower.update();
 
         botHeading = follower.getHeading();
-        posx = follower.getPose().getX();
-        posy = follower.getPose().getY();
-        distx = posx - 8;
+        posx = follower.getPose().mirror().getX();
+        posy = follower.getPose().mirror().getY();
+        distx = posx - 9;
         disty = Math.abs(137 - posy);
-        diagonaldist = Math.sqrt(distx * distx + disty * disty);
-        trigangle = Math.toDegrees(Math.atan(disty / distx));
-        headinglockangle = 90 - trigangle + 90;
+        diagonaldist = Math.sqrt(distx*distx + disty*disty);
+        trigangle = Math.toDegrees(Math.atan(disty/distx));
+        headinglockangle = trigangle;
 
 
         error = targetV - sencoder.getVelocity();

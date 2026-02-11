@@ -29,10 +29,10 @@ public class flickservozero extends LinearOpMode {
     int flickswitch = -1;
     public static double flickup = 0.172, flickdown = 0.491;
 
-    public static double leftdown = 0.259;
-    public static double rightdown = 0.45;
-    public static double leftup = 0.42;
-    public static double rightup = 0.285;
+    public  double leftdown = 0.259;
+    public  double rightdown = 0.45;
+    public  double leftup = 0.42;
+    public  double rightup = 0.285;
 
     boolean truefalse;
     @Override

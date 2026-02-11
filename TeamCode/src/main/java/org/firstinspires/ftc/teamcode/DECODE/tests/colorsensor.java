@@ -41,6 +41,7 @@ public class colorsensor extends LinearOpMode {
     }
 
     boolean leftisgreen, leftispurple, rightisgreen, rightispurple, noballleft, noballright;
+    boolean PP, PG, GP;
 
 
     @Override
@@ -67,6 +68,7 @@ public class colorsensor extends LinearOpMode {
 
 
         while(opModeIsActive()) {
+
             NormalizedRGBA colorintake = intakecs.getNormalizedColors();
             NormalizedRGBA colorleft = leftcs.getNormalizedColors();
 
@@ -81,25 +83,6 @@ public class colorsensor extends LinearOpMode {
             Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
             Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
 
-
-
-//            leftinake.setPower(1);
-//up is counterclockwise
-
-
-            if (gamepad1.a) {
-                settherotation(0.495);  //SHOOTER 3 hoewfjepwa //0.45 1
-            }
-            if (gamepad1.b) {
-                settherotation(0.75);
-            }
-            if (gamepad1.x) {
-                settherotation(1); //SHOOTER 2
-
-            }
-            if (gamepad1.y) {
-                settherotation(0.24); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
-            }
 
             if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
                 rightisgreen = true;
@@ -129,10 +112,6 @@ public class colorsensor extends LinearOpMode {
                 leftispurple = false;
             }
 
-
-
-
-
             if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
                 leftisgreen = true;
                 noballleft = false;
@@ -143,6 +122,27 @@ public class colorsensor extends LinearOpMode {
                 leftispurple = true;
                 noballleft = false;
             } else leftispurple = false;
+
+            if (leftispurple && rightispurple) {
+                PP = true;
+                PG = false;
+                GP = false;
+            }
+            if (leftispurple && rightisgreen) {
+                PP = false;
+                PG = true;
+                GP = false;
+            }
+            if (leftisgreen && rightispurple) {
+                PP = false;
+                PG = false;
+                GP = true;
+            }
+            if (noballleft || noballright) {
+               PP = true;
+               PG = false;
+               GP = true;
+            }
 
 
 
