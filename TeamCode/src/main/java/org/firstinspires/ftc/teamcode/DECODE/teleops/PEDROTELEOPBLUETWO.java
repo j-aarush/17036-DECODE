@@ -109,21 +109,21 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     NormalizedRGBA colorintake, colorleft;
 
     double turnerror;
-    public static Servo leftpark, rightpark, leftwall, rightwall;
+    public Servo leftpark, rightpark, leftwall, rightwall;
 
-    public static void setleftdown() {
+    public void setleftdown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightup);
     }
-    public static void setrightdown() {
+    public void setrightdown() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwalldown() {
+    public void bothwalldown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwallup() {
+    public void bothwallup() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightup);
     }
@@ -171,91 +171,91 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 //call method forever. when need to use, set to 5 once. call case 4 when identifying pattern/order to prepare. case 5 when to shoot.
     //THE TWO LETTER PHRASE REFERS TO THE TWO BALLS IDENTIFIED BY COLOR SENSOR. FIRST LETTER IS BALL ON LEFT, SECOND IS BALL ON RIGHT.
 
-public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND PP; GPP AND GP
-    switch (skip1) {
-        case 4:
-            bothwallup();
-            settherotation(spinb);
-            intakeeee.reset();
-            skip1 = 3;
-            break;
-        case 3:
-            if (intakeeee.time() > 0.5) {
-                setrightdown();
-            }
-            break;
-        case 5:
-            if (intakeeee.time() > 0.0005) {
-                headingLock = true;
-                bothwalldown();
-                intaekstage = 6;
-                intakeeee.reset();}
-            break;
-        case 6:
-            settherotation(spinb);
-            if (!follower.isBusy()) {
-                intaekstage = 7;
-                intakeeee.reset();}
-            break;
-        case 7:
-            if (holdshooting) {
-                parksettherotation(0.1);
-            }
-            spinflickup();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 8;
-                intakeeee.reset();}
-            break;
-        case 8:
-            spinflickdown();
-            setrightdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 9;
-                intakeeee.reset();}
-            break;
-        case 9:
-            settherotation(spinc);
-            if (intakeeee.time() > 0.56) {
-                intaekstage = 10;
-                intakeeee.reset();}
-            break;
-        case 10:
-            spinflickup();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 11;
-                intakeeee.reset();}
-            break;
-        case 11:
-            spinflickdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = 12;
-                intakeeee.reset();}
-            break;
-        case 12:
-            settherotation(spind);
-            if (intakeeee.time() > 0.57) {
-                intaekstage = 13;
-                intakeeee.reset();}
-            break;
-        case 13:
-            spinflickup();
-            if (intakeeee.time() > 0.65) {
-                headingLock = false;
-                intaekstage = 14;
-                intakeeee.reset();}
-            break;
-        case 14:
-            parksettherotation(0);
-            headingLock = false;
-            spinflickdown();
-            if (intakeeee.time() > 0.056) {
-                intaekstage = -1;
+    public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND PP; GPP AND GP
+        switch (skip1) {
+            case 4:
+                bothwallup();
+                settherotation(spinb);
                 intakeeee.reset();
-                settherotation(spina);}
-            break;
+                skip1 = 3;
+                break;
+            case 3:
+                if (intakeeee.time() > 0.5) {
+                    setrightdown();
+                }
+                break;
+            case 5:
+                if (intakeeee.time() > 0.0005) {
+                    headingLock = true;
+                    bothwalldown();
+                    skip1 = 6;
+                    intakeeee.reset();}
+                break;
+            case 6:
+                settherotation(spinb);
+                if (!follower.isBusy()) {
+                    skip1 = 7;
+                    intakeeee.reset();}
+                break;
+            case 7:
+                if (holdshooting) {
+                    parksettherotation(0.1);
+                }
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
+                    skip1 = 8;
+                    intakeeee.reset();}
+                break;
+            case 8:
+                spinflickdown();
+                setrightdown();
+                if (intakeeee.time() > 0.056) {
+                    skip1 = 9;
+                    intakeeee.reset();}
+                break;
+            case 9:
+                settherotation(spinc);
+                if (intakeeee.time() > 0.56) {
+                    skip1 = 10;
+                    intakeeee.reset();}
+                break;
+            case 10:
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
+                    skip1 = 11;
+                    intakeeee.reset();}
+                break;
+            case 11:
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
+                    skip1 = 12;
+                    intakeeee.reset();}
+                break;
+            case 12:
+                settherotation(spind);
+                if (intakeeee.time() > 0.57) {
+                    skip1 = 13;
+                    intakeeee.reset();}
+                break;
+            case 13:
+                spinflickup();
+                if (intakeeee.time() > 0.65) {
+                    headingLock = false;
+                    skip1 = 14;
+                    intakeeee.reset();}
+                break;
+            case 14:
+                parksettherotation(0);
+                headingLock = false;
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
+                    skip1 = -1;
+                    intakeeee.reset();
+                    settherotation(spina);}
+                break;
 
+        }
     }
-}
     public void sorttwo() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PP; PPG AND GP; GPP AND PG;
         switch (reverse1) {
             case 4:
@@ -273,13 +273,13 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     bothwalldown();
-                    intaekstage = 6;
+                    reverse1 = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spino);
                 if (!follower.isBusy()) {
-                    intaekstage = 7;
+                    reverse1 = 7;
                     intakeeee.reset();}
                 break;
             case 7:
@@ -288,45 +288,45 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 8;
+                    reverse1 = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 spinflickdown();
                 setrightdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 9;
+                    reverse1 = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spina);
                 if (intakeeee.time() > 0.56) {
-                    intaekstage = 10;
+                    reverse1 = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 11;
+                    reverse1 = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 12;
+                    reverse1 = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spinb);
                 if (intakeeee.time() > 0.57) {
-                    intaekstage = 13;
+                    reverse1 = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 spinflickup();
                 if (intakeeee.time() > 0.65) {
                     headingLock = false;
-                    intaekstage = 14;
+                    reverse1 = 14;
                     intakeeee.reset();}
                 break;
             case 14:
@@ -334,7 +334,7 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 headingLock = false;
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = -1;
+                    reverse1 = -1;
                     intakeeee.reset();
                     settherotation(spina);}
                 break;
@@ -350,13 +350,13 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     setrightdown();
-                    intaekstage = 6;
+                    thedefault = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spina);
                 if (!follower.isBusy()) {
-                    intaekstage = 7;
+                    thedefault = 7;
                     intakeeee.reset();}
                 break;
             case 7:
@@ -365,44 +365,44 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 8;
+                    thedefault = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 9;
+                    thedefault = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spinb);
                 if (intakeeee.time() > 0.56) {
-                    intaekstage = 10;
+                    thedefault = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 11;
+                    thedefault = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 12;
+                    thedefault = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spinc);
                 if (intakeeee.time() > 0.57) {
-                    intaekstage = 13;
+                    thedefault = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 spinflickup();
                 if (intakeeee.time() > 0.65) {
                     headingLock = false;
-                    intaekstage = 14;
+                    thedefault = 14;
                     intakeeee.reset();}
                 break;
             case 14:
@@ -410,7 +410,7 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
                 headingLock = false;
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = -1;
+                    thedefault = -1;
                     intakeeee.reset();
                     settherotation(spina);}
                 break;
@@ -674,16 +674,10 @@ public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND
 
         if (gamepad2.dpad_down) {
 
+            settherotation(spina);
 
             colorintake = intakecs.getNormalizedColors();
             colorleft = leftcs.getNormalizedColors();
-
-            greenintake = colorintake.green;
-            blueintake= colorintake.blue;
-
-
-            greenleft = colorleft.green;
-            blueleft = colorleft.blue;
 
 
             Color.colorToHSV(colorintake.toColor(), hsvValuesintake);

@@ -37,7 +37,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP", group = "redautos")
+@Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP 2", group = "redautos")
 public class REDFRONT extends OpMode {
 
     public static Servo leftspindex, rightspindex;

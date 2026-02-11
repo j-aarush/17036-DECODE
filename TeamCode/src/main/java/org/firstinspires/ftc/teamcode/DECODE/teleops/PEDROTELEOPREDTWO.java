@@ -109,21 +109,21 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
     NormalizedRGBA colorintake, colorleft;
 
     double turnerror;
-    public static Servo leftpark, rightpark, leftwall, rightwall;
+    public Servo leftpark, rightpark, leftwall, rightwall;
 
-    public static void setleftdown() {
+    public void setleftdown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightup);
     }
-    public static void setrightdown() {
+    public void setrightdown() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwalldown() {
+    public void bothwalldown() {
         leftwall.setPosition(leftdown);
         rightwall.setPosition(rightdown);
     }
-    public static void bothwallup() {
+    public void bothwallup() {
         leftwall.setPosition(leftup);
         rightwall.setPosition(rightup);
     }
@@ -188,13 +188,13 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     bothwalldown();
-                    intaekstage = 6;
+                    skip1 = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spinb);
                 if (!follower.isBusy()) {
-                    intaekstage = 7;
+                    skip1 = 7;
                     intakeeee.reset();}
                 break;
             case 7:
@@ -203,45 +203,45 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 8;
+                    skip1 = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 spinflickdown();
                 setrightdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 9;
+                    skip1 = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spinc);
                 if (intakeeee.time() > 0.56) {
-                    intaekstage = 10;
+                    skip1 = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 11;
+                    skip1 = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 12;
+                    skip1 = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spind);
                 if (intakeeee.time() > 0.57) {
-                    intaekstage = 13;
+                    skip1 = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 spinflickup();
                 if (intakeeee.time() > 0.65) {
                     headingLock = false;
-                    intaekstage = 14;
+                    skip1 = 14;
                     intakeeee.reset();}
                 break;
             case 14:
@@ -249,7 +249,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 headingLock = false;
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = -1;
+                    skip1 = -1;
                     intakeeee.reset();
                     settherotation(spina);}
                 break;
@@ -273,13 +273,13 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     bothwalldown();
-                    intaekstage = 6;
+                    reverse1 = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spino);
                 if (!follower.isBusy()) {
-                    intaekstage = 7;
+                    reverse1 = 7;
                     intakeeee.reset();}
                 break;
             case 7:
@@ -288,45 +288,45 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 8;
+                    reverse1 = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 spinflickdown();
                 setrightdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 9;
+                    reverse1 = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spina);
                 if (intakeeee.time() > 0.56) {
-                    intaekstage = 10;
+                    reverse1 = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 11;
+                    reverse1 = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 12;
+                    reverse1 = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spinb);
                 if (intakeeee.time() > 0.57) {
-                    intaekstage = 13;
+                    reverse1 = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 spinflickup();
                 if (intakeeee.time() > 0.65) {
                     headingLock = false;
-                    intaekstage = 14;
+                    reverse1 = 14;
                     intakeeee.reset();}
                 break;
             case 14:
@@ -334,7 +334,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 headingLock = false;
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = -1;
+                    reverse1 = -1;
                     intakeeee.reset();
                     settherotation(spina);}
                 break;
@@ -350,13 +350,13 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
                     setrightdown();
-                    intaekstage = 6;
+                    thedefault = 6;
                     intakeeee.reset();}
                 break;
             case 6:
                 settherotation(spina);
                 if (!follower.isBusy()) {
-                    intaekstage = 7;
+                    thedefault = 7;
                     intakeeee.reset();}
                 break;
             case 7:
@@ -365,44 +365,44 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 8;
+                    thedefault = 8;
                     intakeeee.reset();}
                 break;
             case 8:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 9;
+                    thedefault = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spinb);
                 if (intakeeee.time() > 0.56) {
-                    intaekstage = 10;
+                    thedefault = 10;
                     intakeeee.reset();}
                 break;
             case 10:
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 11;
+                    thedefault = 11;
                     intakeeee.reset();}
                 break;
             case 11:
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = 12;
+                    thedefault = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spinc);
                 if (intakeeee.time() > 0.57) {
-                    intaekstage = 13;
+                    thedefault = 13;
                     intakeeee.reset();}
                 break;
             case 13:
                 spinflickup();
                 if (intakeeee.time() > 0.65) {
                     headingLock = false;
-                    intaekstage = 14;
+                    thedefault = 14;
                     intakeeee.reset();}
                 break;
             case 14:
@@ -410,7 +410,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 headingLock = false;
                 spinflickdown();
                 if (intakeeee.time() > 0.056) {
-                    intaekstage = -1;
+                    thedefault = -1;
                     intakeeee.reset();
                     settherotation(spina);}
                 break;
@@ -673,18 +673,11 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
 //        }
 
         if (gamepad2.dpad_down) {
+            settherotation(spina);
 
 
             colorintake = intakecs.getNormalizedColors();
             colorleft = leftcs.getNormalizedColors();
-
-            greenintake = colorintake.green;
-            blueintake= colorintake.blue;
-
-
-            greenleft = colorleft.green;
-            blueleft = colorleft.blue;
-
 
             Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
             Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
