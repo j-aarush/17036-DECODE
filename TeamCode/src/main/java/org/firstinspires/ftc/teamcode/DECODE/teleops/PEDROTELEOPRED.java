@@ -53,6 +53,17 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     double trigangle;
 
     public static Servo leftspindex, rightspindex;
+    Servo flickright;
+    Servo flickys;
+
+    public void spinflickup() {
+        flickys.setPosition(flickup);
+        flickright.setPosition(flickup);
+    }
+    public void spinflickdown() {
+        flickys.setPosition(flickdown);
+        flickright.setPosition(flickdown);
+    }
 
     public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
@@ -88,7 +99,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
     boolean headingLock;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
+
 
     double botHeading;
     public static ElapsedTime intakeeee = new ElapsedTime(0);
@@ -116,7 +127,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         flickys = hardwareMap.get(Servo.class, "flicky");
-        flickys.setDirection(Servo.Direction.FORWARD);
+        flickys.setDirection(Servo.Direction.REVERSE);
+        flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
@@ -201,6 +213,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
 
 
 
+
         switch (intaekstage) {
             case 5:
                 if (intakeeee.time() > 0.0005) {
@@ -218,14 +231,14 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                 if (holdshooting) {
                     parksettherotation(0.1);
                 }
-                flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.04) {
+                spinflickup();
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
-                flickys.setPosition(flickdown); //hopefully up
-                if (intakeeee.time() > 0.04) {
+                spinflickdown();
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -236,14 +249,14 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 10:
-                flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.04) {
+                spinflickup();
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
-                flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.04) {
+                spinflickdown();
+                if (intakeeee.time() > 0.05) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -254,8 +267,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 13:
-                flickys.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.04) {
+                spinflickup();
+                if (intakeeee.time() > 0.05) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -263,8 +276,8 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
             case 14:
                 parksettherotation(0);
                 headingLock = false;
-                flickys.setPosition(flickdown); //hopefully down
-                if (intakeeee.time() > 0.04) {
+                spinflickdown();
+                if (intakeeee.time() > 0.05) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}
@@ -290,7 +303,7 @@ public class PEDROTELEOPRED extends NextFTCOpMode {
         if (gamepad1.left_stick_button) {
             intaekstage = -1;
             headingLock = false;
-            flickys.setPosition(flickdown);
+            spinflickdown();
             parksettherotation(0);
             settherotation(spina);
         }

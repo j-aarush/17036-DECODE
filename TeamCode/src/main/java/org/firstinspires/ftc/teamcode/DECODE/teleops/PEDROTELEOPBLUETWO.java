@@ -47,7 +47,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     private double slowModeMultiplier = 0.5;
     double headinglockangle;
 
-    Servo flickright;
 
     double posx ;
     double posy;
@@ -77,6 +76,16 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
+    Servo flickys, flickright;
+
+    public void spinflickup() {
+        flickys.setPosition(flickup);
+        flickright.setPosition(flickup);
+    }
+    public void spinflickdown() {
+        flickys.setPosition(flickdown);
+        flickright.setPosition(flickdown);
+    }
 
     double turnerror;
     public static Servo leftpark, rightpark;
@@ -94,9 +103,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     boolean headingLock;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
 
     double botHeading;
+
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     public static ElapsedTime getIntakeeee() {
@@ -117,6 +126,81 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             }
         }
         return 0;
+    }
+    int PPG_PP = -1, PPG_PG;
+
+//call method forever. when need to use, set to 5 once.
+    public void PPG_AND_PP() {
+        switch (PPG_PP) {
+            case 5:
+                if (intakeeee.time() > 0.0005) {
+                    headingLock = true;
+                    intaekstage = 6;
+                    intakeeee.reset();
+                }
+                break;
+            case 6:
+                settherotation(spina);
+                if (!follower.isBusy()) {
+                    intaekstage = 7;
+                    intakeeee.reset();}
+                break;
+            case 7:
+                if (holdshooting) {
+                    parksettherotation(0.1);
+                }
+                spinflickup();
+                if (intakeeee.time() > 0.046) {
+                    intaekstage = 8;
+                    intakeeee.reset();}
+                break;
+            case 8:
+                spinflickdown();
+                if (intakeeee.time() > 0.46) {
+                    intaekstage = 9;
+                    intakeeee.reset();}
+                break;
+            case 9:
+                settherotation(spinb);
+                if (intakeeee.time() > 0.56) {
+                    intaekstage = 10;
+                    intakeeee.reset();}
+                break;
+            case 10:
+                spinflickup();
+                if (intakeeee.time() > 0.046) {
+                    intaekstage = 11;
+                    intakeeee.reset();}
+                break;
+            case 11:
+                spinflickdown();
+                if (intakeeee.time() > 0.46) {
+                    intaekstage = 12;
+                    intakeeee.reset();}
+                break;
+            case 12:
+                settherotation(spinc);
+                if (intakeeee.time() > 0.57) {
+                    intaekstage = 13;
+                    intakeeee.reset();}
+                break;
+            case 13:
+                spinflickup();
+                if (intakeeee.time() > 0.046) {
+                    headingLock = false;
+                    intaekstage = 14;
+                    intakeeee.reset();}
+                break;
+            case 14:
+                parksettherotation(0);
+                headingLock = false;
+                spinflickdown();
+                if (intakeeee.time() > 0.046) {
+                    intaekstage = -1;
+                    intakeeee.reset();
+                    settherotation(spina);}
+                break;
+        }
     }
 
 
@@ -139,8 +223,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         flickys = hardwareMap.get(Servo.class, "flicky");
-        Servo flickright = hardwareMap.get(Servo.class, "flickyr");
-        flickys.setDirection(Servo.Direction.REVERSE);
+        flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickys.setDirection(Servo.Direction.FORWARD);
         flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
@@ -190,8 +274,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         headinglockangle = 90 - trigangle + 90;
 
 
-
-
         error = targetV - sencoder.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
@@ -203,9 +285,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
         }
 
-//        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
-//        if (gamepad1.dpad_right) flickys.setPosition(flickup);
-//
 
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
@@ -230,7 +309,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         switch (intaekstage) {
             case 5:
                 if (intakeeee.time() > 0.0005) {
-                    headingLock = true;
+//                    headingLock = true;
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
@@ -244,17 +323,14 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 if (holdshooting) {
                     parksettherotation(0.1);
                 }
-                flickys.setPosition(flickup); //hopefully up
-                flickright.setPosition(flickup); //hopefully up
-                if (intakeeee.time() > 0.065) {
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
-                flickys.setPosition(flickdown); //hopefully up
-                flickright.setPosition(flickdown); //hopefully up
-
-                if (intakeeee.time() > 0.065) {
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -265,18 +341,14 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 10:
-                flickys.setPosition(flickup); //hopefully up
-                flickright.setPosition(flickup); //hopefully up
-
-                if (intakeeee.time() > 0.065) {
+                spinflickup();
+                if (intakeeee.time() > 0.056) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
-                flickys.setPosition(flickdown); //hopefully down
-                flickright.setPosition(flickdown); //hopefully up
-
-                if (intakeeee.time() > 0.065) {
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -287,10 +359,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 13:
-                flickys.setPosition(flickup); //hopefully up
-                flickright.setPosition(flickup); //hopefully up
-
-                if (intakeeee.time() > 0.065) {
+                spinflickup();
+                if (intakeeee.time() > 0.65) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -298,10 +368,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 14:
                 parksettherotation(0);
                 headingLock = false;
-                flickys.setPosition(flickdown); //hopefully down
-                flickright.setPosition(flickdown); //hopefully up
-
-                if (intakeeee.time() > 0.065) {
+                spinflickdown();
+                if (intakeeee.time() > 0.056) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}
@@ -327,10 +395,14 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         if (gamepad1.left_stick_button) {
             intaekstage = -1;
             headingLock = false;
-            flickys.setPosition(flickdown);
-            flickright.setPosition(flickdown); //hopefully up
+            spinflickdown();
             parksettherotation(0);
             settherotation(spina);
+        }
+
+        if (gamepad2.dpad_up) {
+            flickright.setPosition(flickup);
+            flickys.setPosition(flickup);
         }
 
 

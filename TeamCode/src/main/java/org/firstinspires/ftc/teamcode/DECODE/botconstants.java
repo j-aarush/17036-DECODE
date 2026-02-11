@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public  class botconstants {
 
@@ -15,17 +16,50 @@ public  class botconstants {
 // public  static double spinb = 0.3855;
 //    public static double spinc = 0.635;
 
-    public  static double spina = 0.257;
 
-    public  static double spinb = 0.508;
-    public static double spinc = 0.749;
 
-    public static double flickup = 0.172, flickdown = 0.491;
+    public static double spino = 0.015;
+    public  static double spina = 0.265;
 
+    public  static double spinb = 0.515;
+    public static double spinc = 0.768;
+    public static double spind = 1;
+
+    public static double flickup = 0.06, flickdown = 0.31;
+
+    public static Servo flick, flickright, leftwall, rightwall;
+    //MAKE SURE BOTH ARE REVERSED, set up in configs
 
   public static double kP = 0.1167, kV = 0.000434;
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 //    targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
+
+
+
+    public static double leftdown = 0.259;
+    public static double rightdown = 0.45;
+    public static double leftup = 0.42;
+    public static double rightup = 0.285;
+
+    public static void setleftdown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightup);
+    }
+    public static void setrightdown() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightdown);
+    }
+    public static void bothwaldown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightdown);
+    }
+    public static void bothwallup() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightup);
+    }
+
+
+
 
 }
 

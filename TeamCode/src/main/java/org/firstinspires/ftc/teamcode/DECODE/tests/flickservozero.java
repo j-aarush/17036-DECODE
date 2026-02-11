@@ -29,6 +29,10 @@ public class flickservozero extends LinearOpMode {
     int flickswitch = -1;
     public static double flickup = 0.172, flickdown = 0.491;
 
+    public static double leftdown = 0.259;
+    public static double rightdown = 0.45;
+    public static double leftup = 0.42;
+    public static double rightup = 0.285;
 
     boolean truefalse;
     @Override
@@ -54,7 +58,7 @@ public class flickservozero extends LinearOpMode {
         Servo leftwall = hardwareMap.get(Servo.class, "leftwall");
         leftwall.setDirection(Servo.Direction.FORWARD);
         flickright = hardwareMap.get(Servo.class, "flickyr");
-        flick.setDirection(Servo.Direction.REVERSE);
+        flick.setDirection(Servo.Direction.FORWARD);
         flickright.setDirection(Servo.Direction.REVERSE);
 
 
@@ -78,32 +82,32 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //downnnnnn.
-                flick.setPosition(flickdown);
-                flickright.setPosition(flickdown);
+                flick.setPosition(0.31);
+                flickright.setPosition(0.31);
             }
             if (gamepad1.b) { //down
                 flick.setPosition(0.1515);
             }
 
             if (gamepad1.y) { //upppppp
-                flick.setPosition(flickup);
-                flickright.setPosition(flickup);
+                flick.setPosition(0.06);
+                flickright.setPosition(0.06);
             }
 
             if (gamepad2.a) {
-                rightwall.setPosition(0.45); //down
+                rightwall.setPosition(rightdown); //down
             }
             if (gamepad2.b) {
-                rightwall.setPosition(0.285); //up
+                rightwall.setPosition(rightup); //up
             }
             if (gamepad2.x) {
                 rightwall.setPosition(1);
             }
             if (gamepad2.a) {
-                leftwall.setPosition(0.259); //down
+                leftwall.setPosition(leftdown); //down
             }
             if (gamepad2.b) {
-                leftwall.setPosition(0.42); //up
+                leftwall.setPosition(leftup); //up
             }
             if (gamepad2.x) {
                 leftwall.setPosition(1);

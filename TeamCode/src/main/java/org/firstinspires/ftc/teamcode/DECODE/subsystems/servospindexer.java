@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.DECODE.subsystems;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spind;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spino;
 
 import android.view.View;
 
@@ -71,8 +73,9 @@ public class servospindexer extends LinearOpMode {
 
             }
             if (gamepad1.y) {
-                settherotation(0.366); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
+                settherotation(0); //SHOOTER 1  .hfgeiuawfheawpi  FITURE OUT SHOOTER 3
             }
+
 //            if (gamepad1.left_bumper) {
 //                settherotation(0.50);  //inatke pos 3
 //            }
@@ -80,13 +83,9 @@ public class servospindexer extends LinearOpMode {
 //                settherotation(0.28); //shooter pos 2
 //            }
                 if (gamepad1.dpad_down) {
-                    settherotation(0.02); //intake?
+                    settherotation(spind); //intake?
                 }
 
-                if(gamepad2.a)
-                {
-                    flickys.setPosition(0);
-                }
 //            gamepad1a.whenBecomesTrue(() -> settherotation(0)); //rough near zone
 //
 //            gamepad1b.whenBecomesTrue(() -> settherotation(0.1)); //rough far zone
