@@ -160,6 +160,7 @@ public class BLUEFARINDEX extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case -1:
+                setrightdown();
                 colorintake = intakecs.getNormalizedColors();
                 colorleft = leftcs.getNormalizedColors();
 
@@ -266,12 +267,14 @@ public class BLUEFARINDEX extends OpMode {
 
             case -150:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwallup();
                     settherotation(spinb);
                     setPathState(-151);
                 }
                 break;
             case -151:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
+                    setrightdown();
                     setPathState(-152);
                     spinflickup();
                 }
@@ -326,6 +329,7 @@ public class BLUEFARINDEX extends OpMode {
 
             case -99:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwallup();
                     settherotation(spino);
                     setPathState(-100);
                 }
@@ -333,6 +337,7 @@ public class BLUEFARINDEX extends OpMode {
             case -100:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
                     setPathState(-98);
+                    setrightdown();
                     spinflickup();
                 }
                 break;
@@ -385,6 +390,7 @@ public class BLUEFARINDEX extends OpMode {
 
             case -2:
                 if (pathTimer.getElapsedTimeSeconds()>2.5) {
+                    setrightdown();
                     setPathState(0);
                     spinflickup();
                 }
@@ -467,6 +473,7 @@ public class BLUEFARINDEX extends OpMode {
 
                 Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
                 Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
+                setrightdown();
 
 
                 if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
@@ -568,12 +575,14 @@ public class BLUEFARINDEX extends OpMode {
 
             case 150:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwallup();
                     settherotation(spinb);
                     setPathState(151);
                 }
                 break;
             case 151:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
+                    setrightdown();
                     setPathState(152);
                     spinflickup();
                 }
@@ -628,12 +637,14 @@ public class BLUEFARINDEX extends OpMode {
 
             case 99:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwalldown();
                     settherotation(spino);
                     setPathState(100);
                 }
                 break;
             case 100:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
+                    setrightdown();
                     setPathState(98);
                     spinflickup();
                 }
@@ -691,6 +702,7 @@ public class BLUEFARINDEX extends OpMode {
 
             case 9:
                 if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
+                    setrightdown();
                     spinflickup();
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
@@ -742,6 +754,7 @@ public class BLUEFARINDEX extends OpMode {
 
             case 16:
                 if(pathTimer.getElapsedTimeSeconds()>0.15) {
+                    setrightdown();
 
                     settherotation(spina);
                     intake.setPower(1);
@@ -762,6 +775,7 @@ public class BLUEFARINDEX extends OpMode {
             case 180:
                 colorintake = intakecs.getNormalizedColors();
                 colorleft = leftcs.getNormalizedColors();
+                setrightdown();
 
                 Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
                 Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
@@ -866,12 +880,14 @@ public class BLUEFARINDEX extends OpMode {
 
             case -1500:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwallup();
                     settherotation(spinb);
                     setPathState(-1510);
                 }
                 break;
             case -1510:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
+                    setrightdown();
                     setPathState(-1520);
                     spinflickup();
                 }
@@ -926,12 +942,14 @@ public class BLUEFARINDEX extends OpMode {
 
             case -990:
                 if (pathTimer.getElapsedTimeSeconds()>1) {
+                    bothwallup();
                     settherotation(spino);
                     setPathState(-1000);
                 }
                 break;
             case -1000:
                 if (pathTimer.getElapsedTimeSeconds()>2) {
+                    setrightdown();
                     setPathState(-980);
                     spinflickup();
                 }
@@ -990,6 +1008,7 @@ public class BLUEFARINDEX extends OpMode {
 
             case 18:
                 if (!follower.isBusy()) {
+                    setrightdown();
                     settherotation(spina);
                     intake.setPower(-0.35);
 //                    follower.followPath(return21);

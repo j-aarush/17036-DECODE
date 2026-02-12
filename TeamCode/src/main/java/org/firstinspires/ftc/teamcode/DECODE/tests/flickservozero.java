@@ -86,7 +86,8 @@ public class flickservozero extends LinearOpMode {
                 flickright.setPosition(0.31);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.1515);
+                flick.setPosition(0.1);
+                flickright.setPosition(0.1);
             }
 
             if (gamepad1.y) { //upppppp
@@ -127,12 +128,12 @@ public class flickservozero extends LinearOpMode {
 //            }
 
 
-            if (gamepad2.a) {
-                left.setPosition(0);
-            }
-            if (gamepad2.b) {
-                right.setPosition(0);
-            }
+//            if (gamepad2.a) {
+//                left.setPosition(0);
+//            }
+//            if (gamepad2.b) {
+//                right.setPosition(0);
+//            }
 
 
 //            leftintake.setPower(0.7);
