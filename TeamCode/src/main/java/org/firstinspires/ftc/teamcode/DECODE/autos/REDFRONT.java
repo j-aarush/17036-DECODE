@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendx;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -40,7 +42,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @Autonomous(name = "12 FRONT RED", preselectTeleOp = "RED TELEOP 2", group = "redautos")
 public class REDFRONT extends OpMode {
 
-    public static Servo leftspindex, rightspindex;
+    public static Servo leftspindex, rightspindex, rightwall;
 
     public void settherotation(double rotationn) {
         leftspindex.setPosition(rotationn);
@@ -498,6 +500,8 @@ public class REDFRONT extends OpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
         sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+
 
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
@@ -516,6 +520,8 @@ public class REDFRONT extends OpMode {
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
         settherotation(spina); //first pos figure out later
+        rightwall.setPosition(rightdown);
+
 
 
 

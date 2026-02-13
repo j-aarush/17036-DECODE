@@ -3,17 +3,9 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftdown;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftup;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spind;
-import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spino;
-
-import android.graphics.Color;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
@@ -24,8 +16,6 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -45,17 +35,7 @@ import java.util.List;
 @TeleOp(name = "BLUE TELEOP 2")
 @Configurable
 public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
-
-    boolean skiponee, reverseonee, dononee;
     private Follower follower;
-    float greenintake, blueintake, greenleft, blueleft, greenright, blueright;
-    NormalizedColorSensor intakecs, leftcs;
-    final float[] hsvValuesintake = new float[3];
-    final float[] hsvValuesright = new float[3];
-    final float[] hsvValuesleft = new float[3];
-    boolean leftisgreen, leftispurple, rightisgreen, rightispurple, noballleft, noballright;
-    boolean PP, PG, GP;
-
     Boolean intakepressed = false;
     Boolean intaketoggle;
 
@@ -67,6 +47,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     private double slowModeMultiplier = 0.5;
     double headinglockangle;
 
+    Servo flickright;
 
     double posx ;
     double posy;
@@ -96,38 +77,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
-    Servo flickys, flickright;
-
-    public void spinflickup() {
-        flickys.setPosition(flickup);
-        flickright.setPosition(flickup);
-    }
-    public void spinflickdown() {
-        flickys.setPosition(flickdown);
-        flickright.setPosition(flickdown);
-    }
-    NormalizedRGBA colorintake, colorleft;
 
     double turnerror;
-    public Servo leftpark, rightpark, leftwall, rightwall;
-
-    public void setleftdown() {
-        leftwall.setPosition(leftdown);
-        rightwall.setPosition(rightup);
-    }
-    public void setrightdown() {
-        leftwall.setPosition(leftup);
-        rightwall.setPosition(rightdown);
-    }
-    public void bothwalldown() {
-        leftwall.setPosition(leftdown);
-        rightwall.setPosition(rightdown);
-    }
-    public void bothwallup() {
-        leftwall.setPosition(leftup);
-        rightwall.setPosition(rightup);
-    }
-
+    public static Servo leftpark, rightpark;
 
     public void parksettherotation(double rotationn) {
         leftpark.setPosition(rotationn);
@@ -142,9 +94,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     boolean headingLock;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
+    Servo flickys;
 
     double botHeading;
-
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     public static ElapsedTime getIntakeeee() {
@@ -166,257 +118,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         }
         return 0;
     }
-    int skip1 = -1, reverse1 = -1, thedefault = -1;
-
-//call method forever. when need to use, set to 5 once. call case 4 when identifying pattern/order to prepare. case 5 when to shoot.
-    //THE TWO LETTER PHRASE REFERS TO THE TWO BALLS IDENTIFIED BY COLOR SENSOR. FIRST LETTER IS BALL ON LEFT, SECOND IS BALL ON RIGHT.
-
-    public void sortone() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PG; PPG AND PP; GPP AND GP
-        switch (skip1) {
-            case 4:
-                bothwallup();
-                settherotation(spinb);
-                intakeeee.reset();
-                skip1 = 3;
-                break;
-            case 3:
-                if (intakeeee.time() > 0.5) {
-                    setrightdown();
-                }
-                break;
-            case 5:
-                if (intakeeee.time() > 0.0005) {
-                    headingLock = true;
-                    bothwalldown();
-                    skip1 = 6;
-                    intakeeee.reset();}
-                break;
-            case 6:
-                settherotation(spinb);
-                if (!follower.isBusy()) {
-                    skip1 = 7;
-                    intakeeee.reset();}
-                break;
-            case 7:
-                if (holdshooting) {
-                    parksettherotation(0.1);
-                }
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    skip1 = 8;
-                    intakeeee.reset();}
-                break;
-            case 8:
-                spinflickdown();
-                setrightdown();
-                if (intakeeee.time() > 0.056) {
-                    skip1 = 9;
-                    intakeeee.reset();}
-                break;
-            case 9:
-                settherotation(spinc);
-                if (intakeeee.time() > 0.56) {
-                    skip1 = 10;
-                    intakeeee.reset();}
-                break;
-            case 10:
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    skip1 = 11;
-                    intakeeee.reset();}
-                break;
-            case 11:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    skip1 = 12;
-                    intakeeee.reset();}
-                break;
-            case 12:
-                settherotation(spind);
-                if (intakeeee.time() > 0.57) {
-                    skip1 = 13;
-                    intakeeee.reset();}
-                break;
-            case 13:
-                spinflickup();
-                if (intakeeee.time() > 0.65) {
-                    headingLock = false;
-                    skip1 = 14;
-                    intakeeee.reset();}
-                break;
-            case 14:
-                parksettherotation(0);
-                headingLock = false;
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    skip1 = -1;
-                    intakeeee.reset();
-                    settherotation(spina);}
-                break;
-
-        }
-    }
-    public void sorttwo() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND PP; PPG AND GP; GPP AND PG;
-        switch (reverse1) {
-            case 4:
-                bothwallup();
-                settherotation(spino);
-                intakeeee.reset();
-                reverse1 = 3;
-                break;
-            case 3:
-                if (intakeeee.time() > 0.5) {
-                    setleftdown();
-                }
-                break;
-            case 5:
-                if (intakeeee.time() > 0.0005) {
-                    headingLock = true;
-                    bothwalldown();
-                    reverse1 = 6;
-                    intakeeee.reset();}
-                break;
-            case 6:
-                settherotation(spino);
-                if (!follower.isBusy()) {
-                    reverse1 = 7;
-                    intakeeee.reset();}
-                break;
-            case 7:
-                if (holdshooting) {
-                    parksettherotation(0.1);
-                }
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    reverse1 = 8;
-                    intakeeee.reset();}
-                break;
-            case 8:
-                spinflickdown();
-                setrightdown();
-                if (intakeeee.time() > 0.056) {
-                    reverse1 = 9;
-                    intakeeee.reset();}
-                break;
-            case 9:
-                settherotation(spina);
-                if (intakeeee.time() > 0.56) {
-                    reverse1 = 10;
-                    intakeeee.reset();}
-                break;
-            case 10:
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    reverse1 = 11;
-                    intakeeee.reset();}
-                break;
-            case 11:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    reverse1 = 12;
-                    intakeeee.reset();}
-                break;
-            case 12:
-                settherotation(spinb);
-                if (intakeeee.time() > 0.57) {
-                    reverse1 = 13;
-                    intakeeee.reset();}
-                break;
-            case 13:
-                spinflickup();
-                if (intakeeee.time() > 0.65) {
-                    headingLock = false;
-                    reverse1 = 14;
-                    intakeeee.reset();}
-                break;
-            case 14:
-                parksettherotation(0);
-                headingLock = false;
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    reverse1 = -1;
-                    intakeeee.reset();
-                    settherotation(spina);}
-                break;
-
-        }
-    }
-    public void sortthree() { //TS WORKS FOR THE FOLLOWING COMBOS: PGP AND GP; PPG AND PG; GPP AND PP;
-        switch (thedefault) {
-            case 4:
-                setrightdown();
-                break;
-            case 5:
-                if (intakeeee.time() > 0.0005) {
-                    headingLock = true;
-                    setrightdown();
-                    thedefault = 6;
-                    intakeeee.reset();}
-                break;
-            case 6:
-                settherotation(spina);
-                if (!follower.isBusy()) {
-                    thedefault = 7;
-                    intakeeee.reset();}
-                break;
-            case 7:
-                if (holdshooting) {
-                    parksettherotation(0.1);
-                }
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    thedefault = 8;
-                    intakeeee.reset();}
-                break;
-            case 8:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    thedefault = 9;
-                    intakeeee.reset();}
-                break;
-            case 9:
-                settherotation(spinb);
-                if (intakeeee.time() > 0.56) {
-                    thedefault = 10;
-                    intakeeee.reset();}
-                break;
-            case 10:
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
-                    thedefault = 11;
-                    intakeeee.reset();}
-                break;
-            case 11:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    thedefault = 12;
-                    intakeeee.reset();}
-                break;
-            case 12:
-                settherotation(spinc);
-                if (intakeeee.time() > 0.57) {
-                    thedefault = 13;
-                    intakeeee.reset();}
-                break;
-            case 13:
-                spinflickup();
-                if (intakeeee.time() > 0.65) {
-                    headingLock = false;
-                    thedefault = 14;
-                    intakeeee.reset();}
-                break;
-            case 14:
-                parksettherotation(0);
-                headingLock = false;
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
-                    thedefault = -1;
-                    intakeeee.reset();
-                    settherotation(spina);}
-                break;
-
-        }
-    }
 
 
 
@@ -436,12 +137,10 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        intakecs = hardwareMap.get(NormalizedColorSensor.class, "intakecolor");
-        leftcs = hardwareMap.get(NormalizedColorSensor.class, "leftcs");
 
         flickys = hardwareMap.get(Servo.class, "flicky");
-        flickright = hardwareMap.get(Servo.class, "flickyr");
-        flickys.setDirection(Servo.Direction.FORWARD);
+        Servo flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickys.setDirection(Servo.Direction.REVERSE);
         flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
@@ -453,8 +152,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         rightpark = hardwareMap.get(Servo.class, "rightpark");
         leftpark.setDirection(Servo.Direction.FORWARD);
         rightpark.setDirection(Servo.Direction.REVERSE);
-        rightwall = hardwareMap.get(Servo.class, "rightwall");
-        leftwall = hardwareMap.get(Servo.class, "leftwall");
 
 
 
@@ -493,6 +190,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         headinglockangle = 90 - trigangle + 90;
 
 
+
+
         error = targetV - sencoder.getVelocity();
 
         flywheel.setPower(kP * error + kV * targetV);
@@ -504,6 +203,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             targetV = 2447 + -51.2*diagonaldist + 0.753*diagonaldist*diagonaldist + -0.00437*diagonaldist*diagonaldist*diagonaldist + 0.0000091*diagonaldist*diagonaldist*diagonaldist*diagonaldist;
         }
 
+//        if (gamepad1.dpad_left) flickys.setPosition(flickdown);
+//        if (gamepad1.dpad_right) flickys.setPosition(flickup);
+//
 
 
         if (gamepad2.right_trigger > 0.5 && (intaekstage == -1 || intaekstage == 20)) {
@@ -529,7 +231,6 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 5:
                 if (intakeeee.time() > 0.0005) {
                     headingLock = true;
-                    setrightdown();
                     intaekstage = 6;
                     intakeeee.reset();}
                 break;
@@ -543,14 +244,17 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 if (holdshooting) {
                     parksettherotation(0.1);
                 }
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
+                flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 8;
                     intakeeee.reset();}
                 break;
             case 8:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
+                flickys.setPosition(flickdown); //hopefully up
+                flickright.setPosition(flickdown); //hopefully up
+
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
@@ -561,14 +265,18 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 10:
-                spinflickup();
-                if (intakeeee.time() > 0.056) {
+                flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
+
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 11;
                     intakeeee.reset();}
                 break;
             case 11:
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
+                flickys.setPosition(flickdown); //hopefully down
+                flickright.setPosition(flickdown); //hopefully up
+
+                if (intakeeee.time() > 0.065) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
@@ -579,8 +287,10 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 13:
-                spinflickup();
-                if (intakeeee.time() > 0.65) {
+                flickys.setPosition(flickup); //hopefully up
+                flickright.setPosition(flickup); //hopefully up
+
+                if (intakeeee.time() > 0.065) {
                     headingLock = false;
                     intaekstage = 14;
                     intakeeee.reset();}
@@ -588,8 +298,10 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 14:
                 parksettherotation(0);
                 headingLock = false;
-                spinflickdown();
-                if (intakeeee.time() > 0.056) {
+                flickys.setPosition(flickdown); //hopefully down
+                flickright.setPosition(flickdown); //hopefully up
+
+                if (intakeeee.time() > 0.065) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}
@@ -615,15 +327,11 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         if (gamepad1.left_stick_button) {
             intaekstage = -1;
             headingLock = false;
-            spinflickdown();
+            flickys.setPosition(flickdown);
+            flickright.setPosition(flickdown); //hopefully up
             parksettherotation(0);
             settherotation(spina);
         }
-
-//        if (gamepad2.dpad_up) {
-//            flickright.setPosition(flickup);
-//            flickys.setPosition(flickup);
-//        }
 
 
 //        if (gamepad1.right_trigger > 0.2 && !intakepressed) {
@@ -664,163 +372,18 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         }
 
 
-//        if (gamepad1.dpad_down) {
-//            holdshooting = true;
-//        }
-//        if (gamepad1.dpad_up) {
-//            holdshooting = false;
-//            parksettherotation(0);
-//        }
-
-        if (gamepad2.dpad_down) {
-
-            settherotation(spina);
-
-            colorintake = intakecs.getNormalizedColors();
-            colorleft = leftcs.getNormalizedColors();
-
-
-            Color.colorToHSV(colorintake.toColor(), hsvValuesintake);
-            Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
-
-
-            if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
-                rightisgreen = true;
-                noballright = false;
-                rightispurple = false;
-            } else if (hsvValuesintake[0] > 179 && hsvValuesintake[0] < 230 && hsvValuesintake[2] > 0.015 && hsvValuesintake[2] < 0.033) {
-                rightisgreen = false;
-                noballright = false;
-                rightispurple = true;
-            } else {
-                rightispurple = false;
-                rightisgreen = false;
-                noballright = true;
-            }
-
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
-                leftisgreen = true;
-                noballleft = false;
-                leftispurple = false;
-            } else if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.033) {
-                leftisgreen = false;
-                noballleft = false;
-                leftispurple = true;
-            } else {
-                leftisgreen = false;
-                noballleft = true;
-                leftispurple = false;
-            }
-
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
-                leftisgreen = true;
-                noballleft = false;
-            } else leftisgreen = false;
-
-
-            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
-                leftispurple = true;
-                noballleft = false;
-            } else leftispurple = false;
-
-            if (leftispurple && rightispurple) {
-                PP = true;
-                PG = false;
-                GP = false;
-            }
-            if (leftispurple && rightisgreen) {
-                PP = false;
-                PG = true;
-                GP = false;
-            }
-            if (leftisgreen && rightispurple) {
-                PP = false;
-                PG = false;
-                GP = true;
-            }
-            if (noballleft || noballright) {
-                PP = true;
-                PG = false;
-                GP = true;
-            }
-
-
-            llresultt = getPatternIdAuto();
-
-            if (llresultt == 21 && PP) { //GPP
-                thedefault = 4;
-                dononee = true;
-                skiponee = false;
-                reverseonee = false;
-            }
-            else if (llresultt == 21 && PG) { //GPP
-                reverse1 = 4;
-                dononee = false;
-                skiponee = false;
-                reverseonee = true;
-            }
-            else if (llresultt == 21 && GP) { //GPP
-                skip1 = 4;
-                dononee = false;
-                skiponee = true;
-                reverseonee = false;
-            }
-            else if (llresultt == 22 && PP) { //PGP
-                reverse1 = 4;
-                dononee = false;
-                skiponee = false;
-                reverseonee = true;
-            }
-            else if (llresultt == 22 && PG) { //PGP
-                skip1 = 4;
-                dononee = false;
-                skiponee = true;
-                reverseonee = false;
-            }
-            else if (llresultt == 22 && GP) { //PGP
-                thedefault = 4;
-                dononee = true;
-                skiponee = false;
-                reverseonee = false;
-            }
-            else if (llresultt == 23 && PP) { //PPG
-                skip1 = 4;
-                dononee = false;
-                skiponee = true;
-                reverseonee = false;
-            }
-            else if (llresultt == 23 && PG) { //PPG
-                thedefault = 4;
-                dononee = true;
-                skiponee = false;
-                reverseonee = false;
-            }
-            else if (llresultt == 23 && GP) { //PPG
-                reverse1 = 4;
-                dononee = false;
-                skiponee = false;
-                reverseonee = true;
-            }
-            else {
-                thedefault = 4;
-            }
-        }
-
-        sortone();
-        sorttwo();
-        sortthree();
-
         if (gamepad1.dpad_down) {
-            if (skiponee) {
-                skip1 = 5;
-            }
-            if (dononee) {
-                thedefault = 5;
-            }
-            if (reverseonee) {
-                reverse1 = 5;
-            }
+            holdshooting = true;
         }
+        if (gamepad1.dpad_up) {
+            holdshooting = false;
+            parksettherotation(0);
+        }
+
+        if (gamepad2.dpad_left) {
+            llresultt = getPatternIdAuto();
+        }
+
 
         turnerror = headinglockangle - Math.toDegrees(botHeading);
         controller.updateError(turnerror);
@@ -858,13 +421,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 
 /// OPERATOR CONTROLS AS FOLLOWS:
 
-/// left trigger: intake
+/// left trigger: ------
 /// left bumper: enable heading lock
-/// right trigger: intake off
-/// right bumper: outtake
+/// right trigger: toggle intake off / outtake
+/// right bumper: intake in
 
-/// dpad up: shoot sort
-/// dpad down: get id, prepare for sort
+/// dpad up: enable defense brakes
+/// dpad down: disable defense brakes
 
 /// dpad left: reset pose
 

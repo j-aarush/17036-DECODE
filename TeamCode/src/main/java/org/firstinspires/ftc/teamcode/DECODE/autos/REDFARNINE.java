@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.DECODE.autos;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -91,7 +93,7 @@ public class REDFARNINE extends OpMode {
     double backRightPower;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
+    Servo flickys, rightwall;
 
     GoBildaPinpointDriver pinpoint;
 
@@ -416,6 +418,8 @@ public class REDFARNINE extends OpMode {
 
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+
 
         pinpoint.setHeading(0, AngleUnit.DEGREES);
 
@@ -431,6 +435,8 @@ public class REDFARNINE extends OpMode {
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
         settherotation(spina); //first pos figure out later
+        rightwall.setPosition(rightdown);
+
 
 
 
@@ -442,6 +448,7 @@ public class REDFARNINE extends OpMode {
         flywheel.setPower(kP * error + kV * targetV);
         opmodeTimer.resetTimer();
         setPathState(-1);
+
     }
 
     @Override

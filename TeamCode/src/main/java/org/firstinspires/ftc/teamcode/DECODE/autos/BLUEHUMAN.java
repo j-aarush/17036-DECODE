@@ -150,12 +150,8 @@ public class BLUEHUMAN extends OpMode {
 
 
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, pickup2Pose))
-                .addPath(new BezierCurve(pickup2Pose, pickup67Pose))
-                .addPath(new BezierCurve(pickup67Pose, pickup2Pose))
-                .setConstantHeadingInterpolation((Math.toRadians(182)))
-//                .setLinearHeadingInterpolation((Math.toRadians(175)), pickup2Pose.getHeading())
-                .setTValueConstraint(0.8)
+                .addPath(new BezierCurve(scorePose, secondcontrol, pickup2Pose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
                 .build();
 
         grabPickup67 = follower.pathBuilder()
@@ -236,7 +232,7 @@ public class BLUEHUMAN extends OpMode {
                 if(pathTimer.getElapsedTimeSeconds()>0.15) {
 
                     settherotation(spina);
-                    follower.followPath(intake1, true);
+                    follower.followPath(grabPickup2, true);
                     setPathState(-8);
                 }
 
@@ -245,7 +241,7 @@ public class BLUEHUMAN extends OpMode {
             case -8:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return1,true);
+                    follower.followPath(return11,true);
                     setPathState(-10);
                 }
                 break;
@@ -315,7 +311,7 @@ public class BLUEHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, true);
+                    follower.followPath(intake1, true);
                     setPathState(17);
                 }
                 break;
@@ -323,7 +319,7 @@ public class BLUEHUMAN extends OpMode {
             case 17:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return11,true);
+                    follower.followPath(return1,true);
                     setPathState(18);
                 }
                 break;

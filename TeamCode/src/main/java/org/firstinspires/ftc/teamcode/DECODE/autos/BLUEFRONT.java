@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendx;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -98,7 +100,7 @@ public class BLUEFRONT extends OpMode {
     double backRightPower;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
+    Servo flickys, rightwall;
 
     GoBildaPinpointDriver pinpoint;
 
@@ -498,6 +500,8 @@ public class BLUEFRONT extends OpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
         sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+
 
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
@@ -516,6 +520,8 @@ public class BLUEFRONT extends OpMode {
         flickys.setPosition(flickup);
         flickys.setPosition(flickdown);
         settherotation(spina); //first pos figure out later
+        rightwall.setPosition(rightdown);
+
 
 
 
