@@ -37,7 +37,7 @@ public  class botconstants {
 
 
     public static double leftdown = 0.259;
-    public static double rightdown = 0.45;
+    public static double rightdown = 0.47;
     public static double leftup = 0.42;
     public static double rightup = 0.285;
 

@@ -283,9 +283,6 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                     intakeeee.reset();}
                 break;
             case 7:
-                if (holdshooting) {
-                    parksettherotation(0.1);
-                }
                 spinflickup();
                 if (intakeeee.time() > 0.056) {
                     reverse1 = 8;
@@ -674,7 +671,6 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 
         if (gamepad2.dpad_down) {
 
-            settherotation(spina);
 
             colorintake = intakecs.getNormalizedColors();
             colorleft = leftcs.getNormalizedColors();

@@ -5,6 +5,10 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kP;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kV;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -51,7 +55,8 @@ public class BLUEHUMAN extends OpMode {
 
     PIDFController controller = new PIDFController(new PIDFCoefficients(0.1,0,0.006,0.000004));
 
-    public double         targetV = 1535;
+    public double         targetV = 1542;
+    Servo flickyright, leftwall;
 
     double error =0 ;
     double botHeading;
@@ -74,9 +79,32 @@ public class BLUEHUMAN extends OpMode {
     int counter = 0;
     int shootercounter = 0;
     double rotationpos;
+    Servo rightwall;
+//        public  double leftdown = 0.259;
+//        public  double rightdown = 0.47;
+////        public  double leftup = 0.42;
+//        public  double rightup = 0.285;
+
+//        public void setleftdown() {
+//            leftwall.setPosition(leftdown);
+//            rightwall.setPosition(rightup);
+//        }
+        public void setrightdown() {
+            leftwall.setPosition(0.42);
+            rightwall.setPosition(0.47);
+        }
+        public void bothwalldown() {
+            leftwall.setPosition(0.259);
+            rightwall.setPosition(0.47);
+        }
+//        public void bothwallup() {
+//            leftwall.setPosition(leftup);
+//            rightwall.setPosition(rightup);
+//        }
 
 
-    int intaekstage = -1, shooterstage = -1, previntakestage = -1;
+
+        int intaekstage = -1, shooterstage = -1, previntakestage = -1;
 
     double y;
     double x;
@@ -102,16 +130,16 @@ public class BLUEHUMAN extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(58, 14, Math.toRadians(108)); //figure outt
+    private final Pose scorePose = new Pose(58, 14, Math.toRadians(109)); //figure outt
     private final Pose rescorePose = new Pose(58, 14.25, Math.toRadians(108)); //110
     private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.75)); //110
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)); //figure outt
-    private final Pose pickup1Pose = new Pose(8, 38, Math.toRadians(180)); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose control = new Pose( 60.15, 40, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose pickup1Pose = new Pose(12, 38, Math.toRadians(180)); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose control = new Pose( 65, 45, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
     private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(18, 14, Math.toRadians(190)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(15, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
@@ -131,12 +159,12 @@ public class BLUEHUMAN extends OpMode {
 
         intake1 = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, control, pickup1Pose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading())
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), pickup1Pose.getHeading(), 0.5)
                 .build();
 
         return1 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup1Pose, control, rescorePose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), rescorePose.getHeading())
+                .addPath(new BezierLine(pickup1Pose, rescorePose))
+                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), rescorePose.getHeading(), 0.8)
                 .build();
 
         return11 = follower.pathBuilder()
@@ -150,8 +178,12 @@ public class BLUEHUMAN extends OpMode {
 
 
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, secondcontrol, pickup2Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
+                .addPath(new BezierLine(scorePose, pickup2Pose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading(), 0.75)
+                .build();
+        grabPickup3 = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, pickup2Pose))
+                .setTangentHeadingInterpolation()
                 .build();
 
         grabPickup67 = follower.pathBuilder()
@@ -174,7 +206,7 @@ public class BLUEHUMAN extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case -1:
-                follower.followPath(startshoot,true );
+                follower.followPath(startshoot,true);
                 setPathState(-2);
 
                 break;
@@ -182,12 +214,14 @@ public class BLUEHUMAN extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>2.75) {
                     setPathState(0);
                     flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);
                 }
                 break;
             case 0:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(1);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
                 }
 
                 break;
@@ -198,15 +232,21 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 2:
+                if (pathTimer.getElapsedTimeSeconds() > 0.55) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(3);
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 break;
             case 3:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(4);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
+                    setrightdown();
                 }
                 break;
             case 4:
@@ -216,15 +256,21 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 5:
+                if (pathTimer.getElapsedTimeSeconds() > 0.7) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.8) {
                     setPathState(6);
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 break;
             case 6:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(7);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
+                    setrightdown();
                     intake.setPower(1);
                 }
                 break;
@@ -249,7 +295,7 @@ public class BLUEHUMAN extends OpMode {
             case -10:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-0.5);
 //                    follower.followPath(return21);
                     settherotation(spina);
 
@@ -257,11 +303,13 @@ public class BLUEHUMAN extends OpMode {
                 }
             case 9:
                 if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
                     setPathState(10);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
                 }
 
                 break;
@@ -272,15 +320,21 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 11:
+                if (pathTimer.getElapsedTimeSeconds() > 0.55) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(12);
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 break;
             case 12:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(13);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
+                    setrightdown();
                 }
                 break;
             case 13:
@@ -290,14 +344,20 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 14:
+                if (pathTimer.getElapsedTimeSeconds() > 0.7) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.80) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up]
                     setPathState(15);
                 }
                 break;
             case 15:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up]
+                    setrightdown();
                     setPathState(16);
                 }
                 break;
@@ -327,18 +387,20 @@ public class BLUEHUMAN extends OpMode {
             case 18:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-0.5);
 //                    follower.followPath(return21);
                     settherotation(spina);
                     setPathState(19);
                 }
             case 19:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(20);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
                 }
 
                 break;
@@ -349,15 +411,21 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 21:
+                if (pathTimer.getElapsedTimeSeconds() > 0.55) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(22);
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 break;
             case 22:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(23);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
+                    setrightdown();
                 }
                 break;
             case 23:
@@ -367,14 +435,20 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 24:
+                if (pathTimer.getElapsedTimeSeconds() > 0.7) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.80) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up]
                     setPathState(25);
                 }
                 break;
             case 25:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up]
+                    setrightdown();
                     setPathState(26);
                 }
                 break;
@@ -383,7 +457,7 @@ public class BLUEHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup2, true);
+                    follower.followPath(grabPickup3, true);
                     setPathState(27);
                 }
                 break;
@@ -399,18 +473,20 @@ public class BLUEHUMAN extends OpMode {
             case 28:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-0.8);
                     follower.followPath(grabPickup67);
                     settherotation(spina);
                     setPathState(29);
                 }
             case 29:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(30);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
                 }
 
                 break;
@@ -421,15 +497,21 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 31:
+                if (pathTimer.getElapsedTimeSeconds() > 0.55) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.65) {
                     setPathState(32);
-                    flickys.setPosition(flickup); //hopefully up
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up
                 }
                 break;
             case 32:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(33);
-                    flickys.setPosition(flickdown); //hopefully up
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up
+                    setrightdown();
                 }
                 break;
             case 33:
@@ -439,14 +521,20 @@ public class BLUEHUMAN extends OpMode {
                 }
                 break;
             case 34:
+                if (pathTimer.getElapsedTimeSeconds() > 0.7) {
+                    bothwalldown();
+                }
                 if (pathTimer.getElapsedTimeSeconds()>0.80) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    flickys.setPosition(flickup);
+                    flickyright.setPosition(flickup);//hopefully up]
                     setPathState(35);
                 }
                 break;
             case 35:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    flickys.setPosition(flickdown);
+                    flickyright.setPosition(flickdown);//hopefully up]
+                    setrightdown();
                     setPathState(36);
                 }
                 break;
@@ -480,6 +568,7 @@ public class BLUEHUMAN extends OpMode {
         flywheel = hardwareMap.get(DcMotorEx.class, "shooter");
         sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
 
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
@@ -496,6 +585,10 @@ public class BLUEHUMAN extends OpMode {
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
         intake = hardwareMap.get(DcMotorEx.class, "Lintake");
 
+        flickyright = hardwareMap.get(Servo.class, "flickyr");
+        flickyright.setDirection(Servo.Direction.REVERSE);
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+        leftwall = hardwareMap.get(Servo.class, "leftwall");
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
@@ -511,10 +604,13 @@ public class BLUEHUMAN extends OpMode {
         follower.setMaxPower(0.9);
 
         flickys.setPosition(flickup);
+        flickyright.setPosition(flickup);
         flickys.setPosition(flickdown);
+        flickyright.setPosition(flickdown);
         settherotation(spina); //first pos figure out later
 
-
+        leftwall.setPosition(0.42);
+        rightwall.setPosition(0.47);
 
     }
 
