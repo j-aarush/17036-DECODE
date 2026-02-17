@@ -680,11 +680,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
             Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
 
 
-            if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
+            if (hsvValuesintake[0] > 149 && hsvValuesintake[0] < 181 && hsvValuesintake[2] > 0 && hsvValuesintake[2] < 0.7) {
                 rightisgreen = true;
                 noballright = false;
                 rightispurple = false;
-            } else if (hsvValuesintake[0] > 179 && hsvValuesintake[0] < 230 && hsvValuesintake[2] > 0.015 && hsvValuesintake[2] < 0.033) {
+            } else if (hsvValuesintake[0] > 199 && hsvValuesintake[0] < 250 && hsvValuesintake[2] > 0 && hsvValuesintake[2] < 0.7) {
                 rightisgreen = false;
                 noballright = false;
                 rightispurple = true;
@@ -694,11 +694,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                 noballright = true;
             }
 
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
+            if (hsvValuesleft[0] > 149 && hsvValuesleft[0] < 181 && hsvValuesleft[2] > 0 && hsvValuesleft[2] < 0.7) {
                 leftisgreen = true;
                 noballleft = false;
                 leftispurple = false;
-            } else if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.033) {
+            } else if (hsvValuesleft[0] > 199 && hsvValuesleft[0] < 250 && hsvValuesleft[2] > 0 && hsvValuesleft[2] < 0.7) {
                 leftisgreen = false;
                 noballleft = false;
                 leftispurple = true;
@@ -708,16 +708,16 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                 leftispurple = false;
             }
 
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
-                leftisgreen = true;
-                noballleft = false;
-            } else leftisgreen = false;
-
-
-            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
-                leftispurple = true;
-                noballleft = false;
-            } else leftispurple = false;
+//            if (hsvValuesleft[0] > 150 && hsvValuesleft[0] < 180 && hsvValuesleft[2] > 0 && hsvValuesleft[2] < 0.7) {
+//                leftisgreen = true;
+//                noballleft = false;
+//            } else leftisgreen = false;
+//
+//
+//            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
+//                leftispurple = true;
+//                noballleft = false;
+//            } else leftispurple = false;
 
             if (leftispurple && rightispurple) {
                 PP = true;
@@ -806,17 +806,34 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
         sorttwo();
         sortthree();
 
+//        if (gamepad1.dpad_down) {
+//            if (skiponee) {
+//                skip1 = 5;
+//            }
+//            if (dononee) {
+//                thedefault = 5;
+//            }
+//            if (reverseonee) {
+//                reverse1 = 5;
+//            }
+//        }
+        // NEW EXCLUSIVE LOGIC
         if (gamepad1.dpad_down) {
+            // Check which sorting routine was selected and start ONLY that one.
             if (skiponee) {
                 skip1 = 5;
+                skiponee = false; // Reset the flag
             }
-            if (dononee) {
+            else if (dononee) {
                 thedefault = 5;
+                dononee = false; // Reset the flag
             }
-            if (reverseonee) {
+            else if (reverseonee) {
                 reverse1 = 5;
+                reverseonee = false; // Reset the flag
             }
         }
+
 
         turnerror = headinglockangle - Math.toDegrees(botHeading);
         controller.updateError(turnerror);

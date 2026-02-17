@@ -4,6 +4,10 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendx;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -18,6 +22,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import dev.nextftc.core.commands.Command;
@@ -31,6 +36,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -73,6 +79,33 @@ public class REDFRONTGATE extends OpMode {
     double spind = 1;
 
 
+    Servo flickright, leftwall, rightwall;
+    public void spinflickup() {
+        flickys.setPosition(flickup);
+        flickright.setPosition(flickup);
+    }
+    public void spinflickdown() {
+        flickys.setPosition(flickdown);
+        flickright.setPosition(flickdown);
+    }
+    public void setleftdown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightup);
+    }
+    public void setrightdown() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwalldown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwallup() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightup);
+    }
+
+
     float greenv, bluev, redv;
     double distancev;
     boolean move = false, intakeonoffb = false;
@@ -109,9 +142,9 @@ public class REDFRONTGATE extends OpMode {
     private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180))).mirror();
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145))).mirror();
     private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5))).mirror();
-    private final Pose pickup1 = (new Pose(18, 69.75, Math.toRadians(180))).mirror();
-    private final Pose pickup2 = (new Pose(21, 86, Math.toRadians(180))).mirror();
-    private final Pose pickup3 = (new Pose(16, 59, Math.toRadians(135))).mirror();
+    private final Pose pickup1 = (new Pose(18, 72, Math.toRadians(180))).mirror();
+    private final Pose pickup2 = (new Pose(21, 88, Math.toRadians(180))).mirror();
+    private final Pose pickup3 = (new Pose(13.2, 62.5, Math.toRadians(136.5))).mirror();
     private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
 
 
@@ -132,7 +165,7 @@ public class REDFRONTGATE extends OpMode {
                 .addPath(new BezierCurve(scorepose,
                         new Pose(63.77, 50.86).mirror(),
                         new Pose(-50, 51).mirror(),
-                        new Pose(49.5, 64.9).mirror(),
+                        new Pose(48, 74).mirror(),
                         pickup1))
                 .setConstantHeadingInterpolation((Math.toRadians(0)))
                 .build();
@@ -141,17 +174,18 @@ public class REDFRONTGATE extends OpMode {
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, pickup2))
+                .addPath(new BezierLine(scorepose, pickup2))
                 .setConstantHeadingInterpolation((Math.toRadians(0)))
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup2, scorepose))
+                .addPath(new BezierLine(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(24.5, 47).mirror(), pickup3))
-                .setLinearHeadingInterpolation((scorepose.getHeading()), (Math.toRadians(35)))
-                .setTValueConstraint(0.97)
+                .addPath(new BezierCurve(scorepose, new Pose(24.5, 47).mirror(), new Pose(15.6, 68).mirror(), pickup3))
+                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
+                .setLinearHeadingInterpolation((Math.toRadians(25)), (Math.toRadians(40)))
+                .setTValueConstraint(0.99)
                 .build();
         score3rd = follower.pathBuilder()
                 .addPath(new BezierCurve(pickup3, new Pose(30, 50).mirror(), scorepose))
@@ -170,23 +204,25 @@ public class REDFRONTGATE extends OpMode {
         switch (pathState) {
             case -10:
                 follower.followPath(initpath, true);
+                setrightdown();
                 setPathState(-9);
                 break;
             case -9:
                 if (!follower.isBusy()) {
                     follower.followPath(score1, true);
+                    setrightdown();
                     setPathState(-2); }
                 break;
             case -2:
                 if (pathTimer.getElapsedTimeSeconds()>2.5) {
                     setPathState(0);
-                    flickys.setPosition(flickup);
+                    spinflickup();
                 }
                 break;
             case 0:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(1);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
 
                 break;
@@ -199,13 +235,13 @@ public class REDFRONTGATE extends OpMode {
             case 2:
                 if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(3);
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 break;
             case 3:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(4);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
                 break;
             case 4:
@@ -217,13 +253,13 @@ public class REDFRONTGATE extends OpMode {
             case 5:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     setPathState(6);
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 break;
             case 6:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(7);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                     intake.setPower(1);
                 }
                 break;
@@ -248,11 +284,11 @@ public class REDFRONTGATE extends OpMode {
                 }
             case 9:
                 if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
                     setPathState(10);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
 
                 break;
@@ -265,13 +301,13 @@ public class REDFRONTGATE extends OpMode {
             case 11:
                 if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(12);
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 break;
             case 12:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(13);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
                 break;
             case 13:
@@ -282,13 +318,13 @@ public class REDFRONTGATE extends OpMode {
                 break;
             case 14:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    spinflickup();//hopefully up]
                     setPathState(15);
                 }
                 break;
             case 15:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    spinflickdown();
                     setPathState(16);
                 }
                 break;
@@ -331,11 +367,11 @@ public class REDFRONTGATE extends OpMode {
                 }
             case 19:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(20);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
 
                 break;
@@ -348,13 +384,13 @@ public class REDFRONTGATE extends OpMode {
             case 21:
                 if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(22);
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 break;
             case 22:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(23);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
                 break;
             case 23:
@@ -365,13 +401,13 @@ public class REDFRONTGATE extends OpMode {
                 break;
             case 24:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    spinflickup();
                     setPathState(25);
                 }
                 break;
             case 25:
                 if (pathTimer.getElapsedTimeSeconds()>0.15) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    spinflickdown();
                     setPathState(27);
                 }
                 break;
@@ -407,11 +443,11 @@ public class REDFRONTGATE extends OpMode {
                 }
             case 30:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(31);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
 
                 break;
@@ -424,13 +460,13 @@ public class REDFRONTGATE extends OpMode {
             case 32:
                 if (pathTimer.getElapsedTimeSeconds()>0.5) {
                     setPathState(33);
-                    flickys.setPosition(flickup); //hopefully up
+                    spinflickup();
                 }
                 break;
             case 33:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(34);
-                    flickys.setPosition(flickdown); //hopefully up
+                    spinflickdown();
                 }
                 break;
             case 34:
@@ -441,13 +477,14 @@ public class REDFRONTGATE extends OpMode {
                 break;
             case 35:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
-                    flickys.setPosition(flickup); //hopefully up]
+                    spinflickup();
                     setPathState(36);
                 }
                 break;
             case 36:
                 if (pathTimer.getElapsedTimeSeconds()>0.15) {
-                    flickys.setPosition(flickdown); //hopefully up]
+                    spinflickdown();
+
                     setPathState(26);
                 }
                 break;
@@ -482,12 +519,12 @@ public class REDFRONTGATE extends OpMode {
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
-        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        sencoder = hardwareMap.get(DcMotorEx.class, "sencoder");
 
         flickys = hardwareMap.get(Servo.class, "flicky");
         flickys.setDirection(Servo.Direction.FORWARD);
@@ -507,12 +544,17 @@ public class REDFRONTGATE extends OpMode {
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
-
         follower.setStartingPose(startPose);
+        follower.setMaxPower(0.9);
 
-        flickys.setPosition(flickup);
-        flickys.setPosition(flickdown);
         settherotation(spina); //first pos figure out later
+
+        flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickright.setDirection(Servo.Direction.REVERSE);
+
+
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+        leftwall = hardwareMap.get(Servo.class, "leftwall");
 
 
 

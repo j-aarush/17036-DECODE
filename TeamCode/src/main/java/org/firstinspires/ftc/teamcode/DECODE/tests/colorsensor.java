@@ -84,11 +84,11 @@ public class colorsensor extends LinearOpMode {
             Color.colorToHSV(colorleft.toColor(), hsvValuesleft);
 
 
-            if (hsvValuesintake[0] > 130 && hsvValuesintake[0] < 176 && hsvValuesintake[2] > 0.019 && hsvValuesintake[2] < 0.041) {
+            if (hsvValuesintake[0] > 149 && hsvValuesintake[0] < 181 && hsvValuesintake[2] > 0 && hsvValuesintake[2] < 0.7) {
                 rightisgreen = true;
                 noballright = false;
                 rightispurple = false;
-            } else if (hsvValuesintake[0] > 179 && hsvValuesintake[0] < 230 && hsvValuesintake[2] > 0.015 && hsvValuesintake[2] < 0.033) {
+            } else if (hsvValuesintake[0] > 199 && hsvValuesintake[0] < 250 && hsvValuesintake[2] > 0 && hsvValuesintake[2] < 0.7) {
                 rightisgreen = false;
                 noballright = false;
                 rightispurple = true;
@@ -98,11 +98,11 @@ public class colorsensor extends LinearOpMode {
                 noballright = true;
             }
 
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
+            if (hsvValuesleft[0] > 149 && hsvValuesleft[0] < 181 && hsvValuesleft[2] > 0 && hsvValuesleft[2] < 0.7) {
                 leftisgreen = true;
                 noballleft = false;
                 leftispurple = false;
-            } else if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.033) {
+            } else if (hsvValuesleft[0] > 199 && hsvValuesleft[0] < 250 && hsvValuesleft[2] > 0 && hsvValuesleft[2] < 0.7) {
                 leftisgreen = false;
                 noballleft = false;
                 leftispurple = true;
@@ -111,17 +111,17 @@ public class colorsensor extends LinearOpMode {
                 noballleft = true;
                 leftispurple = false;
             }
-
-            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
-                leftisgreen = true;
-                noballleft = false;
-            } else leftisgreen = false;
-
-
-            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
-                leftispurple = true;
-                noballleft = false;
-            } else leftispurple = false;
+//
+//            if (hsvValuesleft[0] > 130 && hsvValuesleft[0] < 176 && hsvValuesleft[2] > 0.019 && hsvValuesleft[2] < 0.041) {
+//                leftisgreen = true;
+//                noballleft = false;
+//            } else leftisgreen = false;
+//
+//
+//            if (hsvValuesleft[0] > 179 && hsvValuesleft[0] < 230 && hsvValuesleft[2] > 0.015 && hsvValuesleft[2] < 0.031) {
+//                leftispurple = true;
+//                noballleft = false;
+//            } else leftispurple = false;
 
             if (leftispurple && rightispurple) {
                 PP = true;
@@ -167,10 +167,10 @@ public class colorsensor extends LinearOpMode {
 
 
 
-            //green hue: 130-176
-            //green saturation: 0.019 - 0.041
-            //purple hue: 179-230
-            //purple saturation 0.015-0.03
+            //green hue: 150-180
+            //green saturation: 0 - 0.7
+            //purple hue: 199-250
+            //purple saturation 0-0.7
 
             telemetry.update();
 
