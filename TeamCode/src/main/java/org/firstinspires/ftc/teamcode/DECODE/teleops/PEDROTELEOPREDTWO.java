@@ -292,7 +292,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 spinflickdown();
-                if (intakeeee.time() > 0.1) {
+                if (intakeeee.time() > 0.12) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}

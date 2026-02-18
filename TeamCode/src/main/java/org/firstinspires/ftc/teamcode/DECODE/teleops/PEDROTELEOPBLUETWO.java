@@ -308,7 +308,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 flickys.setPosition(flickdown); //hopefully down
                 flickright.setPosition(flickdown); //hopefully up
 
-                if (intakeeee.time() > 0.1) {
+                if (intakeeee.time() > 0.12) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}
