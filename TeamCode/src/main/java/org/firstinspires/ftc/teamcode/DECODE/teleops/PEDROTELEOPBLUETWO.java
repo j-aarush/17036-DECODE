@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -94,7 +95,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     boolean headingLock;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
+    Servo flickys, rightwall, leftwall;
 
     double botHeading;
     public static ElapsedTime intakeeee = new ElapsedTime(0);
@@ -139,8 +140,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         flickys = hardwareMap.get(Servo.class, "flicky");
-        Servo flickright = hardwareMap.get(Servo.class, "flickyr");
-        flickys.setDirection(Servo.Direction.REVERSE);
+        flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickys.setDirection(Servo.Direction.FORWARD);
         flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
@@ -150,6 +151,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 
         leftpark = hardwareMap.get(Servo.class, "leftpark");
         rightpark = hardwareMap.get(Servo.class, "rightpark");
+        rightwall = hardwareMap.get(Servo.class, "rightwall");
+        leftwall = hardwareMap.get(Servo.class, "leftwall");
+
         leftpark.setDirection(Servo.Direction.FORWARD);
         rightpark.setDirection(Servo.Direction.REVERSE);
 
@@ -166,6 +170,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 .addPath(new BezierLine(follower::getPose, new Pose(110,35)))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(270), 0.8))
                 .build();
+
+        rightwall.setPosition(rightdown);
+
     }
 
     @Override
@@ -301,7 +308,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 flickys.setPosition(flickdown); //hopefully down
                 flickright.setPosition(flickdown); //hopefully up
 
-                if (intakeeee.time() > 0.065) {
+                if (intakeeee.time() > 0.1) {
                     intaekstage = -1;
                     intakeeee.reset();
                     settherotation(spina);}

@@ -131,7 +131,7 @@ public class REDHUMAN extends OpMode {
     private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
 
     private final Pose scorePose = new Pose(58, 14, Math.toRadians(109)).mirror(); //figure outt
-    private final Pose rescorePose = new Pose(58, 14.25, Math.toRadians(108)).mirror(); //110
+    private final Pose rescorePose = new Pose(60, 14, Math.toRadians(108)).mirror(); //58, 14.25
     private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.75)).mirror(); //110
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
@@ -145,7 +145,7 @@ public class REDHUMAN extends OpMode {
 
     static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
 
-    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
+    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, return67;
     private Path grab1;
 
     public void buildPaths() {
@@ -171,6 +171,13 @@ public class REDHUMAN extends OpMode {
                 .addPath(new BezierLine(pickup2Pose, scorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
                 .build();
+
+        return67 = follower.pathBuilder()
+                .addPath(new BezierLine(pickup2Pose, rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+
+
         return21 = follower.pathBuilder()
                 .addPath(new BezierLine(prescorePose, rescorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
@@ -183,7 +190,7 @@ public class REDHUMAN extends OpMode {
                 .build();
 
         grabPickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup2Pose))
+                .addPath(new BezierLine(rescorePose, pickup2Pose))
                 .setTangentHeadingInterpolation()
                 .build();
 
@@ -288,7 +295,7 @@ public class REDHUMAN extends OpMode {
             case -8:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return11,true);
+                    follower.followPath(return67,true);
                     setPathState(-10);
                 }
                 break;
@@ -466,7 +473,7 @@ public class REDHUMAN extends OpMode {
             case 27:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return11,true);
+                    follower.followPath(return67,true);
                     setPathState(28);
                 }
                 break;

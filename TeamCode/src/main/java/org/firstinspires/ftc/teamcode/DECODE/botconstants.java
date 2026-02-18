@@ -25,7 +25,7 @@ public  class botconstants {
     public static double spinc = 0.768;
     public static double spind = 1;
 
-    public static double flickup = 0.06, flickdown = 0.31;
+    public static double flickup = 0.045, flickdown = 0.31; //0.06
 
     public Servo flick, flickright, leftwall, rightwall;
     //MAKE SURE BOTH ARE REVERSED, set up in configs
