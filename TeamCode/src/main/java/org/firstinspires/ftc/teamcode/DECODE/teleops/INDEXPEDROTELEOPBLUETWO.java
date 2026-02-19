@@ -58,6 +58,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 
     Boolean intakepressed = false;
     Boolean intaketoggle;
+    Boolean dpadDownWasPressed;
 
     private boolean automatedDrive;
     boolean holdshooting = false;
@@ -669,7 +670,9 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 //            parksettherotation(0);
 //        }
 
-        if (gamepad2.dpad_down) {
+        if (gamepad2.dpad_down && !dpadDownWasPressed) {
+            // This code now runs ONLY ONCE when the button is first pressed.
+            dpadDownWasPressed = true; // Set the flag to prevent re-running
 
 
             colorintake = intakecs.getNormalizedColors();
@@ -800,7 +803,10 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
             else {
                 thedefault = 4;
             }
-        }
+        } else if (!gamepad2.dpad_down) {
+        // When the button is released, reset the flag so it can be pressed again.
+        dpadDownWasPressed = false;
+    }
 
         sortone();
         sorttwo();

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.DECODE.tests;
 
 
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static dev.nextftc.bindings.Bindings.button;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -27,7 +29,6 @@ public class flickservozero extends LinearOpMode {
     public static ElapsedTime intakeeee = new ElapsedTime(0);
 
     int flickswitch = -1;
-    public static double flickup = 0.172, flickdown = 0.491;
 
     public  double leftdown = 0.259;
     public  double rightdown = 0.45;
@@ -82,18 +83,19 @@ public class flickservozero extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.a) { //downnnnnn.
-                flick.setPosition(0.31);
-                flickright.setPosition(0.31);
+                flick.setPosition(flickup);
             }
             if (gamepad1.b) { //down
-                flick.setPosition(0.1);
-                flickright.setPosition(0.1);
+                flick.setPosition(flickdown);
+            }
+            if (gamepad1.x) { //downnnnnn.
+                flickright.setPosition(flickup);
+            }
+            if (gamepad1.y) { //down
+                flickright.setPosition(flickdown);
             }
 
-            if (gamepad1.y) { //upppppp
-                flick.setPosition(0.06);
-                flickright.setPosition(0.06);
-            }
+
 
             if (gamepad2.a) {
                 rightwall.setPosition(rightdown); //down

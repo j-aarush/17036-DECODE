@@ -173,7 +173,7 @@ public class REDHUMAN extends OpMode {
                 .build();
 
         return67 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup2Pose, rescorePose))
+                .addPath(new BezierCurve(pickup2Pose, new Pose(30, 30).mirror(), rescorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
                 .build();
 

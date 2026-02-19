@@ -18,14 +18,14 @@ public  class botconstants {
 
 
 
-    public static double spino = 0.015;
-    public  static double spina = 0.265;
+    public static double spino = 0.03;
+    public  static double spina = 0.285;
 
-    public  static double spinb = 0.515;
-    public static double spinc = 0.768;
+    public  static double spinb = 0.535;
+    public static double spinc = 0.788;
     public static double spind = 1;
 
-    public static double flickup = 0.045, flickdown = 0.31; //0.06
+    public static double flickup = 0, flickdown = 0.30; //0.06
 
     public Servo flick, flickright, leftwall, rightwall;
     //MAKE SURE BOTH ARE REVERSED, set up in configs

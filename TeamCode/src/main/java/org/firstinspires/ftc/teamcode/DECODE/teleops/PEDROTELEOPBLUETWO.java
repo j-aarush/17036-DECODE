@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.DECODE.teleops;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.autoendpose;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -39,6 +42,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
     private Follower follower;
     Boolean intakepressed = false;
     Boolean intaketoggle;
+    boolean dpadDownWasPressed = false; // Add this new flag
 
     private boolean automatedDrive;
     boolean holdshooting = false;
@@ -119,6 +123,23 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
         }
         return 0;
     }
+    public void setleftdown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightup);
+    }
+    public void setrightdown() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwalldown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwallup() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightup);
+    }
+
 
 
 
@@ -243,6 +264,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 6:
                 settherotation(spina);
+                bothwalldown();
                 if (!follower.isBusy()) {
                     intaekstage = 7;
                     intakeeee.reset();}
@@ -260,7 +282,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 8:
                 flickys.setPosition(flickdown); //hopefully up
                 flickright.setPosition(flickdown); //hopefully up
-
+                setrightdown();
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 9;
                     intakeeee.reset();}
@@ -269,6 +291,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 settherotation(spinb);
                 if (intakeeee.time() > 0.56) {
                     intaekstage = 10;
+                    bothwalldown();
                     intakeeee.reset();}
                 break;
             case 10:
@@ -282,7 +305,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 11:
                 flickys.setPosition(flickdown); //hopefully down
                 flickright.setPosition(flickdown); //hopefully up
-
+                setrightdown();
                 if (intakeeee.time() > 0.065) {
                     intaekstage = 12;
                     intakeeee.reset();}
@@ -291,6 +314,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 settherotation(spinc);
                 if (intakeeee.time() > 0.57) {
                     intaekstage = 13;
+                    bothwalldown();
                     intakeeee.reset();}
                 break;
             case 13:
@@ -307,7 +331,7 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 headingLock = false;
                 flickys.setPosition(flickdown); //hopefully down
                 flickright.setPosition(flickdown); //hopefully up
-
+                setrightdown();
                 if (intakeeee.time() > 0.12) {
                     intaekstage = -1;
                     intakeeee.reset();
