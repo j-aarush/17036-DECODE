@@ -143,11 +143,11 @@ public class REDFRONT extends OpMode {
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, pickup2))
+                .addPath(new BezierLine(scorepose, pickup2))
                 .setConstantHeadingInterpolation((Math.toRadians(0)))
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup2, scorepose))
+                .addPath(new BezierLine(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()

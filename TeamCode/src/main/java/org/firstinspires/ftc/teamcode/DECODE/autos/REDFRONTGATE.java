@@ -141,15 +141,16 @@ public class REDFRONTGATE extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180))).mirror();
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145))).mirror();
-    private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5))).mirror();
+    private final Pose scorepose = (new Pose(53, 80, Math.toRadians(127.5))).mirror();
     private final Pose pickup1 = (new Pose(18, 72, Math.toRadians(180))).mirror();
     private final Pose pickup2 = (new Pose(21, 88, Math.toRadians(180))).mirror();
-    private final Pose pickup3 = (new Pose(13.2, 62.5, Math.toRadians(136.5))).mirror();
+    private final Pose pickup3 = (new Pose(13.5, 65, Math.toRadians(136.5))).mirror();
     private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
 
 
 
-    private PathChain score3rd, score3, initpath, score1, grabPickup1, score2, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, pickup3rd, park;
+
+    private PathChain score3rd, score3, initpath, score1, grabPickup1, score2, intake1, return1, grabPickup2, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, pickup3rd, park, stabilizets, adjust;
     private Path grab1;
 
     public void buildPaths() {
@@ -158,7 +159,10 @@ public class REDFRONTGATE extends OpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), realstartpose.getHeading())
                 .build();
         score1 = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, scorepose))
+                .addPath(new BezierCurve(
+                        startPose,
+                        new Pose(33.335, 112).mirror(),
+                        scorepose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup1 = follower.pathBuilder()
@@ -182,11 +186,23 @@ public class REDFRONTGATE extends OpMode {
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, new Pose(24.5, 47).mirror(), new Pose(15.6, 68).mirror(), pickup3))
-                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
+                .addPath(new BezierCurve(scorepose,
+                        new Pose(30.9, 40).mirror(),
+                        pickup3))
+//                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
                 .setLinearHeadingInterpolation((Math.toRadians(25)), (Math.toRadians(40)))
                 .setTValueConstraint(0.99)
                 .build();
+
+
+        adjust = follower.pathBuilder()
+                .addPath(new BezierLine(pickup3,
+                        new Pose(13.5, 64).mirror()
+                        ))
+//                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
+                .setLinearHeadingInterpolation((Math.toRadians(40)), (Math.toRadians(40)))
+                .build();
+
         score3rd = follower.pathBuilder()
                 .addPath(new BezierCurve(pickup3, new Pose(30, 50).mirror(), scorepose))
                 .setLinearHeadingInterpolation((Math.toRadians(10)), scorepose.getHeading())
@@ -349,7 +365,7 @@ public class REDFRONTGATE extends OpMode {
                 }
 
             case 17:
-                if(pathTimer.getElapsedTimeSeconds() > 2)
+                if(pathTimer.getElapsedTimeSeconds() > 5)
                 {
 
                     follower.followPath(score3rd,true);
