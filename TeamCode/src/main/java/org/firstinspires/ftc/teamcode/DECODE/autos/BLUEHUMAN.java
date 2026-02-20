@@ -135,17 +135,17 @@ public class BLUEHUMAN extends OpMode {
     private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.75)); //110
 
     private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)); //figure outt
-    private final Pose pickup1Pose = new Pose(12, 38, Math.toRadians(180)); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose pickup1Pose = new Pose(14.5, 38, Math.toRadians(180)); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose control = new Pose( 65, 45, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
     private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(15, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(10.75, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup3Pose = new Pose(20, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
 
-    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park;
+    private PathChain return67, return68, grab69, grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, donthitgo, donthitback;
     private Path grab1;
 
     public void buildPaths() {
@@ -171,18 +171,25 @@ public class BLUEHUMAN extends OpMode {
                 .addPath(new BezierLine(pickup2Pose, scorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
                 .build();
+
+        return67 = follower.pathBuilder()
+                .addPath(new BezierCurve(pickup2Pose, new Pose(30, 20), rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+
+
         return21 = follower.pathBuilder()
                 .addPath(new BezierLine(prescorePose, rescorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
                 .build();
 
-
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup2Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading(), 0.75)
                 .build();
+
         grabPickup3 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup2Pose))
+                .addPath(new BezierLine(rescorePose, pickup2Pose))
                 .setTangentHeadingInterpolation()
                 .build();
 
@@ -200,6 +207,17 @@ public class BLUEHUMAN extends OpMode {
         park = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, finishPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), finishPose.getHeading())
+                .build();
+
+
+        donthitgo = follower.pathBuilder()
+                .addPath(new BezierLine(rescorePose, pickup3Pose))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        donthitback = follower.pathBuilder()
+                .addPath(new BezierCurve(pickup3Pose, new Pose(30, 20), rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
                 .build();
 
     }
@@ -287,7 +305,7 @@ public class BLUEHUMAN extends OpMode {
             case -8:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return11,true);
+                    follower.followPath(return67,true);
                     setPathState(-10);
                 }
                 break;
@@ -295,7 +313,7 @@ public class BLUEHUMAN extends OpMode {
             case -10:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.5);
+                    intake.setPower(-0.8);
 //                    follower.followPath(return21);
                     settherotation(spina);
 
@@ -387,7 +405,7 @@ public class BLUEHUMAN extends OpMode {
             case 18:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.5);
+                    intake.setPower(-0.8);
 //                    follower.followPath(return21);
                     settherotation(spina);
                     setPathState(19);
@@ -457,7 +475,7 @@ public class BLUEHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup3, true);
+                    follower.followPath(donthitgo, true);
                     setPathState(27);
                 }
                 break;
@@ -465,7 +483,7 @@ public class BLUEHUMAN extends OpMode {
             case 27:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return11,true);
+                    follower.followPath(donthitback,true);
                     setPathState(28);
                 }
                 break;

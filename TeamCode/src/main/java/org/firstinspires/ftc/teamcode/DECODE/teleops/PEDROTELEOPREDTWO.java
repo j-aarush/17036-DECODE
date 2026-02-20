@@ -5,7 +5,10 @@ import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickdown;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.flickup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kP;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.kV;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.leftup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightdown;
+import static org.firstinspires.ftc.teamcode.DECODE.botconstants.rightup;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spina;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinb;
 import static org.firstinspires.ftc.teamcode.DECODE.botconstants.spinc;
@@ -40,6 +43,23 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
     private Follower follower;
     Boolean intakepressed = false;
     Boolean intaketoggle;
+
+    public void setleftdown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightup);
+    }
+    public void setrightdown() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwalldown() {
+        leftwall.setPosition(leftdown);
+        rightwall.setPosition(rightdown);
+    }
+    public void bothwallup() {
+        leftwall.setPosition(leftup);
+        rightwall.setPosition(rightup);
+    }
 
     private boolean automatedDrive;
     boolean holdshooting = false;
@@ -89,7 +109,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
     double rotationpos;
 
     double turnerror;
-    public static Servo leftpark, rightpark, rightwall, leftwall;
+    public Servo leftpark, rightpark, rightwall, leftwall;
 
     public void parksettherotation(double rotationn) {
         leftpark.setPosition(rotationn);
@@ -239,8 +259,10 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
             case 6:
                 settherotation(spina);
                 if (!follower.isBusy()) {
+                    bothwalldown();
                     intaekstage = 7;
-                    intakeeee.reset();}
+                    intakeeee.reset();
+                }
                 break;
             case 7:
                 if (holdshooting) {
@@ -253,13 +275,17 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 break;
             case 8:
                 spinflickdown();
+                setrightdown();
                 if (intakeeee.time() > 0.05) {
                     intaekstage = 9;
                     intakeeee.reset();}
                 break;
             case 9:
                 settherotation(spinb);
-                if (intakeeee.time() > 0.56) {
+                if (intakeeee.time() > 0.54) {
+                    bothwalldown();
+                }
+                if (intakeeee.time() > 0.58) {
                     intaekstage = 10;
                     intakeeee.reset();}
                 break;
@@ -271,13 +297,17 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 break;
             case 11:
                 spinflickdown();
+                setrightdown();
                 if (intakeeee.time() > 0.05) {
                     intaekstage = 12;
                     intakeeee.reset();}
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.57) {
+                if (intakeeee.time() > 0.55) {
+                    bothwalldown();
+                }
+                if (intakeeee.time() > 0.60) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
@@ -292,6 +322,7 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
                 parksettherotation(0);
                 headingLock = false;
                 spinflickdown();
+                setrightdown();
                 if (intakeeee.time() > 0.12) {
                     intaekstage = -1;
                     intakeeee.reset();
