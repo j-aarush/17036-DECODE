@@ -144,7 +144,7 @@ public class REDFRONTGATE extends OpMode {
     private final Pose scorepose = (new Pose(53, 80, Math.toRadians(127.5))).mirror();
     private final Pose pickup1 = (new Pose(18, 72, Math.toRadians(180))).mirror();
     private final Pose pickup2 = (new Pose(21, 88, Math.toRadians(180))).mirror();
-    private final Pose pickup3 = (new Pose(13.5, 65, Math.toRadians(136.5))).mirror();
+    private final Pose pickup3 = (new Pose(14.45, 60.5, Math.toRadians(136.5))).mirror();
     private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140))).mirror();
 
 
@@ -190,8 +190,8 @@ public class REDFRONTGATE extends OpMode {
                         new Pose(30.9, 40).mirror(),
                         pickup3))
 //                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
-                .setLinearHeadingInterpolation((Math.toRadians(25)), (Math.toRadians(40)))
-                .setTValueConstraint(0.99)
+                .setLinearHeadingInterpolation((Math.toRadians(25)), (Math.toRadians(41)))
+                .setTValueConstraint(0.97)
                 .build();
 
 
@@ -365,7 +365,7 @@ public class REDFRONTGATE extends OpMode {
                 }
 
             case 17:
-                if(pathTimer.getElapsedTimeSeconds() > 5)
+                if(pathTimer.getElapsedTimeSeconds() > 2.75)
                 {
 
                     follower.followPath(score3rd,true);
@@ -567,6 +567,7 @@ public class REDFRONTGATE extends OpMode {
 
         flickright = hardwareMap.get(Servo.class, "flickyr");
         flickright.setDirection(Servo.Direction.REVERSE);
+
 
 
         rightwall = hardwareMap.get(Servo.class, "rightwall");

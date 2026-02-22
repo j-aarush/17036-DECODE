@@ -190,6 +190,9 @@ public class PEDROTELEOPREDTWO extends NextFTCOpMode {
 
         rightwall.setPosition(rightdown);
 
+        flickys.setPosition(flickdown);
+        flickright.setPosition(flickdown);
+
     }
 
     @Override

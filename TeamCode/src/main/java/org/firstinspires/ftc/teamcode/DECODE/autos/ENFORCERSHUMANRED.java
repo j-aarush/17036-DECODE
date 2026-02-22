@@ -34,8 +34,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "REDHUMAN", preselectTeleOp = "RED TELEOP", group = "redautos")
-public class REDHUMAN extends OpMode {
+@Autonomous(name = "ENFORCERS RED", preselectTeleOp = "RED TELEOP", group = "redautos")
+public class ENFORCERSHUMANRED extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -143,9 +143,10 @@ public class REDHUMAN extends OpMode {
     private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
+    private final Pose newhumanpickup = new Pose(12, 21, Math.toRadians(90)).mirror();
     static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
 
-    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, return67;
+    private PathChain newnewnewreutun, newhufmanpickup, grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, return67;
     private Path grab1;
 
     public void buildPaths() {
@@ -209,6 +210,17 @@ public class REDHUMAN extends OpMode {
                 .addPath(new BezierLine(scorePose, finishPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), finishPose.getHeading())
                 .build();
+
+        newhufmanpickup = follower.pathBuilder()
+                .addPath(new BezierLine(rescorePose, newhumanpickup))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        newnewnewreutun = follower.pathBuilder()
+                .addPath(new BezierLine(newhumanpickup, rescorePose))
+                .setLinearHeadingInterpolation(newhumanpickup.getHeading(), rescorePose.getHeading())
+                .build();
+
 
     }
     public void autonomousPathUpdate() {
@@ -379,7 +391,7 @@ public class REDHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(intake1, true);
+                    follower.followPath(newhufmanpickup, true);
                     setPathState(17);
                 }
                 break;
@@ -387,7 +399,7 @@ public class REDHUMAN extends OpMode {
             case 17:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return1,true);
+                    follower.followPath(newnewnewreutun,true);
                     setPathState(18);
                 }
                 break;

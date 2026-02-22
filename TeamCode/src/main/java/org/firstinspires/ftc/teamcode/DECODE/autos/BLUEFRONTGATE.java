@@ -109,9 +109,9 @@ public class BLUEFRONTGATE extends OpMode {
     private final Pose startPose = (new Pose(15.67, 113.5, Math.toRadians(180)));
     private final Pose realstartpose = (new Pose(24.025, 126.169, Math.toRadians(145)));
     private final Pose scorepose = (new Pose(49, 80, Math.toRadians(127.5)));
-    private final Pose pickup1 = (new Pose(18, 68.75, Math.toRadians(180)));
-    private final Pose pickup2 = (new Pose(22.1, 88, Math.toRadians(180)));
-    private final Pose pickup3 = (new Pose(17, 60, Math.toRadians(138)));
+    private final Pose pickup1 = (new Pose(18, 72, Math.toRadians(180)));
+    private final Pose pickup2 = (new Pose(21, 88, Math.toRadians(180)));
+    private final Pose pickup3 = (new Pose(12, 60, Math.toRadians(138)));
     private final Pose parkpos = (new Pose(43, 77, Math.toRadians(140)));
 
 
@@ -141,11 +141,11 @@ public class BLUEFRONTGATE extends OpMode {
                 .setLinearHeadingInterpolation(pickup1.getHeading(), scorepose.getHeading())
                 .build();
         grabPickup2 = follower.pathBuilder()
-                .addPath(new BezierCurve(scorepose, pickup2))
+                .addPath(new BezierLine(scorepose, pickup2))
                 .setConstantHeadingInterpolation((Math.toRadians(180)))
                 .build();
         score3 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup2, scorepose))
+                .addPath(new BezierLine(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
         pickup3rd = follower.pathBuilder()

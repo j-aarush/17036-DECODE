@@ -100,7 +100,7 @@ public class REDFRONT extends OpMode {
     double backRightPower;
 
     DcMotorEx FL, FR, BL, BR, leftinake, rightinake;
-    Servo flickys;
+    Servo flickys, flickright;
 
     GoBildaPinpointDriver pinpoint;
 
@@ -186,12 +186,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>2.5) {
                     setPathState(0);
                     flickys.setPosition(flickup);
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 0:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(1);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
 
                 break;
@@ -205,12 +209,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>0.53) {
                     setPathState(3);
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 3:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(4);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
                 break;
             case 4:
@@ -223,12 +231,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     setPathState(6);
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 6:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(7);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                     intake.setPower(1);
                 }
                 break;
@@ -254,10 +266,14 @@ public class REDFRONT extends OpMode {
             case 9:
                 if (pathTimer.getElapsedTimeSeconds() > 1.1 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.30 && !follower.isBusy()) {
                     setPathState(10);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
 
                 break;
@@ -271,12 +287,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>0.53) {
                     setPathState(12);
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 12:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(13);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
                 break;
             case 13:
@@ -288,12 +308,16 @@ public class REDFRONT extends OpMode {
             case 14:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
+                    flickright.setPosition(flickup); //hopefully up
+
                     setPathState(15);
                 }
                 break;
             case 15:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     flickys.setPosition(flickdown); //hopefully up]
+                    flickright.setPosition(flickdown); //hopefully up
+
                     setPathState(16);
                 }
                 break;
@@ -331,10 +355,14 @@ public class REDFRONT extends OpMode {
             case 19:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(20);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
 
                 break;
@@ -348,12 +376,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>0.53) {
                     setPathState(22);
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 22:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(23);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
                 break;
             case 23:
@@ -365,12 +397,16 @@ public class REDFRONT extends OpMode {
             case 24:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
+                    flickright.setPosition(flickup); //hopefully up
+
                     setPathState(25);
                 }
                 break;
             case 25:
                 if (pathTimer.getElapsedTimeSeconds()>0.15) {
                     flickys.setPosition(flickdown); //hopefully up]
+                    flickright.setPosition(flickdown); //hopefully up
+
                     setPathState(27);
                 }
                 break;
@@ -413,10 +449,14 @@ public class REDFRONT extends OpMode {
             case 30:
                 if (pathTimer.getElapsedTimeSeconds() > 1.35 && !follower.isBusy()) {
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 if (pathTimer.getElapsedTimeSeconds()>1.55 && !follower.isBusy()) {
                     setPathState(31);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
 
                 break;
@@ -430,12 +470,16 @@ public class REDFRONT extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds()>0.53) {
                     setPathState(33);
                     flickys.setPosition(flickup); //hopefully up
+                    flickright.setPosition(flickup); //hopefully up
+
                 }
                 break;
             case 33:
                 if (pathTimer.getElapsedTimeSeconds()>0.20) {
                     setPathState(34);
                     flickys.setPosition(flickdown); //hopefully up
+                    flickright.setPosition(flickdown); //hopefully up
+
                 }
                 break;
             case 34:
@@ -447,12 +491,16 @@ public class REDFRONT extends OpMode {
             case 35:
                 if (pathTimer.getElapsedTimeSeconds()>0.67) {
                     flickys.setPosition(flickup); //hopefully up]
+                    flickright.setPosition(flickup); //hopefully up
+
                     setPathState(36);
                 }
                 break;
             case 36:
                 if (pathTimer.getElapsedTimeSeconds()>0.15) {
                     flickys.setPosition(flickdown); //hopefully up]
+                    flickright.setPosition(flickdown); //hopefully up
+
                     setPathState(26);
                 }
                 break;
@@ -495,6 +543,8 @@ public class REDFRONT extends OpMode {
 
         flickys = hardwareMap.get(Servo.class, "flicky");
         flickys.setDirection(Servo.Direction.FORWARD);
+        flickright = hardwareMap.get(Servo.class, "flickyr");
+        flickright.setDirection(Servo.Direction.REVERSE);
 
         leftspindex = hardwareMap.get(Servo.class, "leftspindex");
         rightspindex = hardwareMap.get(Servo.class, "rightspindex");
@@ -506,7 +556,6 @@ public class REDFRONT extends OpMode {
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
-        pinpoint.setHeading(0, AngleUnit.DEGREES);
 
         // Configure the sensor
         pathTimer = new Timer();
@@ -517,8 +566,9 @@ public class REDFRONT extends OpMode {
 
         follower.setStartingPose(startPose);
 
-        flickys.setPosition(flickup);
-        flickys.setPosition(flickdown);
+         flickys.setPosition(flickdown);
+        flickright.setPosition(flickdown);
+
         settherotation(spina); //first pos figure out later
         rightwall.setPosition(rightdown);
 

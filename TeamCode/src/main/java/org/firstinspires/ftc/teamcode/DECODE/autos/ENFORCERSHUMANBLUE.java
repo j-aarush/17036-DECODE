@@ -34,8 +34,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
-@Autonomous(name = "REDHUMAN", preselectTeleOp = "RED TELEOP", group = "redautos")
-public class REDHUMAN extends OpMode {
+@Autonomous(name = "ENFORCERS BLUE", preselectTeleOp = "BLUE TELEOP", group = "blueautos")
+public class ENFORCERSHUMANBLUE extends OpMode {
 
     public static Servo leftspindex, rightspindex;
 
@@ -128,24 +128,25 @@ public class REDHUMAN extends OpMode {
 
 
     private Timer pathTimer, actionTimer, opmodeTimer;
-    private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90)).mirror();
+    private final Pose startPose = new Pose(63.5, 8, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(58, 14, Math.toRadians(109)).mirror(); //figure outt
-    private final Pose rescorePose = new Pose(60, 14, Math.toRadians(108)).mirror(); //58, 14.25
-    private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.75)).mirror(); //110
+    private final Pose scorePose = new Pose(58, 14, Math.toRadians(109)); //figure outt
+    private final Pose rescorePose = new Pose(58, 14.25, Math.toRadians(108)); //110
+    private final Pose rescorePose3 = new Pose(58, 14.25, Math.toRadians(109.75)); //110
 
-    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)).mirror(); //figure outt
-    private final Pose pickup1Pose = new Pose(12, 38, Math.toRadians(180)).mirror(); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose control = new Pose( 65, 45, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
-    private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)).mirror(); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose prescorePose = new Pose(50.5, 20, Math.toRadians(150)); //figure outt
+    private final Pose pickup1Pose = new Pose(14.5, 38, Math.toRadians(180)); // 19.7 x Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose control = new Pose( 65, 45, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
+    private final Pose secondcontrol = new Pose(78, 65, Math.toRadians(180)); // Scoring Pose 2 of our robot. goes forward to intake
 
-    private final Pose pickup2Pose = new Pose(10.25, 8.85, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)).mirror(); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose pickup3Pose = new Pose(56.5, 135, Math.toRadians(0)).mirror(); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(10.75, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup3Pose = new Pose(20, 8.85, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup67Pose = new Pose(24, 14, Math.toRadians(180)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose newhumanpickup = new Pose(12, 20, Math.toRadians(90));
 
-    static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0)).mirror();
+    static final Pose finishPose = new Pose(50.5, 25.0, Math.toRadians(108.0));
 
-    private PathChain grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, return67;
+    private PathChain newnewnewreutun, newhufmanpickup, return67, return68, grab69, grabPickup1, return21, intake1, return1, grabPickup2, grabPickup67, scorePickup2, grabPickup3, scorePickup3, startshoot, return11, actuallyscorePickup2, park, donthitgo, donthitback;
     private Path grab1;
 
     public void buildPaths() {
@@ -173,7 +174,7 @@ public class REDHUMAN extends OpMode {
                 .build();
 
         return67 = follower.pathBuilder()
-                .addPath(new BezierCurve(pickup2Pose, new Pose(26, 26).mirror(), rescorePose))
+                .addPath(new BezierCurve(pickup2Pose, new Pose(30, 20), rescorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
                 .build();
 
@@ -182,7 +183,6 @@ public class REDHUMAN extends OpMode {
                 .addPath(new BezierLine(prescorePose, rescorePose))
                 .setLinearHeadingInterpolation(prescorePose.getHeading(), rescorePose.getHeading())
                 .build();
-
 
         grabPickup2 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup2Pose))
@@ -209,6 +209,28 @@ public class REDHUMAN extends OpMode {
                 .addPath(new BezierLine(scorePose, finishPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), finishPose.getHeading())
                 .build();
+
+
+        donthitgo = follower.pathBuilder()
+                .addPath(new BezierLine(rescorePose, pickup3Pose))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        donthitback = follower.pathBuilder()
+                .addPath(new BezierCurve(pickup3Pose, new Pose(30, 20), rescorePose))
+                .setLinearHeadingInterpolation(prescorePose.getHeading(), scorePose.getHeading())
+                .build();
+
+        newhufmanpickup = follower.pathBuilder()
+                .addPath(new BezierLine(rescorePose, newhumanpickup))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        newnewnewreutun = follower.pathBuilder()
+                .addPath(new BezierLine(newhumanpickup, rescorePose))
+                .setLinearHeadingInterpolation(newhumanpickup.getHeading(), rescorePose.getHeading())
+                .build();
+
 
     }
     public void autonomousPathUpdate() {
@@ -379,7 +401,7 @@ public class REDHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(intake1, true);
+                    follower.followPath(newhufmanpickup, true);
                     setPathState(17);
                 }
                 break;
@@ -387,7 +409,7 @@ public class REDHUMAN extends OpMode {
             case 17:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return1,true);
+                    follower.followPath(newnewnewreutun,true);
                     setPathState(18);
                 }
                 break;
@@ -465,7 +487,7 @@ public class REDHUMAN extends OpMode {
 
                     settherotation(spina);
                     intake.setPower(1);
-                    follower.followPath(grabPickup3, true);
+                    follower.followPath(donthitgo, true);
                     setPathState(27);
                 }
                 break;
@@ -473,7 +495,7 @@ public class REDHUMAN extends OpMode {
             case 27:
                 if(!follower.isBusy())
                 {
-                    follower.followPath(return67,true);
+                    follower.followPath(donthitback,true);
                     setPathState(28);
                 }
                 break;

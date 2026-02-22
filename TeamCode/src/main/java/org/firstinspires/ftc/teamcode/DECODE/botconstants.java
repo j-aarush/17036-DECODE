@@ -36,7 +36,7 @@ public  class botconstants {
 
 
 
-    public static double leftdown = 0.259;
+    public static double leftdown = 0.250;
     public static double rightdown = 0.47;
     public static double leftup = 0.42;
     public static double rightup = 0.285;
@@ -71,3 +71,8 @@ public  class botconstants {
 //retune heading pid
 //account for bot velocity for heading/velocity
 //try field centric
+
+
+//fix sorting -- make manual for teleops; ll for autos
+//add flicker in all programs
+//optimize partner autons
