@@ -58,7 +58,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 
     Boolean intakepressed = false;
     Boolean intaketoggle;
-    Boolean dpadDownWasPressed;
+    Boolean dpadDownWasPressed = false, otherdpaddown = false;
 
     private boolean automatedDrive;
     boolean holdshooting = false;
@@ -181,7 +181,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                 skip1 = 3;
                 break;
             case 3:
-                if (intakeeee.time() > 0.5) {
+                if (intakeeee.time() > 0.6) {
                     setrightdown();
                 }
                 break;
@@ -674,6 +674,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
             // This code now runs ONLY ONCE when the button is first pressed.
             dpadDownWasPressed = true; // Set the flag to prevent re-running
 
+            bothwallup();
 
             colorintake = intakecs.getNormalizedColors();
             colorleft = leftcs.getNormalizedColors();
@@ -808,9 +809,256 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
         dpadDownWasPressed = false;
     }
 
-        sortone();
-        sorttwo();
-        sortthree();
+            switch (skip1) {
+                case 4:
+                    bothwallup();
+                    settherotation(spinb);
+                    intakeeee.reset();
+                    skip1 = 3;
+                    break;
+                case 3:
+                    if (intakeeee.time() > 0.8) {
+                        intakeeee.reset();
+                        bothwalldown();
+                        skip1 = 2;
+                    }
+                    break;
+                case 2:
+                    bothwalldown();
+                    if (intakeeee.time() > 0.2) {
+                        bothwalldown();
+                        settherotation(spina);
+                    }
+                    break;
+                case 5:
+                    if (intakeeee.time() > 0.0005) {
+                        headingLock = true;
+                        bothwalldown();
+                        skip1 = 6;
+                        intakeeee.reset();}
+                    break;
+                case 6:
+                    settherotation(spina);
+                    bothwalldown();
+                    if (!follower.isBusy()) {
+                        skip1 = 7;
+                        intakeeee.reset();}
+                    break;
+                case 7:
+                    if (holdshooting) {
+                        parksettherotation(0.1);
+                    }
+                    spinflickup();
+                    if (intakeeee.time() > 0.2) {
+                        skip1 = 8;
+                        intakeeee.reset();}
+                    break;
+                case 8:
+                    spinflickdown();
+                    setrightdown();
+                    if (intakeeee.time() > 0.2) {
+                        skip1 = 9;
+                        intakeeee.reset();}
+                    break;
+                case 9:
+                    settherotation(spinb);
+                    if (intakeeee.time() > 0.65) {
+                        skip1 = 10;
+                        intakeeee.reset();}
+                    break;
+                case 10:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        skip1 = 11;
+                        intakeeee.reset();}
+                    break;
+                case 11:
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        skip1 = 12;
+                        intakeeee.reset();}
+                    break;
+                case 12:
+                    settherotation(spinc);
+                    if (intakeeee.time() > 0.65) {
+                        skip1 = 13;
+                        intakeeee.reset();}
+                    break;
+                case 13:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        headingLock = false;
+                        skip1 = 14;
+                        intakeeee.reset();}
+                    break;
+                case 14:
+                    parksettherotation(0);
+                    headingLock = false;
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        skip1 = -1;
+                        intakeeee.reset();
+                        settherotation(spina);}
+                    break;
+
+            }
+
+            switch (reverse1) {
+                case 4:
+                    bothwallup();
+                    settherotation(spino);
+                    intakeeee.reset();
+                    reverse1 = 3;
+                    break;
+                case 3:
+                    if (intakeeee.time() > 0.67) {
+                        setleftdown();
+                    }
+                    break;
+                case 5:
+                    if (intakeeee.time() > 0.0005) {
+                        headingLock = true;
+                        bothwalldown();
+                        reverse1 = 6;
+                        intakeeee.reset();}
+                    break;
+                case 6:
+                    settherotation(spino);
+                    if (!follower.isBusy()) {
+                        reverse1 = 7;
+                        intakeeee.reset();}
+                    break;
+                case 7:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        reverse1 = 8;
+                        intakeeee.reset();}
+                    break;
+                case 8:
+                    spinflickdown();
+                    setrightdown();
+                    if (intakeeee.time() > 0.06) {
+                        reverse1 = 9;
+                        intakeeee.reset();}
+                    break;
+                case 9:
+                    settherotation(spina);
+                    if (intakeeee.time() > 0.65) {
+                        reverse1 = 10;
+                        intakeeee.reset();}
+                    break;
+                case 10:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        reverse1 = 11;
+                        intakeeee.reset();}
+                    break;
+                case 11:
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        reverse1 = 12;
+                        intakeeee.reset();}
+                    break;
+                case 12:
+                    settherotation(spinb);
+                    if (intakeeee.time() > 0.65) {
+                        reverse1 = 13;
+                        intakeeee.reset();}
+                    break;
+                case 13:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        headingLock = false;
+                        reverse1 = 14;
+                        intakeeee.reset();}
+                    break;
+                case 14:
+                    parksettherotation(0);
+                    headingLock = false;
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        reverse1 = -1;
+                        intakeeee.reset();
+                        settherotation(spina);}
+                    break;
+
+            }
+
+            switch (thedefault) {
+                case 4:
+                    setrightdown();
+                    break;
+                case 5:
+                    if (intakeeee.time() > 0.0005) {
+                        headingLock = true;
+                        setrightdown();
+                        thedefault = 6;
+                        intakeeee.reset();}
+                    break;
+                case 6:
+                    settherotation(spina);
+                    if (!follower.isBusy()) {
+                        thedefault = 7;
+                        intakeeee.reset();}
+                    break;
+                case 7:
+                    if (holdshooting) {
+                        parksettherotation(0.1);
+                    }
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        thedefault = 8;
+                        intakeeee.reset();}
+                    break;
+                case 8:
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        thedefault = 9;
+                        intakeeee.reset();}
+                    break;
+                case 9:
+                    settherotation(spinb);
+                    if (intakeeee.time() > 0.65) {
+                        thedefault = 10;
+                        intakeeee.reset();}
+                    break;
+                case 10:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        thedefault = 11;
+                        intakeeee.reset();}
+                    break;
+                case 11:
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        thedefault = 12;
+                        intakeeee.reset();}
+                    break;
+                case 12:
+                    settherotation(spinc);
+                    if (intakeeee.time() > 0.65) {
+                        thedefault = 13;
+                        intakeeee.reset();}
+                    break;
+                case 13:
+                    spinflickup();
+                    if (intakeeee.time() > 0.06) {
+                        headingLock = false;
+                        thedefault = 14;
+                        intakeeee.reset();}
+                    break;
+                case 14:
+                    parksettherotation(0);
+                    headingLock = false;
+                    spinflickdown();
+                    if (intakeeee.time() > 0.06) {
+                        thedefault = -1;
+                        intakeeee.reset();
+                        settherotation(spina);}
+                    break;
+
+            }
+
 
 //        if (gamepad1.dpad_down) {
 //            if (skiponee) {
@@ -824,7 +1072,8 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 //            }
 //        }
         // NEW EXCLUSIVE LOGIC
-        if (gamepad1.dpad_down) {
+        if (gamepad1.dpad_down && !otherdpaddown) {
+            otherdpaddown = true;
             // Check which sorting routine was selected and start ONLY that one.
             if (skiponee) {
                 skip1 = 5;
@@ -838,7 +1087,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                 reverse1 = 5;
                 reverseonee = false; // Reset the flag
             }
+        } else if (!gamepad1.dpad_down) {
+            // When the button is released, reset the flag so it can be pressed again.
+            otherdpaddown = false;
         }
+
 
 
         turnerror = headinglockangle - Math.toDegrees(botHeading);

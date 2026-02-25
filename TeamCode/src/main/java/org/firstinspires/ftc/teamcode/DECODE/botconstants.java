@@ -18,12 +18,20 @@ public  class botconstants {
 
 
 
-    public static double spino = 0.03;
-    public  static double spina = 0.285;
+//    public static double spino = 0.03;
+//    public  static double spina = 0.285;
+//
+//    public  static double spinb = 0.535;
+//    public static double spinc = 0.788;
+//    public static double spind = 1;
 
-    public  static double spinb = 0.535;
-    public static double spinc = 0.788;
+    public static double spino = 0.01;
+    public  static double spina = 0.257;
+
+    public  static double spinb = 0.508;
+    public static double spinc = 0.759;
     public static double spind = 1;
+
 
     public static double flickup = 0, flickdown = 0.30; //0.06
 
