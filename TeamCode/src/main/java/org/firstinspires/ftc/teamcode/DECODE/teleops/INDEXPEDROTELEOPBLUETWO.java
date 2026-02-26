@@ -618,6 +618,10 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
             settherotation(spina);
         }
 
+        if (gamepad2.dpad_up) {
+            bothwalldown();
+        }
+
 //        if (gamepad2.dpad_up) {
 //            flickright.setPosition(flickup);
 //            flickys.setPosition(flickup);
@@ -820,14 +824,6 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                     if (intakeeee.time() > 0.8) {
                         intakeeee.reset();
                         bothwalldown();
-                        skip1 = 2;
-                    }
-                    break;
-                case 2:
-                    bothwalldown();
-                    if (intakeeee.time() > 0.2) {
-                        bothwalldown();
-                        settherotation(spina);
                     }
                     break;
                 case 5:
@@ -838,7 +834,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 6:
-                    settherotation(spina);
+                    settherotation(spinb);
                     bothwalldown();
                     if (!follower.isBusy()) {
                         skip1 = 7;
@@ -861,7 +857,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 9:
-                    settherotation(spinb);
+                    settherotation(spinc);
+
+                    if (intakeeee.time() > 0.59) {
+                        bothwalldown();
+                    }
                     if (intakeeee.time() > 0.65) {
                         skip1 = 10;
                         intakeeee.reset();}
@@ -879,7 +879,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 12:
-                    settherotation(spinc);
+                    setleftdown();
+                    settherotation(spina);
+                    if (intakeeee.time() > 0.59) {
+                        bothwalldown();
+                    }
                     if (intakeeee.time() > 0.65) {
                         skip1 = 13;
                         intakeeee.reset();}
@@ -898,7 +902,9 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                     if (intakeeee.time() > 0.06) {
                         skip1 = -1;
                         intakeeee.reset();
-                        settherotation(spina);}
+                        settherotation(spina);
+                        setrightdown();
+                    }
                     break;
 
             }
@@ -942,8 +948,11 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 9:
-                    settherotation(spina);
-                    if (intakeeee.time() > 0.65) {
+                    settherotation(spinb);
+                    if (intakeeee.time() > 1.1) {
+                        bothwalldown();
+                    }
+                    if (intakeeee.time() > 1.2) {
                         reverse1 = 10;
                         intakeeee.reset();}
                     break;
@@ -960,7 +969,10 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                         intakeeee.reset();}
                     break;
                 case 12:
-                    settherotation(spinb);
+                    if (intakeeee.time() > 0.59) {
+                        bothwalldown();
+                    }
+                    settherotation(spinc);
                     if (intakeeee.time() > 0.65) {
                         reverse1 = 13;
                         intakeeee.reset();}
@@ -978,6 +990,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                     spinflickdown();
                     if (intakeeee.time() > 0.06) {
                         reverse1 = -1;
+                        setrightdown();
                         intakeeee.reset();
                         settherotation(spina);}
                     break;
@@ -986,7 +999,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
 
             switch (thedefault) {
                 case 4:
-                    setrightdown();
+                    bothwalldown();
                     break;
                 case 5:
                     if (intakeeee.time() > 0.0005) {
@@ -1054,6 +1067,7 @@ public class INDEXPEDROTELEOPBLUETWO extends NextFTCOpMode {
                     if (intakeeee.time() > 0.06) {
                         thedefault = -1;
                         intakeeee.reset();
+                        setrightdown();
                         settherotation(spina);}
                     break;
 
