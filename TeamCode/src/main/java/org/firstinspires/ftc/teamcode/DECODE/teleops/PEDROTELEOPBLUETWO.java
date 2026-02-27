@@ -294,9 +294,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
             case 9:
                 settherotation(spinb);
                 if (intakeeee.time() > 0.19) {
-                    bothwalldown();
                 }
-                if (intakeeee.time() > 0.245) {
+                if (intakeeee.time() > 0.23) {
                     intaekstage = 10;
                     bothwalldown();
                     intakeeee.reset();}
@@ -322,9 +321,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
 //                if (intakeeee.time() > 0.22) {
 //                    bothwalldown();
 //                }
-                if (intakeeee.time() > 0.24) {
+                if (intakeeee.time() > 0.265) {
                     intaekstage = 13;
-                    bothwalldown();
                     intakeeee.reset();}
                 break;
             case 13:
