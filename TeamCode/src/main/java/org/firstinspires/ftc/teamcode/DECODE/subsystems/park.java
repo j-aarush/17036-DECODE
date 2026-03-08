@@ -53,10 +53,10 @@ public class park extends LinearOpMode {
 
 
             if (gamepad1.a) {
-            settherotation(0);
+            settherotation(0.02);
             }
             if (gamepad1.b) {
-            settherotation(0.75);
+            settherotation(0.4);
             }
             if (gamepad1.x) {
                 rightpark.setPosition(0.2);
