@@ -25,11 +25,11 @@ public  class botconstants {
 //    public static double spinc = 0.788;
 //    public static double spind = 1;
 
-    public static double spino = 0.02;
-    public  static double spina = 0.277;
+    public static double spino = 0.03;
+    public  static double spina = 0.284;
 
-    public  static double spinb = 0.527;
-    public static double spinc = 0.783;
+    public  static double spinb = 0.535;
+    public static double spinc = 0.795;
     public static double spind = 1;
 
 
