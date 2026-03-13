@@ -292,13 +292,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 flickys.setPosition(flickup); //hopefully up
                 flickright.setPosition(flickup); //hopefully up
                 if (intakeeee.time() > 0.07) {
-                    if (laserdetected) {
-                        intaekstage = 7;
-                        intakeeee.reset();
-                    } else {
                     intaekstage = 8;
                     intakeeee.reset();
-                    }
                 }
                 break;
             case 8:
@@ -311,13 +306,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 9:
                 settherotation(spinb);
-                if (intakeeee.time() > 0.20) {
+                if (intakeeee.time() > 0.25) {
                     setrightdown();
                 }
-                if (intakeeee.time() > 0.225) {
+                if (intakeeee.time() > 0.31) {
                     bothwalldown();
                 }
-                if (intakeeee.time() > 0.255) {
+                if (intakeeee.time() > 0.36) {
                     intaekstage = 10;
                     bothwalldown();
                     intakeeee.reset();}
@@ -327,13 +322,8 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 flickright.setPosition(flickup); //hopefully up
 
                 if (intakeeee.time() > 0.07) {
-                    if (laserdetected) {
-                        intaekstage = 10;
-                        intakeeee.reset();
-                    } else {
                         intaekstage = 11;
                         intakeeee.reset();
-                    }
                 }
                 break;
             case 11:
@@ -346,13 +336,13 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 break;
             case 12:
                 settherotation(spinc);
-                if (intakeeee.time() > 0.20) {
+                if (intakeeee.time() > 0.25) {
                     setrightdown();
                 }
-                if (intakeeee.time() > 0.246) {
+                if (intakeeee.time() > 0.31) {
                     bothwalldown();
                 }
-                if (intakeeee.time() > 0.27) {
+                if (intakeeee.time() > 0.36) {
                     intaekstage = 13;
                     intakeeee.reset();}
                 break;
@@ -361,14 +351,9 @@ public class PEDROTELEOPBLUETWO extends NextFTCOpMode {
                 flickright.setPosition(flickup); //hopefully up
 
                 if (intakeeee.time() > 0.07) {
-                    if (laserdetected) {
-                        intaekstage = 13;
-                        intakeeee.reset();
-                    } else {
-                        intaekstage = 14;
-                        headingLock = false;
-                        intakeeee.reset();
-                    }
+                    intaekstage = 14;
+                    headingLock = false;
+                    intakeeee.reset();
                 }
                 break;
             case 14:
