@@ -260,7 +260,7 @@ public class REDFRONT extends OpMode {
             case -3:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-1);
                     setPathState(9);
                 }
             case 9:
@@ -347,7 +347,7 @@ public class REDFRONT extends OpMode {
             case 18:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-1);
 //                    follower.followPath(return21);
                     settherotation(spina);
                     setPathState(19);
@@ -441,7 +441,7 @@ public class REDFRONT extends OpMode {
             case 29:
                 if (!follower.isBusy()) {
                     settherotation(spina);
-                    intake.setPower(-0.35);
+                    intake.setPower(-1);
 //                    follower.followPath(return21);
                     settherotation(spina);
                     setPathState(30);
