@@ -185,9 +185,9 @@ public class REDFRONTGATE extends OpMode {
                 .addPath(new BezierLine(pickup2, scorepose))
                 .setLinearHeadingInterpolation(pickup2.getHeading(), scorepose.getHeading())
                 .build();
-        pickup3rd = follower.pathBuilder()
+        pickup3rd = follower.pathBuilder() //gate 30.9
                 .addPath(new BezierCurve(scorepose,
-                        new Pose(30.9, 40).mirror(),
+                        new Pose(40, 40).mirror(),
                         pickup3))
 //                .addPath(new BezierLine(pickup3, new Pose(12.5, 60)))
                 .setLinearHeadingInterpolation((Math.toRadians(25)), (Math.toRadians(41)))
@@ -365,7 +365,7 @@ public class REDFRONTGATE extends OpMode {
                 }
 
             case 17:
-                if(pathTimer.getElapsedTimeSeconds() > 2.75)
+                if(pathTimer.getElapsedTimeSeconds() > 2.6)
                 {
 
                     follower.followPath(score3rd,true);
